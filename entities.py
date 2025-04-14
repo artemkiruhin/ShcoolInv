@@ -14,8 +14,7 @@ class User(Base):
     email = Column(String(50), nullable=False, unique=True)
     full_name = Column(String(100), nullable=False)
     phone_number = Column(String(11), nullable=False)
-    registered_at = Column(DateTime(timezone=True), nullable=False,
-                           default=lambda: datetime.now(timezone('Europe/Moscow')))
+    registered_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone('Europe/Moscow')))
     deleted_at = Column(DateTime(timezone=True), nullable=True)
     is_admin = Column(Boolean, nullable=False, default=False)
     is_active = Column(Boolean, nullable=False, default=True)
