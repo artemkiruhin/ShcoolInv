@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from config import Base
 from datetime import datetime
 from pytz import timezone
-
+from sqlalchemy import LargeBinary
 
 class User(Base):
     __tablename__ = 'users'
@@ -18,19 +18,20 @@ class User(Base):
     deleted_at = Column(DateTime(timezone=True), nullable=True)
     is_admin = Column(Boolean, nullable=False, default=False)
     is_active = Column(Boolean, nullable=False, default=True)
-    avatar_path = Column(String, nullable=True)
+    avatar = Column(LargeBinary, nullable=True)
 
     assigned_items = relationship("InventoryItem", back_populates="assigned_user")
 
     @staticmethod
-    def create(username, password_hash, email, full_name, phone_number, is_admin=False):
+    def create(username, password_hash, email, full_name, phone_number, is_admin=False, avatar=None):
         return User(
             username=username,
             password_hash=password_hash,
             email=email,
             full_name=full_name,
             phone_number=phone_number,
-            is_admin=is_admin
+            is_admin=is_admin,
+            avatar=avatar
         )
 
 
@@ -93,7 +94,7 @@ class InventoryItem(Base):
     room_id = Column(Integer, ForeignKey('rooms.id'), nullable=True)
     assigned_user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
-    photo_path = Column(String, nullable=True)
+    photo = Column(LargeBinary, nullable=True)
     purchase_date = Column(DateTime(timezone=True), nullable=True)
     purchase_price = Column(DECIMAL, nullable=True)
     warranty_until = Column(DateTime(timezone=True), nullable=False)
@@ -106,7 +107,7 @@ class InventoryItem(Base):
 
     @staticmethod
     def create(number, name, description, category_id, room_id, assigned_user_id,
-               photo_path=None, purchase_date=None, purchase_price=None, warranty_until=None):
+               photo_path=None, purchase_date=None, purchase_price=None, warranty_until=None, photo=None):
         return InventoryItem(
             number=number,
             name=name,
@@ -117,7 +118,8 @@ class InventoryItem(Base):
             photo_path=photo_path,
             purchase_date=purchase_date,
             purchase_price=purchase_price,
-            warranty_until=warranty_until
+            warranty_until=warranty_until,
+            photo=photo
         )
 
 
