@@ -1,9 +1,40 @@
 from datetime import datetime
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Type
 from pytz import timezone
 from sqlalchemy.orm import Session
-
+from typing_extensions import Generic
+from config import T
 from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
+
+
+
+class Repository(Generic[T]):
+    def __init__(self, model: Type[T], session: Session):
+        self.model = model
+        self.db = session
+
+    def get_all(self):
+        return self.db.query(self.model).all()
+
+    def get_by_id(self, entity_id: int):
+        return self.db.query(self.model).filter_by(id=entity_id).first()
+
+    def create(self, entity: Type[T]):
+        self.db.add(entity)
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
+
+    def update(self, entity: Type[T]):
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
+
+    def delete(self, entity_id: int):
+        entity = self.get_by_id(entity_id)
+        if entity is None: raise ValueError('entity not found')
+        self.db.delete(entity)
+        self.db.commit()
 
 
 class UserRepository:
