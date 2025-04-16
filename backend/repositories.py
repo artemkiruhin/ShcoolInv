@@ -1,113 +1,141 @@
-from typing import Type
-from sqlalchemy.orm import Session
-from typing_extensions import Generic
-from config import T
-from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
+from typing import List, Optional, Dict, Any
+from sqlalchemy.orm import Session, Query
+from sqlalchemy import desc
+from entities import *
 
 
-class Repository(Generic[T]):
-    def __init__(self, model: Type[T], session: Session):
+class BaseRepository:
+    def __init__(self, model, session: Session):
         self.model = model
-        self.db = session
+        self.session = session
 
-    def get_all(self):
-        return self.db.query(self.model).all()
+    def get_all(self) -> List:
+        return self.session.query(self.model).all()
 
-    def get_by_id(self, entity_id: int):
-        return self.db.query(self.model).filter_by(id=entity_id).first()
+    def get_by_id(self, entity_id: int) -> Optional[Any]:
+        return self.session.query(self.model).get(entity_id)
 
-    def create(self, entity: Type[T]):
-        self.db.add(entity)
-        self.db.commit()
-        self.db.refresh(entity)
+    def create(self, entity) -> Any:
+        self.session.add(entity)
+        self.session.commit()
+        self.session.refresh(entity)
         return entity
 
-    def update(self, entity: Type[T]):
-        self.db.commit()
-        self.db.refresh(entity)
+    def update(self, entity) -> Any:
+        self.session.commit()
+        self.session.refresh(entity)
         return entity
 
-    def delete(self, entity_id: int):
+    def delete(self, entity_id: int) -> bool:
         entity = self.get_by_id(entity_id)
-        if entity is None: raise ValueError('entity not found')
-        self.db.delete(entity)
-        self.db.commit()
+        if not entity:
+            return False
+        self.session.delete(entity)
+        self.session.commit()
+        return True
 
 
+class UserRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(User, session)
 
-class UserRepository(Repository[User]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
+    def get_by_username(self, username: str, exact: bool = True) -> Optional[User]:
+        query = self.session.query(User).filter(User.username.ilike(username))
+        return query.first() if exact else query.all()
 
-    def get_by_username(self, username: str, is_strong: bool = False):
-        if is_strong: return self.db.query(User).filter_by(username=username).first()
-        return self.db.query(User).filter_by(username=username).all()
+    def get_by_email(self, email: str, exact: bool = True) -> Optional[User]:
+        query = self.session.query(User).filter(User.email.ilike(email))
+        return query.first() if exact else query.all()
 
-    def get_by_email(self, email: str, is_strong: bool = False):
-        if is_strong: return self.db.query(User).filter_by(email=email).first()
-        return self.db.query(User).filter_by(email=email).all()
-
-    def get_by_phone(self, phone_number: str, is_strong: bool = False):
-        if is_strong:return self.db.query(User).filter_by(phone_number=phone_number).first()
-        return self.db.query(User).filter_by(phone_number=phone_number).all()
-
-    def get_by_username_and_password(self, username: str, password_hash: str):
-        return self.db.query(User).filter_by(
-            username=username,
-            password_hash=password_hash
+    def get_by_credentials(self, username: str, password_hash: str) -> Optional[User]:
+        return self.session.query(User).filter(
+            User.username == username,
+            User.password_hash == password_hash
         ).first()
 
 
+class RoomRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(Room, session)
 
-class RoomRepository(Repository[Room]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
+    def get_by_name(self, name: str) -> Optional[Room]:
+        return self.session.query(Room).filter(Room.name.ilike(name)).first()
 
-    def get_by_name(self, name: str):
-        return self.db.query(Room).filter_by(name=name).first()
-
-
-class InventoryConditionRepository(Repository[InventoryCondition]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
-
-    def get_by_name(self, name: str):
-        return self.db.query(InventoryCondition).filter_by(name=name).first()
+    def get_by_short_name(self, short_name: str) -> Optional[Room]:
+        return self.session.query(Room).filter(Room.short_name.ilike(short_name)).first()
 
 
-class InventoryCategoryRepository(Repository[InventoryCategory]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
+class InventoryCategoryRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(InventoryCategory, session)
 
-    def get_by_name(self, name: str):
-        return self.db.query(InventoryCategory).filter_by(name=name).first()
+    def get_by_name(self, name: str) -> Optional[InventoryCategory]:
+        return self.session.query(InventoryCategory).filter(InventoryCategory.name.ilike(name)).first()
 
-
-
-class InventoryItemRepository(Repository[InventoryItem]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
-
-    def get_by_number(self, number: str):
-        return self.db.query(InventoryItem).filter_by(number=number).first()
-
-    def get_by_assigned_user(self, user_id: int):
-        return self.db.query(InventoryItem).filter_by(assigned_user_id=user_id).all()
-
-    def get_by_room(self, room_id: int):
-        return self.db.query(InventoryItem).filter_by(room_id=room_id).all()
-
-    def get_by_category(self, category_id: int):
-        return self.db.query(InventoryItem).filter_by(category_id=category_id).all()
-
-    def get_by_condition(self, condition_id: int):
-        return self.db.query(InventoryItem).filter_by(condition_id=condition_id).all()
+    def get_by_short_name(self, short_name: str) -> Optional[InventoryCategory]:
+        return self.session.query(InventoryCategory).filter(InventoryCategory.short_name.ilike(short_name)).first()
 
 
+class InventoryConditionRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(InventoryCondition, session)
 
-class LogRepository(Repository[Log]):
-    def __init__(self, model: Type[T], session: Session):
-        super().__init__(model, session)
+    def get_by_name(self, name: str) -> Optional[InventoryCondition]:
+        return self.session.query(InventoryCondition).filter(InventoryCondition.name.ilike(name)).first()
 
-    def get_recent(self, limit: int = 100):
-        return self.db.query(Log).order_by(Log.created_at.desc()).limit(limit).all()
+
+class InventoryItemRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(InventoryItem, session)
+
+    def get_by_number(self, number: str) -> Optional[InventoryItem]:
+        return self.session.query(InventoryItem).filter(InventoryItem.number == number).first()
+
+    def get_last_by_category_and_room(self, category_id: int, room_id: Optional[int]) -> Optional[InventoryItem]:
+        query = self.session.query(InventoryItem).filter(
+            InventoryItem.category_id == category_id
+        )
+
+        if room_id:
+            query = query.filter(InventoryItem.room_id == room_id)
+        else:
+            query = query.filter(InventoryItem.room_id.is_(None))
+
+        return query.order_by(InventoryItem.id.desc()).first()
+
+    def search(self, filters: Dict) -> [InventoryItem]:
+        query = self.session.query(InventoryItem)
+
+        if 'number' in filters:
+            query = query.filter(InventoryItem.number.ilike(f"%{filters['number']}%"))
+        if 'name' in filters:
+            query = query.filter(InventoryItem.name.ilike(f"%{filters['name']}%"))
+        if 'category_id' in filters:
+            query = query.filter(InventoryItem.category_id == filters['category_id'])
+        if 'room_id' in filters:
+            query = query.filter(InventoryItem.room_id == filters['room_id'])
+        if 'condition_id' in filters:
+            query = query.filter(InventoryItem.condition_id == filters['condition_id'])
+        if 'assigned_user_id' in filters:
+            query = query.filter(InventoryItem.assigned_user_id == filters['assigned_user_id'])
+        if 'is_written_off' in filters:
+            query = query.filter(InventoryItem.is_written_off == filters['is_written_off'])
+
+        return query.order_by(InventoryItem.number).all()
+
+
+class LogRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(Log, session)
+
+    def get_recent(self, limit: int = 100) -> [Log]:
+        return self.session.query(Log).order_by(desc(Log.created_at)).limit(limit).all()
+
+    def get_by_user(self, user_id: int, limit: int = 100) -> List[Log]:
+        return (
+            self.session.query(Log)
+            .filter(Log.user_id == user_id)
+            .order_by(desc(Log.created_at))
+            .limit(limit)
+            .all()
+        )
