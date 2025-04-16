@@ -1,184 +1,179 @@
-from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
-    InventoryItemRepository, LogRepository
+from datetime import datetime
+from typing import List, Optional, Dict
+import logging
+from dtos import *
+from entities import *
+from repositories import *
+
+logger = logging.getLogger(__name__)
 
 
 class UserService:
     def __init__(self, user_repository: UserRepository):
-        self.user_repository = user_repository
+        self.repo = user_repository
 
-    def create(self, username, password_hash, email, full_name, phone_number, is_admin, avatar = None):
-        raise NotImplemented
+    def create_user(self, user_data: Dict) -> Optional[UserDTO]:
+        try:
+            if self.repo.get_by_username(user_data['username']):
+                logger.warning(f"Username {user_data['username']} already exists")
+                return None
 
-    def update(self, username, email, full_name, phone_number):
-        raise NotImplemented
+            if self.repo.get_by_email(user_data['email']):
+                logger.warning(f"Email {user_data['email']} already exists")
+                return None
 
-    def delete(self, user_id, is_strong = False):
-        raise NotImplemented
+            new_user = User(**user_data)
+            created_user = self.repo.create(new_user)
+            return UserDTO.model_validate(created_user)
+        except Exception as e:
+            logger.error(f"Error creating user: {str(e)}")
+            return None
 
-    def get_all(self):
-        raise NotImplemented
+    def authenticate(self, username: str, password_hash: str) -> Optional[UserDTO]:
+        user = self.repo.get_by_credentials(username, password_hash)
+        return UserDTO.model_validate(user) if user else None
 
-    def get_by_id(self, user_id):
-        raise NotImplemented
+    def get_user(self, user_id: int) -> Optional[UserDTO]:
+        user = self.repo.get_by_id(user_id)
+        return UserDTO.model_validate(user) if user else None
 
-    def login(self, username, password_hash):
-        raise NotImplemented
+    def update_user(self, user_id: int, update_data: Dict) -> Optional[UserDTO]:
+        user = self.repo.get_by_id(user_id)
+        if not user:
+            return None
 
-    def change_password_as_admin(self, user_id, new_password):
-        raise NotImplemented
+        for key, value in update_data.items():
+            setattr(user, key, value)
 
-    def change_password(self, user_id, old_password, new_password):
-        raise NotImplemented
+        updated_user = self.repo.update(user)
+        return UserDTO.model_validate(updated_user)
 
-    def change_role(self, user_id, is_admin):
-        raise NotImplemented
+    def delete_user(self, user_id: int) -> bool:
+        return self.repo.delete(user_id)
 
-    def get_by_username(self, username, is_strong = False):
-        raise NotImplemented
-
-    def get_by_full_name(self, full_name, is_strong = False):
-        raise NotImplemented
-
-    def get_by_email(self, email, is_strong: bool = False):
-        raise NotImplemented
-
-    def get_by_phone(self, phone_number, is_strong: bool = False):
-        raise NotImplemented
-
-    def change_avatar(self, avatar = None):
-        raise NotImplemented
-
+    def list_users(self) -> List[UserDTO]:
+        users = self.repo.get_all()
+        return [UserDTO.model_validate(user) for user in users]
 
 
 class RoomService:
     def __init__(self, room_repository: RoomRepository):
-        self.room_repository = room_repository
+        self.repo = room_repository
 
-    def create(self, name):
-        raise NotImplemented
+    def create_room(self, name: str, short_name: str) -> Optional[RoomDTO]:
+        try:
+            if self.repo.get_by_name(name):
+                logger.warning(f"Room {name} already exists")
+                return None
 
-    def update(self, name):
-        raise NotImplemented
+            new_room = Room(name=name, short_name=short_name)
+            created_room = self.repo.create(new_room)
+            return RoomDTO.model_validate(created_room)
+        except Exception as e:
+            logger.error(f"Error creating room: {str(e)}")
+            return None
 
-    def delete(self, room_id, is_strong=False):
-        raise NotImplemented
+    def get_room(self, room_id: int) -> Optional[RoomDTO]:
+        room = self.repo.get_by_id(room_id)
+        return RoomDTO.model_validate(room) if room else None
 
-    def get_all(self):
-        raise NotImplemented
-
-    def get_by_id(self, room_id):
-        raise NotImplemented
-
-    def get_by_name(self, name, is_strong=False):
-        raise NotImplemented
-
-
-
-class InventoryConditionService:
-    def __init__(self, inventory_condition_repository: InventoryConditionRepository):
-        self.inventory_condition_repository = inventory_condition_repository
-
-    def create(self, name, description):
-        raise NotImplemented
-
-    def update(self, name, description):
-        raise NotImplemented
-
-    def delete(self, condition_id, is_strong=False):
-        raise NotImplemented
-
-    def get_all(self):
-        raise NotImplemented
-
-    def get_by_id(self, condition_id):
-        raise NotImplemented
-
-    def get_by_name(self, name, is_strong=False):
-        raise NotImplemented
-
-
-
-class InventoryCategoryService:
-    def __init__(self, inventory_category_repository: InventoryCategoryRepository):
-        self.inventory_category_repository = inventory_category_repository
-
-    def create(self, name, description):
-        raise NotImplemented
-
-    def update(self, name, description):
-        raise NotImplemented
-
-    def delete(self, category_id, is_strong=False):
-        raise NotImplemented
-
-    def get_all(self):
-        raise NotImplemented
-
-    def get_by_id(self, category_id):
-        raise NotImplemented
-
-    def get_by_name(self, name, is_strong=False):
-        raise NotImplemented
-
+    def list_rooms(self) -> List[RoomDTO]:
+        rooms = self.repo.get_all()
+        return [RoomDTO.model_validate(room) for room in rooms]
 
 
 class InventoryItemService:
-    def __init__(self, inventory_item_repository: InventoryItemRepository):
-        self.inventory_item_repository = inventory_item_repository
+    def __init__(self,
+                 item_repo: InventoryItemRepository,
+                 category_repo: InventoryCategoryRepository,
+                 room_repo: RoomRepository):
+        self.item_repo = item_repo
+        self.category_repo = category_repo
+        self.room_repo = room_repo
 
-    def create(self, name, description, category_id, room_id, assigned_user_id, photo=None, purchase_date=None, purchase_price=None, warranty_until=None):
-        raise NotImplemented
+    def generate_inventory_number(self, category_id: int, room_id: Optional[int] = None) -> str:
+        category = self.category_repo.get_by_id(category_id)
+        if not category:
+            raise ValueError("Category not found")
 
-    def update(self, name, description, category_id, room_id, assigned_user_id, photo, purchase_date, purchase_price, warranty_until):
-        raise NotImplemented
+        room_short = "GEN"  # Для предметов без кабинета
+        if room_id:
+            room = self.room_repo.get_by_id(room_id)
+            if room:
+                room_short = room.short_name.upper()[:3]
 
-    def delete(self, item_id, is_strong=False):
-        raise NotImplemented
+        cat_short = category.short_name.upper()[:3]
 
-    def get_all(self):
-        raise NotImplemented
+        last_item = self.item_repo.get_last_by_category_and_room(category_id, room_id)
+        next_num = 1
+        if last_item and last_item.number:
+            try:
+                last_num = int(last_item.number.split('-')[-1])
+                next_num = last_num + 1
+            except (IndexError, ValueError):
+                pass
 
-    def get_by_id(self, item_id):
-        raise NotImplemented
+        return f"{cat_short}-{room_short}-{next_num:06d}"
 
-    def get_by_number(self, number, is_strong):
-        raise NotImplemented
+    def create_item(self, item_data: Dict) -> Optional[InventoryItemDTO]:
+        try:
+            if 'number' not in item_data or not item_data['number']:
+                item_data['number'] = self.generate_inventory_number(
+                    item_data['category_id'],
+                    item_data.get('room_id')
+                )
 
-    def get_by_name(self, name, is_strong):
-        raise NotImplemented
+            new_item = InventoryItem(**item_data)
+            created_item = self.item_repo.create(new_item)
+            return InventoryItemDTO.model_validate(created_item)
+        except Exception as e:
+            logger.error(f"Error creating inventory item: {str(e)}")
+            return None
 
-    def get_by_category(self, category_id, is_strong):
-        raise NotImplemented
+    def get_item(self, item_id: int) -> Optional[InventoryItemDTO]:
+        item = self.item_repo.get_by_id(item_id)
+        return InventoryItemDTO.model_validate(item) if item else None
 
-    def get_by_room(self, room_id, is_strong):
-        raise NotImplemented
+    def search_items(self, filters: Dict) -> List[InventoryItemDTO]:
+        items = self.item_repo.search(filters)
+        return [InventoryItemDTO.model_validate(item) for item in items]
 
-    def get_by_assigned_user(self, assigned_user_id, is_strong):
-        raise NotImplemented
+    def update_item(self, item_id: int, update_data: Dict) -> Optional[InventoryItemDTO]:
+        item = self.item_repo.get_by_id(item_id)
+        if not item:
+            return None
 
-    def get_by_price(self, price_from, price_to):
-        raise NotImplemented
+        for key, value in update_data.items():
+            setattr(item, key, value)
 
+        updated_item = self.item_repo.update(item)
+        return InventoryItemDTO.model_validate(updated_item)
+
+    def delete_item(self, item_id: int) -> bool:
+        return self.item_repo.delete(item_id)
 
 
 class LogService:
-    def __init__(self, log_repository: LogRepository):
-        self.log_repository = log_repository
+    def __init__(self, log_repo: LogRepository):
+        self.repo = log_repo
 
-    def create(self, description, type, related_entity_link=None):
-        raise NotImplemented
+    def create_log(self, description: str, log_type: int, user_id: Optional[int] = None) -> Optional[LogDTO]:
+        try:
+            new_log = Log(
+                description=description,
+                type=log_type,
+                user_id=user_id
+            )
+            created_log = self.repo.create(new_log)
+            return LogDTO.model_validate(created_log)
+        except Exception as e:
+            logger.error(f"Error creating log: {str(e)}")
+            return None
 
-    def delete(self, log_id, is_strong=False):
-        raise NotImplemented
+    def get_recent_logs(self, limit: int = 100) -> List[LogDTO]:
+        logs = self.repo.get_recent(limit)
+        return [LogDTO.model_validate(log) for log in logs]
 
-    def get_all(self):
-        raise NotImplemented
-
-    def get_by_id(self, log_id):
-        raise NotImplemented
-
-    def get_by_status(self, status):
-        raise NotImplemented
-
-    def get_by_user(self, user_id):
-        raise NotImplemented
+    def get_user_logs(self, user_id: int, limit: int = 100) -> List[LogDTO]:
+        logs = self.repo.get_by_user(user_id, limit)
+        return [LogDTO.model_validate(log) for log in logs]
