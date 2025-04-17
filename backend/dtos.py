@@ -89,3 +89,53 @@ class PaginatedResponse(BaseModel):
     total: int
     page: int
     size: int
+
+# Добавьте в dtos.py
+class UserCreateDTO(BaseModel):
+    username: str
+    password: str
+    email: str
+    full_name: str
+    phone_number: str
+    is_admin: bool = False
+
+class UserUpdateDTO(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    phone_number: Optional[str] = None
+    is_active: Optional[bool] = None
+    avatar: Optional[bytes] = None
+
+class RoomCreateDTO(BaseModel):
+    name: str
+    short_name: str
+
+class InventoryItemCreateDTO(BaseModel):
+    name: str
+    description: str
+    category_id: int
+    room_id: Optional[int] = None
+    condition_id: int
+    photo: Optional[bytes] = None
+    purchase_date: Optional[datetime] = None
+    purchase_price: Optional[float] = None
+    warranty_until: Optional[datetime] = None
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class InventoryItemUpdateDTO(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    category_id: Optional[int] = None
+    room_id: Optional[int] = None
+    condition_id: Optional[int] = None
+    assigned_user_id: Optional[int] = None
+    photo: Optional[bytes] = None
+    purchase_date: Optional[datetime] = None
+    purchase_price: Optional[float] = None
+    warranty_until: Optional[datetime] = None
+    is_written_off: Optional[bool] = None
