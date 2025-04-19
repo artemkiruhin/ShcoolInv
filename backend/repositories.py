@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session, Query
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 from entities import *
 
 
@@ -26,10 +26,7 @@ class BaseRepository:
         self.session.refresh(entity)
         return entity
 
-    def delete(self, entity_id: int) -> bool:
-        entity = self.get_by_id(entity_id)
-        if not entity:
-            return False
+    def delete(self, entity: Base) -> bool:
         self.session.delete(entity)
         self.session.commit()
         return True
@@ -52,6 +49,25 @@ class UserRepository(BaseRepository):
             User.username == username,
             User.password_hash == password_hash
         ).first()
+
+    def get_by_all_args(self, username: str | None, email: str | None,
+                        full_name: str | None, phone_number: str | None) -> User | None:
+        query = self.session.query(User)
+
+        filters = []
+        if username is not None:
+            filters.append(User.username == username)
+        if email is not None:
+            filters.append(User.email == email)
+        if full_name is not None:
+            filters.append(User.full_name == full_name)
+        if phone_number is not None:
+            filters.append(User.phone_number == phone_number)
+
+        if filters:
+            query = query.filter(or_(*filters))
+
+        return query.first()
 
 
 class RoomRepository(BaseRepository):
