@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Type, List
 
-from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO
-from entities import User, Room
+from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO
+from entities import User, Room, InventoryCondition
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
@@ -207,3 +207,46 @@ class RoomService:
     def __map_to_dto(entity: Room):
         return RoomDTO(entity.id, entity.name, entity.short_name)
 
+
+class InventoryConditionService:
+    def __init__(self, inventory_condition_repository: InventoryConditionRepository):
+        self.inventory_condition_repository = inventory_condition_repository
+
+    def create(self, name, description) -> int | None:
+        condition = self.inventory_condition_repository.get_by_name(name)
+        if condition: return None
+        new_condition = InventoryCondition.create(name, description)
+        return self.inventory_condition_repository.create(new_condition).id
+
+    def update(self, condition_id, name: str = None, description: str = None) -> int | None:
+        if not name and not description: return None
+        condition = self.inventory_condition_repository.get_by_id(condition_id)
+        if not condition: return None
+        if name: condition.name = name
+        if description: condition.description = description
+        return self.inventory_condition_repository.update(condition).id
+
+    def delete(self, condition_id, is_strong=False) -> bool:
+        condition = self.inventory_condition_repository.get_by_id(condition_id)
+        if not condition: return False
+        return self.inventory_condition_repository.delete(condition)
+
+    def get_all(self) -> list[InventoryConditionDTO]:
+        conditions = self.inventory_condition_repository.get_all()
+        condition_dtos = [InventoryConditionDTO]
+        for condition in conditions: condition_dtos.append(self.__map_to_dto(condition))
+        return condition_dtos
+
+    def get_by_id(self, condition_id) -> InventoryConditionDTO | None:
+        condition = self.inventory_condition_repository.get_by_id(condition_id)
+        if not condition: return None
+        return self.__map_to_dto(condition)
+
+    def get_by_name(self, name) -> InventoryConditionDTO | None:
+        condition = self.inventory_condition_repository.get_by_name(name)
+        if not condition: return None
+        return self.__map_to_dto(condition)
+
+    @staticmethod
+    def __map_to_dto(condition: InventoryCondition):
+        return InventoryConditionDTO(condition.id, condition.name, condition.description)
