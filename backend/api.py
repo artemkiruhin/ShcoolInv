@@ -1,12 +1,11 @@
-from dependency_injector.wiring import inject
-from flask import Flask, request
-from dependency_injection import get_user_service, get_room_service, get_inventory_condition_service, \
-    get_inventory_category_service, get_inventory_item_service, get_log_service, container
+from flask import Flask
+from dependency_injection import container
 from security import *
-from config import DEFAULT_JWT_EXPIRES_SECONDS, T
-from flask_utils import Response400, Response401, Response200, Response204, Response404, Response201, Response500, \
-    authorized
-from dtos import *
+import endpoints.auth_endpoints as auth
+import endpoints.users_endpoints as users
+import endpoints.rooms_endpoints as rooms
+import endpoints.inventory_endpoints as inventory
+import endpoints.logs_endpoints as logs
 
 app = Flask(__name__)
 app.container = container
@@ -15,234 +14,58 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 
 
 @app.route("/auth/login", methods=['POST'])
-@inject
-def login():
-    if not request.is_json:
-        return Response400.send(message="Request must be JSON")
-
-    username = request.json.get('username')
-    password = request.json.get('password')
-    if not username or not password:
-        return Response400.send(message="Username and password are required")
-
-    service = get_user_service()
-    password_hash = hash_data(password)
-    login_dto = service.login(username, password_hash)
-
-    if not login_dto or not login_dto.jwt or not login_dto.user_data:
-        return Response401.send(message="Invalid credentials")
-
-    response = Response200.send(
-        data=login_dto.user_data.__dict__,
-        message="Login successful"
-    )
-
-    response.set_cookie(
-        key='jwt',
-        value=login_dto.jwt,
-        httponly=True,
-        secure=False,
-        samesite='Lax',
-        max_age=DEFAULT_JWT_EXPIRES_SECONDS
-    )
-    return response
-
+def login(): return auth.login()
 
 @app.route("/auth/validate", methods=['GET'])
-@authorized
-def validate():
-    return Response204.send()
-
+def validate(): return auth.validate()
 
 @app.route("/auth/logout", methods=['GET'])
-@authorized
-def logout():
-    response = Response200.send(message="Logged out successfully")
-    response.set_cookie(
-        key='jwt',
-        value='',
-        expires=0,
-        max_age=0,
-        httponly=True,
-        secure=False,
-        samesite='Lax',
-    )
-    return response
+def logout(): return auth.logout()
+
 
 
 @app.route("/users", methods=['GET'])
-@inject
-@authorized
-def get_users():
-    try:
-        service = get_user_service()
-        users = service.get_all()
-        return Response200.send(data=[user.__dict__ for user in users])
-    except Exception as e:
-        return Response500.send(message=str(e))
-
+def get_users(): return users.get_users()
 
 @app.route("/users/<int:user_id>", methods=['GET'])
-@inject
-@authorized
-def get_user(user_id):
-    service = get_user_service()
-    user = service.get_by_id(user_id)
-    if not user:
-        return Response404.send(message="User not found")
-    return Response200.send(data=user.__dict__)
-
+def get_user(user_id): return users.get_user(user_id)
 
 @app.route("/users", methods=['POST'])
-@inject
-@authorized
-def create_user():
-    if not request.is_json:
-        return Response400.send(message="Request must be JSON")
+def create_user(): return users.create_user()
 
-    try:
-        data = request.json
-        dto = UserCreateDTO(
-            username=data.get('username'),
-            password_hash=hash_data(data.get('password')),
-            email=data.get('email'),
-            full_name=data.get('full_name'),
-            phone_number=data.get('phone_number'),
-            is_admin=data.get('is_admin', False),
-            avatar=data.get('avatar')
-        )
-
-        service = get_user_service()
-        user = service.create(dto)
-        if not user:
-            return Response400.send(message="User creation failed")
-        return Response201.send(data=user.__dict__)
-    except Exception as e:
-        return Response400.send(message=str(e))
 
 
 @app.route("/rooms", methods=['GET'])
-@inject
-@authorized
-def get_rooms():
-    service = get_room_service()
-    rooms = service.get_all()
-    return Response200.send(data=[room.__dict__ for room in rooms])
-
+def get_rooms(): return rooms.get_rooms()
 
 @app.route("/rooms/<int:room_id>", methods=['GET'])
-@inject
-@authorized
-def get_room(room_id):
-    service = get_room_service()
-    room = service.get_by_id(room_id)
-    if not room:
-        return Response404.send(message="Room not found")
-    return Response200.send(data=room.__dict__)
-
+def get_room(room_id): return rooms.get_room(room_id)
 
 @app.route("/rooms", methods=['POST'])
-@inject
-@authorized
-def create_room():
-    if not request.is_json:
-        return Response400.send(message="Request must be JSON")
+def create_room(): rooms.create_room()
 
-    try:
-        data = request.json
-        if not data.get('name') or not data.get('short_name'):
-            return Response400.send(message="Name and short_name are required")
-
-        service = get_room_service()
-        room_id = service.create(data.get('name'), data.get('short_name'))
-        if not room_id:
-            return Response400.send(message="Room creation failed")
-        return Response201.send(data={"id": room_id})
-    except Exception as e:
-        return Response400.send(message=str(e))
 
 
 @app.route("/inventory/conditions", methods=['GET'])
-@inject
-@authorized
-def get_inventory_conditions():
-    service = get_inventory_condition_service()
-    conditions = service.get_all()
-    return Response200.send(data=[condition.__dict__ for condition in conditions])
-
+def get_inventory_conditions(): return inventory.get_inventory_conditions()
 
 @app.route("/inventory/categories", methods=['GET'])
-@inject
-@authorized
-def get_inventory_categories():
-    service = get_inventory_category_service()
-    categories = service.get_all()
-    return Response200.send(data=[category.__dict__ for category in categories])
-
+def get_inventory_categories(): return inventory.get_inventory_categories()
 
 @app.route("/inventory/items", methods=['GET'])
-@inject
-@authorized
-def get_inventory_items():
-    is_short = request.args.get('short', 'true').lower() == 'true'
-    service = get_inventory_item_service()
-    items = service.get_all(is_short)
-    return Response200.send(data=[item.__dict__ for item in items])
-
+def get_inventory_items(): return inventory.get_inventory_items()
 
 @app.route("/inventory/items/<int:item_id>", methods=['GET'])
-@inject
-@authorized
-def get_inventory_item(item_id):
-    is_short = request.args.get('short', 'true').lower() == 'true'
-    service = get_inventory_item_service()
-    item = service.get_by_id(item_id, is_short)
-    if not item:
-        return Response404.send(message="Item not found")
-    return Response200.send(data=item.__dict__)
-
+def get_inventory_item(item_id): return inventory.get_inventory_item(item_id)
 
 @app.route("/inventory/items", methods=['POST'])
-@inject
-@authorized
-def create_inventory_item():
-    if not request.is_json:
-        return Response400.send(message="Request must be JSON")
+def create_inventory_item(): return inventory.create_inventory_item()
 
-    try:
-        data = request.json
-        required_fields = ['name', 'category_id', 'room_id']
-        if not all(field in data for field in required_fields):
-            return Response400.send(message=f"Required fields: {', '.join(required_fields)}")
-
-        dto = InventoryItemCreateDTO(
-            name=data['name'],
-            description=data.get('description'),
-            category_id=data['category_id'],
-            room_id=data['room_id'],
-            assigned_user_id=data.get('assigned_user_id'),
-            photo=data.get('photo'),
-            purchase_date=data.get('purchase_date'),
-            purchase_price=data.get('purchase_price'),
-            warranty_until=data.get('warranty_until')
-        )
-
-        service = get_inventory_item_service()
-        item_id = service.create(dto)
-        if not item_id:
-            return Response400.send(message="Item creation failed")
-        return Response201.send(data={"id": item_id})
-    except Exception as e:
-        return Response400.send(message=str(e))
 
 
 @app.route("/logs", methods=['GET'])
-@inject
-@authorized
-def get_logs():
-    service = get_log_service()
-    logs = service.get_all()
-    return Response200.send(data=[log.__dict__ for log in logs])
+def get_logs(): return logs.get_logs()
+
 
 
 if __name__ == "__main__":
