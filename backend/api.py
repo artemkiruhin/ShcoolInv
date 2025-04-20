@@ -49,8 +49,28 @@ def create_room(): rooms.create_room()
 @app.route("/inventory/conditions", methods=['GET'])
 def get_inventory_conditions(): return inventory.get_inventory_conditions()
 
+@app.route("/inventory/conditions/create", methods=['POST'])
+def create_inventory_conditions(): return inventory.create_inventory_condition()
+
+@app.route("/inventory/conditions/delete/<int:condition_id>", methods=['DELETE'])
+def delete_inventory_condition(condition_id: int): return inventory.delete_inventory_condition(condition_id)
+
+@app.route("/inventory/conditions/update", methods=['PATCH'])
+def update_inventory_condition(): return inventory.update_inventory_condition()
+
+
+
 @app.route("/inventory/categories", methods=['GET'])
 def get_inventory_categories(): return inventory.get_inventory_categories()
+
+@app.route("/inventory/categories/create", methods=['POST'])
+def create_inventory_category(): return inventory.create_inventory_category()
+
+@app.route("/inventory/categories/delete/<int:category_id>", methods=['DELETE'])
+def delete_inventory_category(category_id: int): return inventory.delete_inventory_category(category_id)
+
+@app.route("/inventory/categories/update", methods=['PATCH'])
+def update_inventory_category(): return inventory.update_inventory_category()
 
 @app.route("/inventory/items", methods=['GET'])
 def get_inventory_items(): return inventory.get_inventory_items()
@@ -60,6 +80,12 @@ def get_inventory_item(item_id): return inventory.get_inventory_item(item_id)
 
 @app.route("/inventory/items", methods=['POST'])
 def create_inventory_item(): return inventory.create_inventory_item()
+
+@app.route("/inventory/items/update", methods=['PATCH'])
+def update_inventory_item(): return inventory.update_inventory_item()
+
+@app.route("/inventory/delete/<int:category_id>", methods=['DELETE'])
+def delete_inventory_item(category_id: int): return inventory.delete_inventory_item(category_id)
 
 
 
