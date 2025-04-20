@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Type, List
 
-from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO
-from entities import User, Room, InventoryCondition
+from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO
+from entities import User, Room, InventoryCondition, InventoryCategory
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
@@ -250,3 +250,49 @@ class InventoryConditionService:
     @staticmethod
     def __map_to_dto(condition: InventoryCondition):
         return InventoryConditionDTO(condition.id, condition.name, condition.description)
+
+
+
+class InventoryCategoryService:
+    def __init__(self, inventory_category_repository: InventoryCategoryRepository):
+        self.inventory_category_repository = inventory_category_repository
+
+    def create(self, name, short_name, description) -> int | None:
+        category = self.inventory_category_repository.get_by_name(name)
+        if category: return None
+        new_category = InventoryCategory.create(name, short_name, description)
+        return self.inventory_category_repository.create(new_category).id
+
+    def update(self, condition_id, name: str = None, short_name: str = None, description: str = None) -> int | None:
+        if not name and not description and not short_name: return None
+        category = self.inventory_category_repository.get_by_id(condition_id)
+        if not category: return None
+        if name: category.name = name
+        if short_name: category.short_name = short_name
+        if description: category.description = description
+        return self.inventory_category_repository.update(category).id
+
+    def delete(self, condition_id, is_strong=False) -> bool:
+        category = self.inventory_category_repository.get_by_id(condition_id)
+        if not category: return False
+        return self.inventory_category_repository.delete(category)
+
+    def get_all(self) -> list[InventoryCategoryDTO]:
+        categories = self.inventory_category_repository.get_all()
+        category_dtos = [InventoryConditionDTO]
+        for category in categories: category_dtos.append(self.__map_to_dto(category))
+        return category_dtos
+
+    def get_by_id(self, condition_id) -> InventoryCategoryDTO | None:
+        category = self.inventory_category_repository.get_by_id(condition_id)
+        if not category: return None
+        return self.__map_to_dto(category)
+
+    def get_by_name(self, name) -> InventoryCategoryDTO | None:
+        category = self.inventory_category_repository.get_by_name(name)
+        if not category: return None
+        return self.__map_to_dto(category)
+
+    @staticmethod
+    def __map_to_dto(category: InventoryCategory):
+        return InventoryCategoryDTO(category.id, category.name, category.short_name, category.description)
