@@ -106,18 +106,18 @@ class InventoryItemShortDTO(BaseModel):
     id: int
     number: str
     name: str
-    category: str
-    room: Optional[str] = None
-    condition: str
+    category: InventoryCategoryDTO
+    room: RoomDTO
+    condition: InventoryConditionDTO
 
     def __init__(
         self,
         id: int,
         number: str,
         name: str,
-        category: str,
-        condition: str,
-        room: Optional[str] = None,
+        category: InventoryCategoryDTO,
+        condition: InventoryConditionDTO,
+        room: RoomDTO
     ):
         super().__init__(
             id=id,
@@ -303,35 +303,35 @@ class InventoryItemCreateDTO(BaseModel):
     name: str
     description: str
     category_id: int
-    room_id: Optional[int] = None
-    condition_id: int
-    photo: Optional[bytes] = None
-    purchase_date: Optional[datetime] = None
-    purchase_price: Optional[float] = None
-    warranty_until: Optional[datetime] = None
+    room_id: int
+    assigned_user_id: int
+    photo: Optional[bytes]
+    purchase_date: Optional[datetime]
+    purchase_price: Optional[float]
+    warranty_until: Optional[datetime]
 
     def __init__(
         self,
-        name: str,
-        description: str,
-        category_id: int,
-        condition_id: int,
-        room_id: Optional[int] = None,
-        photo: Optional[bytes] = None,
-        purchase_date: Optional[datetime] = None,
-        purchase_price: Optional[float] = None,
-        warranty_until: Optional[datetime] = None,
+            name: str,
+            description: str,
+            category_id: int,
+            room_id: int,
+            assigned_user_id: int,
+            photo: Optional[bytes] = None,
+            purchase_date: Optional[datetime] = None,
+            purchase_price: Optional[float] = None,
+            warranty_until: Optional[datetime] = None
     ):
         super().__init__(
             name=name,
             description=description,
             category_id=category_id,
             room_id=room_id,
-            condition_id=condition_id,
+            assigned_user_id=assigned_user_id,
             photo=photo,
             purchase_date=purchase_date,
             purchase_price=purchase_price,
-            warranty_until=warranty_until,
+            warranty_until=warranty_until
         )
 
 
@@ -344,6 +344,7 @@ class Token(BaseModel):
 
 
 class InventoryItemUpdateDTO(BaseModel):
+    item_id: int
     name: Optional[str] = None
     description: Optional[str] = None
     category_id: Optional[int] = None
@@ -358,17 +359,18 @@ class InventoryItemUpdateDTO(BaseModel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        category_id: Optional[int] = None,
-        room_id: Optional[int] = None,
-        condition_id: Optional[int] = None,
-        assigned_user_id: Optional[int] = None,
-        photo: Optional[bytes] = None,
-        purchase_date: Optional[datetime] = None,
-        purchase_price: Optional[float] = None,
-        warranty_until: Optional[datetime] = None,
-        is_written_off: Optional[bool] = None,
+            item_id: int,
+            name: Optional[str] = None,
+            description: Optional[str] = None,
+            category_id: Optional[int] = None,
+            room_id: Optional[int] = None,
+            condition_id: Optional[int] = None,
+            assigned_user_id: Optional[int] = None,
+            photo: Optional[bytes] = None,
+            purchase_date: Optional[datetime] = None,
+            purchase_price: Optional[float] = None,
+            warranty_until: Optional[datetime] = None,
+            is_written_off: Optional[bool] = None
     ):
         super().__init__(
             name=name,
@@ -381,5 +383,5 @@ class InventoryItemUpdateDTO(BaseModel):
             purchase_date=purchase_date,
             purchase_price=purchase_price,
             warranty_until=warranty_until,
-            is_written_off=is_written_off,
+            is_written_off=is_written_off
         )
