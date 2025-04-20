@@ -1,5 +1,5 @@
 from dependency_injector import containers, providers
-from repositories import (
+from core.repositories import (
     UserRepository,
     RoomRepository,
     InventoryItemRepository,
@@ -7,7 +7,7 @@ from repositories import (
     InventoryConditionRepository,
     LogRepository
 )
-from services import (
+from services.services import (
     UserService,
     RoomService,
     InventoryItemService,

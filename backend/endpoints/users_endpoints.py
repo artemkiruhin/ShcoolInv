@@ -1,9 +1,9 @@
 from dependency_injector.wiring import inject
 
-from dependency_injection import get_user_service
-from dtos import UserCreateDTO
-from flask_utils import authorized, Response200, Response500, Response404, Response400, Response201
-from security import hash_data
+from configurations.dependency_injection import get_user_service
+from core.dtos import UserCreateDTO
+from configurations.flask_utils import authorized, Response200, Response500, Response404, Response400, Response201
+from services.security import hash_data
 from flask import request
 
 

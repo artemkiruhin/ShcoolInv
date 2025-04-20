@@ -1,6 +1,6 @@
 from dependency_injector.wiring import inject
-from dependency_injection import get_room_service
-from flask_utils import authorized, Response200, Response404, Response400, Response201
+from configurations.dependency_injection import get_room_service
+from configurations.flask_utils import authorized, Response200, Response404, Response400, Response201
 from flask import request
 
 

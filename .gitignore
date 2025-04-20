@@ -55,6 +55,7 @@ logs/
 *.code-workspace
 
 # PyCharm/IntelliJ
+.idea/*
 .idea/
 *.iml
 *.ipr

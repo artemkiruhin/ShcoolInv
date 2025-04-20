@@ -1,9 +1,9 @@
 from dependency_injector.wiring import inject
 
-from config import DEFAULT_JWT_EXPIRES_SECONDS
-from dependency_injection import get_user_service
-from flask_utils import Response204, Response200, Response401, Response400
-from security import hash_data
+from configurations.config import DEFAULT_JWT_EXPIRES_SECONDS
+from configurations.dependency_injection import get_user_service
+from configurations.flask_utils import Response204, Response200, Response401, Response400
+from services.security import hash_data
 from flask import request
 
 @inject

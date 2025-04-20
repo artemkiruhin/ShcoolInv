@@ -1,6 +1,5 @@
 from flask import Flask
-from dependency_injection import container
-from security import *
+from configurations.dependency_injection import container
 import endpoints.auth_endpoints as auth
 import endpoints.users_endpoints as users
 import endpoints.rooms_endpoints as rooms

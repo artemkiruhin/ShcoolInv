@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import hashlib
 import jwt
-from config import SECRET_KEY, ALGORITHM, DEFAULT_JWT_EXPIRES_HOURS
+from configurations.config import SECRET_KEY, ALGORITHM, DEFAULT_JWT_EXPIRES_HOURS
 
 
 def create_jwt_token(data: dict, expires_delta_hours: timedelta = None) -> str:

@@ -1,8 +1,8 @@
 from dependency_injector.wiring import inject
-from dependency_injection import get_inventory_item_service, get_inventory_category_service, \
+from configurations.dependency_injection import get_inventory_item_service, get_inventory_category_service, \
     get_inventory_condition_service
-from dtos import InventoryItemCreateDTO, InventoryItemUpdateDTO
-from flask_utils import authorized, Response400, Response201, Response200, Response404, Response500
+from core.dtos import InventoryItemCreateDTO, InventoryItemUpdateDTO
+from configurations.flask_utils import authorized, Response400, Response201, Response200, Response404, Response500
 from flask import request
 
 @inject

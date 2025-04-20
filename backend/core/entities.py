@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
-from config import Base
+from configurations.config import Base
 from datetime import datetime
 from pytz import timezone
 from sqlalchemy import LargeBinary

@@ -1,6 +1,6 @@
 from dependency_injector.wiring import inject
-from dependency_injection import get_log_service
-from flask_utils import authorized, Response200
+from configurations.dependency_injection import get_log_service
+from configurations.flask_utils import authorized, Response200
 
 
 @inject

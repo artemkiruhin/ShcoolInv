@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import jsonify, request
 from typing import Any, Optional, Dict, Union, List
-from security import validate_jwt_token
+from services.security import validate_jwt_token
 
 
 class BaseResponse:
