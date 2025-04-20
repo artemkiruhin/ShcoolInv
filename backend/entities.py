@@ -68,14 +68,16 @@ class InventoryCategory(Base):
     __tablename__ = 'inventory_category'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
+    short_name = Column(String(10), nullable=False, unique=True)
     description = Column(String, nullable=True)
 
     items = relationship("InventoryItem", back_populates="category")
 
     @staticmethod
-    def create(name, description=None):
+    def create(name, short_name, description=None):
         return InventoryCategory(
             name=name,
+            short_name=short_name,
             description=description
         )
 
@@ -83,7 +85,7 @@ class InventoryCategory(Base):
 class InventoryItem(Base):
     __tablename__ = 'inventory_items'
     id = Column(Integer, primary_key=True)
-    number = Column(String(50), nullable=False, unique=True)
+    number = Column(String(50), nullable=True, unique=True)
     name = Column(String(50), nullable=False)
     description = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False,
@@ -108,7 +110,7 @@ class InventoryItem(Base):
 
     @staticmethod
     def create(number, name, description, category_id, room_id, assigned_user_id,
-               photo_path=None, purchase_date=None, purchase_price=None, warranty_until=None, photo=None):
+               photo=None, purchase_date=None, purchase_price=None, warranty_until=None):
         return InventoryItem(
             number=number,
             name=name,
@@ -116,11 +118,10 @@ class InventoryItem(Base):
             category_id=category_id,
             room_id=room_id,
             assigned_user_id=assigned_user_id,
-            photo_path=photo_path,
+            photo=photo,
             purchase_date=purchase_date,
             purchase_price=purchase_price,
-            warranty_until=warranty_until,
-            photo=photo
+            warranty_until=warranty_until
         )
 
 
