@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Type
+from typing import Type, List
 
-from dtos import UserCreateDTO, UserDTO, UserUpdateDTO
-from entities import User
+from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO
+from entities import User, Room
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
@@ -157,3 +157,53 @@ class UserService:
                       entity.is_active,
                       entity.avatar)
         return dto
+
+
+class RoomService:
+
+    def __init__(self, room_repository: RoomRepository):
+        self.room_repository = room_repository
+
+    def create(self, name) -> int | None:
+        room = self.room_repository.get_by_name(name)
+        if not room: return None
+        new_room = Room.create(name)
+        result = self.room_repository.create(new_room).id
+        return result
+
+    def update(self, room_id, name) -> int | None:
+        room = self.room_repository.get_by_id(room_id)
+        if not room: return None
+
+        room_by_name = self.room_repository.get_by_name(name)
+        if room_by_name: return None
+
+        room.name = name
+        result = self.room_repository.update(room).id
+        return result
+
+    def delete(self, room_id) -> bool:
+        room = self.room_repository.get_by_id(room_id)
+        if not room: return False
+        return self.room_repository.delete(room)
+
+    def get_all(self) -> list[RoomDTO]:
+        rooms = self.room_repository.get_all()
+        room_dtos = [RoomDTO]
+        for room in rooms: room_dtos.append(self.__map_to_dto(room))
+        return room_dtos
+
+    def get_by_id(self, room_id):
+        room = self.room_repository.get_by_id(room_id)
+        room_dto = self.__map_to_dto(room)
+        return room_dto
+
+    def get_by_name(self, name):
+        room = self.room_repository.get_by_name(name)
+        room_dto = self.__map_to_dto(room)
+        return room_dto
+
+    @staticmethod
+    def __map_to_dto(entity: Room):
+        return RoomDTO(entity.id, entity.name, entity.short_name)
+
