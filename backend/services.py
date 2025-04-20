@@ -3,8 +3,8 @@ from time import timezone
 from typing import Type, List
 
 from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
-    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO
-from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem
+    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO
+from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
@@ -450,4 +450,46 @@ class InventoryItemService:
             InventoryCategoryService.map_to_dto(inventory_item.category),
             InventoryConditionService.map_to_dto(inventory_item.condition),
             RoomService.map_to_dto(inventory_item.room)
+        )
+
+
+class LogService:
+    def __init__(self, log_repository: LogRepository):
+        self.log_repository = log_repository
+
+    def create(self, description: str, log_type: LogType, related_entity_link: str = None):
+        new_log = Log.create(description, log_type, related_entity_link)
+        return self.log_repository.create(new_log) is not None
+
+    def delete(self, log_id: int, is_strong: bool = False):
+        log = self.log_repository.get_by_id(log_id)
+        if not log: return False
+        return self.log_repository.delete(log)
+
+    def get_all(self) -> [LogDTO]:
+        logs = self.log_repository.get_all()
+        log_dtos = [LogDTO]
+        for log in logs:
+            log_dtos.append(LogService.map_to_dto(log))
+        return log_dtos
+
+    def get_by_id(self, log_id: int):
+        log = self.log_repository.get_by_id(log_id)
+        return LogService.map_to_dto(log)
+
+    def get_by_status(self, status: LogType):
+        logs = self.log_repository.get_by_status(status)
+        log_dtos = [LogDTO]
+        for log in logs:
+            log_dtos.append(LogService.map_to_dto(log))
+        return log_dtos
+
+    @staticmethod
+    def map_to_dto(log: Log):
+        return LogDTO(
+            log.id,
+            log.description,
+            log.type,
+            log.created_at,
+            log.related_entity_link
         )
