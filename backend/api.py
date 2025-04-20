@@ -3,14 +3,25 @@ from flask import Flask, request
 from dependency_injection import get_user_service, get_room_service, get_inventory_condition_service, \
     get_inventory_category_service, get_inventory_item_service, get_log_service, container
 from security import *
-from config import DEFAULT_JWT_EXPIRES_SECONDS
+from config import DEFAULT_JWT_EXPIRES_SECONDS, T
 from flask_utils import Response400, Response401, Response200, Response204, Response404, Response201, Response500
 from dtos import *
+from functools import wraps
 
 app = Flask(__name__)
 app.container = container
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
+
+
+def authorized(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        jwt_token = validate_jwt_token(request.cookies.get('jwt'))
+        if jwt_token is None:
+            return Response401.send()
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route("/auth/login", methods=['POST'])
@@ -48,14 +59,13 @@ def login():
 
 
 @app.route("/auth/validate", methods=['GET'])
+@authorized
 def validate():
-    jwt_token = validate_jwt_token(request.cookies.get('jwt'))
-    if not jwt_token:
-        return Response401.send(message="Invalid or expired token")
     return Response204.send()
 
 
 @app.route("/auth/logout", methods=['GET'])
+@authorized
 def logout():
     response = Response200.send(message="Logged out successfully")
     response.set_cookie(
@@ -72,6 +82,7 @@ def logout():
 
 @app.route("/users", methods=['GET'])
 @inject
+@authorized
 def get_users():
     try:
         service = get_user_service()
@@ -83,6 +94,7 @@ def get_users():
 
 @app.route("/users/<int:user_id>", methods=['GET'])
 @inject
+@authorized
 def get_user(user_id):
     service = get_user_service()
     user = service.get_by_id(user_id)
@@ -93,6 +105,7 @@ def get_user(user_id):
 
 @app.route("/users", methods=['POST'])
 @inject
+@authorized
 def create_user():
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
@@ -120,6 +133,7 @@ def create_user():
 
 @app.route("/rooms", methods=['GET'])
 @inject
+@authorized
 def get_rooms():
     service = get_room_service()
     rooms = service.get_all()
@@ -128,6 +142,7 @@ def get_rooms():
 
 @app.route("/rooms/<int:room_id>", methods=['GET'])
 @inject
+@authorized
 def get_room(room_id):
     service = get_room_service()
     room = service.get_by_id(room_id)
@@ -138,6 +153,7 @@ def get_room(room_id):
 
 @app.route("/rooms", methods=['POST'])
 @inject
+@authorized
 def create_room():
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
@@ -158,6 +174,7 @@ def create_room():
 
 @app.route("/inventory/conditions", methods=['GET'])
 @inject
+@authorized
 def get_inventory_conditions():
     service = get_inventory_condition_service()
     conditions = service.get_all()
@@ -166,6 +183,7 @@ def get_inventory_conditions():
 
 @app.route("/inventory/categories", methods=['GET'])
 @inject
+@authorized
 def get_inventory_categories():
     service = get_inventory_category_service()
     categories = service.get_all()
@@ -174,6 +192,7 @@ def get_inventory_categories():
 
 @app.route("/inventory/items", methods=['GET'])
 @inject
+@authorized
 def get_inventory_items():
     is_short = request.args.get('short', 'true').lower() == 'true'
     service = get_inventory_item_service()
@@ -183,6 +202,7 @@ def get_inventory_items():
 
 @app.route("/inventory/items/<int:item_id>", methods=['GET'])
 @inject
+@authorized
 def get_inventory_item(item_id):
     is_short = request.args.get('short', 'true').lower() == 'true'
     service = get_inventory_item_service()
@@ -194,6 +214,7 @@ def get_inventory_item(item_id):
 
 @app.route("/inventory/items", methods=['POST'])
 @inject
+@authorized
 def create_inventory_item():
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
@@ -227,6 +248,7 @@ def create_inventory_item():
 
 @app.route("/logs", methods=['GET'])
 @inject
+@authorized
 def get_logs():
     service = get_log_service()
     logs = service.get_all()
