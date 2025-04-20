@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_cors import CORS
+from configurations.config import SECRET_KEY, CORS_CONFIGURATION
 from configurations.dependency_injection import container
 import endpoints.auth_endpoints as auth
 import endpoints.users_endpoints as users
@@ -7,6 +9,7 @@ import endpoints.inventory_endpoints as inventory
 import endpoints.logs_endpoints as logs
 
 app = Flask(__name__)
+CORS(app, resources=CORS_CONFIGURATION)
 app.container = container
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
