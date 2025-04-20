@@ -3,7 +3,7 @@ from time import timezone
 from typing import Type, List
 
 from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
-    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO
+    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO, LoginDTO
 from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
@@ -82,7 +82,7 @@ class UserService:
         dto = self.map_to_dto(user)
         return dto
 
-    def login(self, username, password_hash) -> str | None:
+    def login(self, username, password_hash) -> LoginDTO | None:
         user = self.user_repository.get_by_credentials(username, password_hash)
         if not user: return None
         jwt_token = create_jwt_token({
@@ -90,7 +90,8 @@ class UserService:
             "is_admin": user.is_admin
         })
 
-        return jwt_token
+        result = LoginDTO(jwt_token, UserService.map_to_dto(user))
+        return result
 
     def change_password_as_admin(self, sender_id, user_id, new_password_hash) -> bool:
         sender = self.user_repository.get_by_id(sender_id)
