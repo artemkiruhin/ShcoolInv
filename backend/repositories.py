@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session, Query
 from sqlalchemy import desc, or_
+
+from dtos import LogType
 from entities import *
 
 
@@ -149,3 +151,6 @@ class LogRepository(BaseRepository):
             .limit(limit)
             .all()
         )
+
+    def get_by_status(self, log_status: LogType) -> [Log]:
+        return self.session.query(Log).filter_by(type=log_status)
