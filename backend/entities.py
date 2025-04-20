@@ -39,12 +39,13 @@ class Room(Base):
     __tablename__ = 'rooms'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
+    short_name = Column(String(10), nullable=False, unique=True)
 
     items = relationship("InventoryItem", back_populates="room")
 
     @staticmethod
-    def create(name):
-        return Room(name=name)
+    def create(name, short_name):
+        return Room(name=name, short_name=short_name)
 
 
 class InventoryCondition(Base):
