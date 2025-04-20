@@ -107,17 +107,11 @@ class InventoryItemRepository(BaseRepository):
     def get_by_number(self, number: str) -> Optional[InventoryItem]:
         return self.session.query(InventoryItem).filter(InventoryItem.number == number).first()
 
-    def get_last_by_category_and_room(self, category_id: int, room_id: Optional[int]) -> Optional[InventoryItem]:
-        query = self.session.query(InventoryItem).filter(
-            InventoryItem.category_id == category_id
-        )
+    def get_by_category(self, category_id: int):
+        return self.session.query(InventoryItem).filter_by(category_id=category_id).all()
 
-        if room_id:
-            query = query.filter(InventoryItem.room_id == room_id)
-        else:
-            query = query.filter(InventoryItem.room_id.is_(None))
-
-        return query.order_by(InventoryItem.id.desc()).first()
+    def get_by_room(self, room_id: int):
+        return self.session.query(InventoryItem).filter_by(room_id=room_id).all()
 
     def search(self, filters: Dict) -> [InventoryItem]:
         query = self.session.query(InventoryItem)
