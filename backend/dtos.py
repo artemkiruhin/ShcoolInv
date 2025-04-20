@@ -333,12 +333,12 @@ class InventoryItemCreateDTO(BaseModel):
         )
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+class LoginDTO(BaseModel):
+    jwt: str
+    user_data: UserDTO
 
-    def __init__(self, access_token: str, token_type: str):
-        super().__init__(access_token=access_token, token_type=token_type)
+    def __init__(self, jwt: str, user_data: UserDTO):
+        super().__init__(jwt=jwt, user_data=user_data)
 
 
 class InventoryItemUpdateDTO(BaseModel):
