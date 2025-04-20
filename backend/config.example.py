@@ -10,3 +10,4 @@ T = TypeVar('T', bound=Base)
 SECRET_KEY = "your_super_secret_key"
 ALGORITHM = "encode_alg" # HS256 is popular
 DEFAULT_JWT_EXPIRES_HOURS = 24
+DEFAULT_JWT_EXPIRES_SECONDS = DEFAULT_JWT_EXPIRES_HOURS * 360
