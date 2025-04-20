@@ -4,24 +4,14 @@ from dependency_injection import get_user_service, get_room_service, get_invento
     get_inventory_category_service, get_inventory_item_service, get_log_service, container
 from security import *
 from config import DEFAULT_JWT_EXPIRES_SECONDS, T
-from flask_utils import Response400, Response401, Response200, Response204, Response404, Response201, Response500
+from flask_utils import Response400, Response401, Response200, Response204, Response404, Response201, Response500, \
+    authorized
 from dtos import *
-from functools import wraps
 
 app = Flask(__name__)
 app.container = container
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
-
-
-def authorized(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        jwt_token = validate_jwt_token(request.cookies.get('jwt'))
-        if jwt_token is None:
-            return Response401.send()
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 @app.route("/auth/login", methods=['POST'])

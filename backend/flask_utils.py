@@ -1,5 +1,7 @@
-from flask import jsonify
+from functools import wraps
+from flask import jsonify, request
 from typing import Any, Optional, Dict, Union, List
+from security import validate_jwt_token
 
 
 class BaseResponse:
@@ -116,3 +118,12 @@ class Response500(BaseResponse):
             errors=errors
         )
         return jsonify(response), 500
+
+def authorized(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        jwt_token = validate_jwt_token(request.cookies.get('jwt'))
+        if jwt_token is None:
+            return Response401.send()
+        return f(*args, **kwargs)
+    return decorated_function
