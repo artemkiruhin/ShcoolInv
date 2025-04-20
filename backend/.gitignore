@@ -1,0 +1,114 @@
+### Python ###
+# Байт-код, кэш и скомпилированные файлы
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.so
+
+# Виртуальные окружения
+.env/
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+pythonenv*
+
+# Установочные и зависимые файлы
+pip-delete-this-directory.txt
+pip-log.txt
+
+# Тесты и покрытие кода
+.coverage
+.coverage.*
+htmlcov/
+.nox/
+.tox/
+.pytest_cache/
+.mypy_cache/
+*.cover
+*.py,cover
+hypothesis/
+
+### FastAPI ###
+# Локальные базы данных
+*.db
+*.sqlite
+*.sqlite3
+
+# Логи
+*.log
+logs/
+
+# Файлы окружения
+.env
+.env.*
+!.env.example  # Пример файла окружения можно включить
+
+### IDE ###
+# VS Code
+.vscode/
+!.vscode/settings.json  # Можно включить общие настройки
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm/IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Vim
+*.swp
+*.swo
+*.un~
+
+### Системные файлы ###
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Прочее ###
+# Временные файлы
+*.tmp
+*.bak
+*~
+temp/
+tmp/
+
+# Рабочие файлы (workspace)
+*.workspace
+
+# Миграции (Alembic)
+alembic/versions/*
+!alembic/versions/.keep
+
+# Статика и медиа (если используются)
+staticfiles/
+mediafiles/
+
+# Docker
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Фронтенд-артефакты (если есть)
+node_modules/
+dist/
+build/
+*.min.js
+*.min.css

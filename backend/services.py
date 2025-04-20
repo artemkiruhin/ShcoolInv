@@ -164,10 +164,10 @@ class RoomService:
     def __init__(self, room_repository: RoomRepository):
         self.room_repository = room_repository
 
-    def create(self, name) -> int | None:
+    def create(self, name, short_name) -> int | None:
         room = self.room_repository.get_by_name(name)
         if not room: return None
-        new_room = Room.create(name)
+        new_room = Room.create(name, short_name)
         result = self.room_repository.create(new_room).id
         return result
 
