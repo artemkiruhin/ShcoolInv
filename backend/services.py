@@ -1,8 +1,10 @@
 from datetime import datetime
+from time import timezone
 from typing import Type, List
 
-from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO
-from entities import User, Room, InventoryCondition, InventoryCategory
+from dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
+    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO
+from entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem
 from repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
@@ -77,7 +79,7 @@ class UserService:
         user = self.user_repository.get_by_id(user_id)
         if not user: return None
 
-        dto = self.__map_to_dto(user)
+        dto = self.map_to_dto(user)
         return dto
 
     def login(self, username, password_hash) -> str | None:
@@ -121,19 +123,19 @@ class UserService:
     def get_by_username(self, username, is_strong=False) -> UserDTO | None:
         user = self.user_repository.get_by_username(username, is_strong)
         if not user: return None
-        dto = self.__map_to_dto(user)
+        dto = self.map_to_dto(user)
         return dto
 
     def get_by_email(self, email, is_strong: bool = False) -> UserDTO | None:
         user = self.user_repository.get_by_email(email, is_strong)
         if not user: return None
-        dto = self.__map_to_dto(user)
+        dto = self.map_to_dto(user)
         return dto
 
     def get_by_phone(self, phone_number) -> UserDTO | None:
         user = self.user_repository.get_by_all_args(None, None, None, phone_number)
         if not user: return None
-        dto = self.__map_to_dto(user)
+        dto = self.map_to_dto(user)
         return dto
 
     def change_avatar(self, user_id: int, avatar=None) -> bool:
@@ -145,7 +147,7 @@ class UserService:
         return True if result is not None else False
 
     @staticmethod
-    def __map_to_dto(entity: User):
+    def map_to_dto(entity: User):
         dto = UserDTO(entity.id,
                       entity.username,
                       entity.email,
@@ -190,21 +192,21 @@ class RoomService:
     def get_all(self) -> list[RoomDTO]:
         rooms = self.room_repository.get_all()
         room_dtos = [RoomDTO]
-        for room in rooms: room_dtos.append(self.__map_to_dto(room))
+        for room in rooms: room_dtos.append(self.map_to_dto(room))
         return room_dtos
 
     def get_by_id(self, room_id):
         room = self.room_repository.get_by_id(room_id)
-        room_dto = self.__map_to_dto(room)
+        room_dto = self.map_to_dto(room)
         return room_dto
 
     def get_by_name(self, name):
         room = self.room_repository.get_by_name(name)
-        room_dto = self.__map_to_dto(room)
+        room_dto = self.map_to_dto(room)
         return room_dto
 
     @staticmethod
-    def __map_to_dto(entity: Room):
+    def map_to_dto(entity: Room):
         return RoomDTO(entity.id, entity.name, entity.short_name)
 
 
@@ -234,21 +236,21 @@ class InventoryConditionService:
     def get_all(self) -> list[InventoryConditionDTO]:
         conditions = self.inventory_condition_repository.get_all()
         condition_dtos = [InventoryConditionDTO]
-        for condition in conditions: condition_dtos.append(self.__map_to_dto(condition))
+        for condition in conditions: condition_dtos.append(self.map_to_dto(condition))
         return condition_dtos
 
     def get_by_id(self, condition_id) -> InventoryConditionDTO | None:
         condition = self.inventory_condition_repository.get_by_id(condition_id)
         if not condition: return None
-        return self.__map_to_dto(condition)
+        return self.map_to_dto(condition)
 
     def get_by_name(self, name) -> InventoryConditionDTO | None:
         condition = self.inventory_condition_repository.get_by_name(name)
         if not condition: return None
-        return self.__map_to_dto(condition)
+        return self.map_to_dto(condition)
 
     @staticmethod
-    def __map_to_dto(condition: InventoryCondition):
+    def map_to_dto(condition: InventoryCondition):
         return InventoryConditionDTO(condition.id, condition.name, condition.description)
 
 
@@ -280,19 +282,172 @@ class InventoryCategoryService:
     def get_all(self) -> list[InventoryCategoryDTO]:
         categories = self.inventory_category_repository.get_all()
         category_dtos = [InventoryConditionDTO]
-        for category in categories: category_dtos.append(self.__map_to_dto(category))
+        for category in categories: category_dtos.append(self.map_to_dto(category))
         return category_dtos
 
     def get_by_id(self, condition_id) -> InventoryCategoryDTO | None:
         category = self.inventory_category_repository.get_by_id(condition_id)
         if not category: return None
-        return self.__map_to_dto(category)
+        return self.map_to_dto(category)
 
     def get_by_name(self, name) -> InventoryCategoryDTO | None:
         category = self.inventory_category_repository.get_by_name(name)
         if not category: return None
-        return self.__map_to_dto(category)
+        return self.map_to_dto(category)
 
     @staticmethod
-    def __map_to_dto(category: InventoryCategory):
+    def map_to_dto(category: InventoryCategory):
         return InventoryCategoryDTO(category.id, category.name, category.short_name, category.description)
+
+
+class InventoryItemService:
+    def __init__(self,
+                 inventory_item_repository: InventoryItemRepository,
+                 condition_repository: InventoryConditionRepository,
+                 category_repository: InventoryCategoryRepository,
+                 room_repository: RoomRepository):
+        self.inventory_item_repository = inventory_item_repository
+        self.condition_repository = condition_repository
+        self.category_repository = category_repository
+        self.room_repository = room_repository
+
+    def generate_number(self, item_id: int, category_id: int, room_id: int) -> str | None:
+        item = self.inventory_item_repository.get_by_id(item_id)
+        category = self.category_repository.get_by_id(category_id)
+        room = self.room_repository.get_by_id(room_id)
+
+        if not item or not category or not room: return None
+
+        return f'{category.short_name.upper()} - {room.short_name.upper()} - {item_id:05d}'
+
+    def create(self, request: InventoryItemCreateDTO) -> int | None:
+        item = self.inventory_item_repository.search({"name": request.name})[0]
+        if item: return None
+        new_item = InventoryItem.create(
+            None,
+            request.name,
+            request.description,
+            request.category_id,
+            request.room_id,
+            request.assigned_user_id,
+            request.photo,
+            request.purchase_date,
+            request.purchase_price,
+            request.warranty_until
+        )
+        created_item = self.inventory_item_repository.create(new_item)
+        if not created_item: return None
+
+        created_item.number = self.generate_number(created_item.id, created_item.category_id, created_item.room_id)
+        result = self.inventory_item_repository.update(created_item)
+        return result.id if result is not None else None
+
+    def update(self, request: InventoryItemUpdateDTO) -> bool:
+        if not any([
+            request.name,
+            request.description,
+            request.category_id,
+            request.room_id,
+            request.condition_id,
+            request.assigned_user_id,
+            request.photo is not None,
+            request.purchase_date,
+            request.purchase_price,
+            request.warranty_until,
+            request.is_written_off is not None
+        ]):
+            return False
+
+        item = self.inventory_item_repository.get_by_id(request.item_id)
+        if not item: return False
+
+        needs_number_update = False
+
+        if request.name: item.name = request.name
+        if request.description: item.description = request.description
+        if request.condition_id: item.condition_id = request.condition_id
+        if request.assigned_user_id: item.assigned_user_id = request.assigned_user_id
+        if request.photo is not None: item.photo = request.photo
+        if request.purchase_date: item.purchase_date = request.purchase_date
+        if request.purchase_price: item.purchase_price = request.purchase_price
+        if request.warranty_until: item.warranty_until = request.warranty_until
+        if request.is_written_off is not None: item.is_written_off = request.is_written_off
+        if request.category_id and request.category_id != item.category_id:
+            item.category_id = request.category_id
+            needs_number_update = True
+        if request.room_id and request.room_id != item.room_id:
+            item.room_id = request.room_id
+            needs_number_update = True
+        if needs_number_update:
+            category = self.category_repository.get_by_id(item.category_id)
+            room = self.room_repository.get_by_id(item.room_id)
+
+            if category and room:
+                item.number = self.generate_number(
+                    item_id=item.id,
+                    category_short_name=category.short_name,
+                    room_short_name=room.short_name
+                )
+
+        item.updated_at = datetime.now()
+        updated_item = self.inventory_item_repository.update(item)
+        return updated_item is not None
+
+    def delete(self, item_id: int, is_strong: bool = True) -> bool:
+        item = self.inventory_item_repository.get_by_id(item_id)
+        if not item: return False
+        return self.inventory_item_repository.delete(item)
+
+    def get_all(self, is_short: bool) -> list[InventoryItemDTO] | list[InventoryItemShortDTO]:
+        items = self.inventory_item_repository.get_all()
+        item_dtos = []
+        for item in items: item_dtos.append(self.__map_to_dto(item, is_short))
+        return item_dtos
+
+    def get_by_id(self, item_id: int, is_short: bool = True):
+        item = self.inventory_item_repository.get_by_id(item_id)
+        if not item: return None
+        return self.__map_to_dto(item, is_short)
+
+    def get_by_number(self, number, is_short: bool = True):
+        item = self.inventory_item_repository.get_by_number(number)
+        if not item: return None
+        return self.__map_to_dto(item, is_short)
+
+    def get_by_category(self, category_id, is_short: bool = True):
+        item = self.inventory_item_repository.get_by_category(category_id)
+        if not item: return None
+        return self.__map_to_dto(item, is_short)
+
+    def get_by_room(self, room_id, is_short: bool = True):
+        item = self.inventory_item_repository.get_by_room(room_id)
+        if not item: return None
+        return self.__map_to_dto(item, is_short)
+
+
+    @staticmethod
+    def __map_to_dto(inventory_item: InventoryItem, is_short: bool = True):
+        return InventoryItemDTO(
+            inventory_item.id,
+            inventory_item.number,
+            inventory_item.name,
+            inventory_item.description,
+            inventory_item.created_at,
+            InventoryConditionService.map_to_dto(inventory_item.condition),
+            InventoryCategoryService.map_to_dto(inventory_item.category),
+            UserService.map_to_dto(inventory_item.assigned_user),
+            inventory_item.is_written_off,
+            inventory_item.updated_at,
+            RoomService.map_to_dto(inventory_item.room),
+            inventory_item.photo,
+            inventory_item.purchase_date,
+            inventory_item.purchase_price,
+            inventory_item.warranty_until
+        ) if is_short else InventoryItemShortDTO(
+            inventory_item.id,
+            inventory_item.number,
+            inventory_item.name,
+            InventoryCategoryService.map_to_dto(inventory_item.category),
+            InventoryConditionService.map_to_dto(inventory_item.condition),
+            RoomService.map_to_dto(inventory_item.room)
+        )
