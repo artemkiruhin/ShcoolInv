@@ -1,3 +1,4 @@
+import enum
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
@@ -195,7 +196,6 @@ class LogDTO(BaseModel):
     type: int
     created_at: datetime
     related_entity_link: Optional[str] = None
-    user: Optional[UserDTO] = None
 
     def __init__(
         self,
@@ -203,16 +203,14 @@ class LogDTO(BaseModel):
         description: str,
         type: int,
         created_at: datetime,
-        related_entity_link: Optional[str] = None,
-        user: Optional[UserDTO] = None,
+        related_entity_link: Optional[str] = None
     ):
         super().__init__(
             id=id,
             description=description,
             type=type,
             created_at=created_at,
-            related_entity_link=related_entity_link,
-            user=user,
+            related_entity_link=related_entity_link
         )
 
     class Config:
@@ -385,3 +383,8 @@ class InventoryItemUpdateDTO(BaseModel):
             warranty_until=warranty_until,
             is_written_off=is_written_off
         )
+
+class LogType(enum.Enum):
+    Info = 1
+    Warning = 2
+    Error = 3
