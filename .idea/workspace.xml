@@ -5,13 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: hash_data">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pythonProject1.iml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/alembic/env.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/configurations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/core/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/endpoints/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/services/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/entities.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/alembic.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/configurations/dependency_injection.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/configurations/dependency_injection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/configurations/flask_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/configurations/flask_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/core/entities.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/entities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/core/repositories.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/repositories.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/inventory_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/inventory_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/logs_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/logs_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/rooms_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/rooms_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/users_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/users_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/services/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/services/security.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/services/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/services/services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +40,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -39,11 +53,28 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.api.executor": "Run",
+    "Python.entities.executor": "Run",
+    "Python.flask_utils.executor": "Run",
+    "Python.reader.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/programming/projects/Diploma/ShcoolInv/backend"
+    "last_opened_file_path": "D:/programming/projects/Diploma/ShcoolInv/ShcoolInv/backend"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend" />
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\configurations" />
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\core" />
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\endpoints" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend" />
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\s" />
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\configurations" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -126,6 +157,17 @@
     </task>
     <option name="localTasksCounter" value="9" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />

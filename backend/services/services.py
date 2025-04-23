@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import Type
 
-from core.dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
+from backend.core.dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
     InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO, LoginDTO
-from core.entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
-from core.repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
+from backend.core.entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
+from backend.core.repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
  \
     InventoryItemRepository, LogRepository
-from security import create_jwt_token
+from backend.services.security import create_jwt_token
 
 
 class UserService:

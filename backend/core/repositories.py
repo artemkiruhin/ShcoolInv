@@ -1,9 +1,13 @@
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session, Query
 from sqlalchemy import desc, or_
+from backend.core.dtos import LogType
+from backend.core.entities import InventoryCategory, InventoryItem, InventoryCondition, User, Room, Log
+from typing import List, Optional, Union
+from sqlalchemy.orm import Session, Query
+from sqlalchemy import or_, and_
 
-from dtos import LogType
-from entities import *
+from backend.configurations.config import Base
 
 
 class BaseRepository:
@@ -34,23 +38,149 @@ class BaseRepository:
         return True
 
 
-class UserRepository(BaseRepository):
+
+class UserRepository:
     def __init__(self, session: Session):
-        super().__init__(User, session)
+        self.session = session
 
-    def get_by_username(self, username: str, exact: bool = True) -> Optional[User]:
-        query = self.session.query(User).filter(User.username.ilike(username))
-        return query.first() if exact else query.all()
+    def get_all(self) -> List[User]:
+        """Get all users"""
+        return self.session.query(User).all()
 
-    def get_by_email(self, email: str, exact: bool = True) -> Optional[User]:
-        query = self.session.query(User).filter(User.email.ilike(email))
-        return query.first() if exact else query.all()
+    def get_by_id(self, user_id: int) -> Optional[User]:
+        """Get user by ID"""
+        return self.session.query(User).get(user_id)
+
+    def create(self, user: User) -> User:
+        """Create new user"""
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+
+    def update(self, user: User) -> User:
+        """Update existing user"""
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+
+    def delete(self, user: User) -> bool:
+        """Delete user"""
+        self.session.delete(user)
+        self.session.commit()
+        return True
+
+    def get_by_username(self, username: str, exact: bool = True) -> Union[Optional[User], List[User]]:
+        """
+        Get user by username
+        :param username: Username to search
+        :param exact: If True - exact match, False - partial match
+        :return: Single user if exact=True, list of users if exact=False
+        """
+        query = self.session.query(User)
+        if exact:
+            query = query.filter(User.username == username)
+            return query.first()
+        else:
+            query = query.filter(User.username.ilike(f"%{username}%"))
+            return query.all()
+
+    def get_by_email(self, email: str, exact: bool = True) -> Union[Optional[User], List[User]]:
+        """
+        Get user by email
+        :param email: Email to search
+        :param exact: If True - exact match, False - partial match
+        :return: Single user if exact=True, list of users if exact=False
+        """
+        query = self.session.query(User)
+        if exact:
+            query = query.filter(User.email == email)
+            return query.first()
+        else:
+            query = query.filter(User.email.ilike(f"%{email}%"))
+            return query.all()
 
     def get_by_credentials(self, username: str, password_hash: str) -> Optional[User]:
+        """Get user by username and password hash"""
         return self.session.query(User).filter(
-            User.username == username,
-            User.password_hash == password_hash
+            and_(
+                User.username == username,
+                User.password_hash == password_hash
+            )
         ).first()
+
+    def search(self, username: Optional[str] = None,
+               email: Optional[str] = None,
+               full_name: Optional[str] = None,
+               phone_number: Optional[str] = None,
+               is_active: Optional[bool] = None) -> List[User]:
+        """
+        Search users with multiple filters
+        :param username: Partial username match
+        :param email: Partial email match
+        :param full_name: Partial full name match
+        :param phone_number: Partial phone number match
+        :param is_active: Active status filter
+        :return: List of matching users
+        """
+        query = self.session.query(User)
+
+        filters = []
+        if username:
+            filters.append(User.username.ilike(f"%{username}%"))
+        if email:
+            filters.append(User.email.ilike(f"%{email}%"))
+        if full_name:
+            filters.append(User.full_name.ilike(f"%{full_name}%"))
+        if phone_number:
+            filters.append(User.phone_number.ilike(f"%{phone_number}%"))
+        if is_active is not None:
+            filters.append(User.is_active == is_active)
+
+        if filters:
+            query = query.filter(or_(*filters))
+
+        return query.order_by(User.username).all()
+
+    def exists_with_username(self, username: str) -> bool:
+        """Check if user with given username exists"""
+        return self.session.query(
+            self.session.query(User)
+            .filter(User.username == username)
+            .exists()
+        ).scalar()
+
+    def exists_with_email(self, email: str) -> bool:
+        """Check if user with given email exists"""
+        return self.session.query(
+            self.session.query(User)
+            .filter(User.email == email)
+            .exists()
+        ).scalar()
+
+    def get_admins(self) -> List[User]:
+        """Get all admin users"""
+        return self.session.query(User).filter(User.is_admin == True).all()
+
+    def activate_user(self, user_id: int) -> bool:
+        """Activate user account"""
+        user = self.get_by_id(user_id)
+        if not user:
+            return False
+
+        user.is_active = True
+        self.session.commit()
+        return True
+
+    def deactivate_user(self, user_id: int) -> bool:
+        """Deactivate user account"""
+        user = self.get_by_id(user_id)
+        if not user:
+            return False
+
+        user.is_active = False
+        self.session.commit()
+        return True
 
     def get_by_all_args(self, username: str | None, email: str | None,
                         full_name: str | None, phone_number: str | None) -> User | None:

@@ -1,21 +1,14 @@
-from dependency_injector.wiring import inject
-from configurations.dependency_injection import get_inventory_item_service, get_inventory_category_service, \
-    get_inventory_condition_service
-from core.dtos import InventoryItemCreateDTO, InventoryItemUpdateDTO
-from configurations.flask_utils import authorized, Response400, Response201, Response200, Response404, Response500
+from backend.core.dtos import InventoryItemCreateDTO, InventoryItemUpdateDTO
+from backend.configurations.flask_utils import authorized, Response400, Response201, Response200, Response404, Response500
 from flask import request
 
-@inject
 @authorized
-def get_inventory_conditions():
-    service = get_inventory_condition_service()
+def get_inventory_conditions(service):
     conditions = service.get_all()
     return Response200.send(data=[condition.__dict__ for condition in conditions])
 
-@inject
 @authorized
-def create_inventory_condition():
-    service = get_inventory_condition_service()
+def create_inventory_condition(service):
     data = request.json
     required_fields = ['name', 'description']
     if not all(field in data for field in required_fields):
@@ -23,40 +16,27 @@ def create_inventory_condition():
     result = service.create(data['name'], data['description'])
     return Response201.send(data=result) if result is not None else Response500.send()
 
-@inject
 @authorized
-def delete_inventory_condition(condition_id: int):
-    service = get_inventory_condition_service()
+def delete_inventory_condition(condition_id: int, service):
     result = service.delete(condition_id)
     return Response200.send(data=result) if result else Response500.send()
 
-@inject
 @authorized
-def update_inventory_condition():
-    service = get_inventory_condition_service()
+def update_inventory_condition(service):
     data = request.json
     required_fields = ['condition_id', 'name', 'description']
     if not all(field in data for field in required_fields):
         return Response400.send(message=f"Required fields: {', '.join(required_fields)}")
-    idx = data['condition_id']
-    name = data['name']
-    description = data['description']
-    result = service.update(idx, name, description)
+    result = service.update(data['condition_id'], data['name'], data['description'])
     return Response200.send(data=result) if result is not None else Response500.send()
 
-
-
-@inject
 @authorized
-def get_inventory_categories():
-    service = get_inventory_category_service()
+def get_inventory_categories(service):
     categories = service.get_all()
     return Response200.send(data=[category.__dict__ for category in categories])
 
-@inject
 @authorized
-def create_inventory_category():
-    service = get_inventory_category_service()
+def create_inventory_category(service):
     data = request.json
     required_fields = ['name', 'short_name', 'description']
     if not all(field in data for field in required_fields):
@@ -64,54 +44,36 @@ def create_inventory_category():
     result = service.create(data['name'], data['short_name'], data['description'])
     return Response201.send(data=result) if result is not None else Response500.send()
 
-@inject
 @authorized
-def delete_inventory_category(category_id: int):
-    service = get_inventory_category_service()
+def delete_inventory_category(category_id: int, service):
     result = service.delete(category_id)
     return Response200.send(data=result) if result else Response500.send()
 
-@inject
 @authorized
-def update_inventory_category():
-    service = get_inventory_category_service()
+def update_inventory_category(service):
     data = request.json
     required_fields = ['category_id', 'name', 'short_name', 'description']
     if not all(field in data for field in required_fields):
         return Response400.send(message=f"Required fields: {', '.join(required_fields)}")
-    idx = data['category_id']
-    name = data['name']
-    short_name = data['short_name']
-    description = data['description']
-    result = service.update(idx, name, short_name, description)
+    result = service.update(data['category_id'], data['name'], data['short_name'], data['description'])
     return Response200.send(data=result) if result is not None else Response500.send()
 
-
-@inject
 @authorized
-def get_inventory_items():
+def get_inventory_items(service):
     is_short = request.args.get('short', 'true').lower() == 'true'
-    service = get_inventory_item_service()
     items = service.get_all(is_short)
     return Response200.send(data=[item.__dict__ for item in items])
 
-
-
-@inject
 @authorized
-def get_inventory_item(item_id):
+def get_inventory_item(item_id, service):
     is_short = request.args.get('short', 'true').lower() == 'true'
-    service = get_inventory_item_service()
     item = service.get_by_id(item_id, is_short)
     if not item:
         return Response404.send(message="Item not found")
     return Response200.send(data=item.__dict__)
 
-
-
-@inject
 @authorized
-def create_inventory_item():
+def create_inventory_item(service):
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
 
@@ -133,7 +95,6 @@ def create_inventory_item():
             warranty_until=data.get('warranty_until')
         )
 
-        service = get_inventory_item_service()
         item_id = service.create(dto)
         if not item_id:
             return Response400.send(message="Item creation failed")
@@ -141,9 +102,8 @@ def create_inventory_item():
     except Exception as e:
         return Response400.send(message=str(e))
 
-@inject
 @authorized
-def update_inventory_item():
+def update_inventory_item(service):
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
 
@@ -167,16 +127,14 @@ def update_inventory_item():
             warranty_until=data['warranty_until'],
             is_written_off=data['is_written_off']
         )
-        service = get_inventory_item_service()
         item_id = service.update(update_dto)
-        if not item_id: return Response400.send(message="Item creation failed")
+        if not item_id:
+            return Response400.send(message="Item update failed")
         return Response200.send(data={"id": item_id})
     except Exception as e:
         return Response400.send(message=str(e))
 
-@inject
 @authorized
-def delete_inventory_item(category_id: int):
-    service = create_inventory_item()
-    result = service.delete(category_id)
+def delete_inventory_item(item_id: int, service):
+    result = service.delete(item_id)
     return Response200.send(data=result) if result else Response500.send()

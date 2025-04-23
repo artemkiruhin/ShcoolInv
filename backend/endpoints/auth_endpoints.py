@@ -1,13 +1,9 @@
-from dependency_injector.wiring import inject
-
-from configurations.config import DEFAULT_JWT_EXPIRES_SECONDS
-from configurations.dependency_injection import get_user_service
-from configurations.flask_utils import Response204, Response200, Response401, Response400
-from services.security import hash_data
+from backend.configurations.config import DEFAULT_JWT_EXPIRES_SECONDS
+from backend.configurations.flask_utils import Response204, Response200, Response401, Response400
+from backend.services.security import hash_data
 from flask import request
 
-@inject
-def login():
+def login(user_service):
     if not request.is_json:
         return Response400.send(message="Request must be JSON")
 
@@ -16,9 +12,8 @@ def login():
     if not username or not password:
         return Response400.send(message="Username and password are required")
 
-    service = get_user_service()
     password_hash = hash_data(password)
-    login_dto = service.login(username, password_hash)
+    login_dto = user_service.login(username, password_hash)
 
     if not login_dto or not login_dto.jwt or not login_dto.user_data:
         return Response401.send(message="Invalid credentials")
@@ -38,12 +33,8 @@ def login():
     )
     return response
 
-
-
 def validate():
     return Response204.send()
-
-
 
 def logout():
     response = Response200.send(message="Logged out successfully")

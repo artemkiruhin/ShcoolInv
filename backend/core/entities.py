@@ -1,12 +1,12 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, DECIMAL
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, DECIMAL, LargeBinary
 from sqlalchemy.orm import relationship
-from configurations.config import Base
+from backend.configurations.config import Base
 from datetime import datetime
 from pytz import timezone
-from sqlalchemy import LargeBinary
 
 class User(Base):
     __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
     username = Column(String(50), nullable=False, unique=True)
@@ -22,50 +22,30 @@ class User(Base):
 
     assigned_items = relationship("InventoryItem", back_populates="assigned_user")
 
-    @staticmethod
-    def create(username, password_hash, email, full_name, phone_number, is_admin=False, avatar=None):
-        return User(
-            username=username,
-            password_hash=password_hash,
-            email=email,
-            full_name=full_name,
-            phone_number=phone_number,
-            is_admin=is_admin,
-            avatar=avatar
-        )
-
-
 class Room(Base):
     __tablename__ = 'rooms'
+    __table_args__ = {'extend_existing': True}
+
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
     short_name = Column(String(10), nullable=False, unique=True)
 
     items = relationship("InventoryItem", back_populates="room")
 
-    @staticmethod
-    def create(name, short_name):
-        return Room(name=name, short_name=short_name)
-
-
 class InventoryCondition(Base):
     __tablename__ = 'inventory_conditions'
+    __table_args__ = {'extend_existing': True}
+
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
     description = Column(String, nullable=True)
 
     items = relationship("InventoryItem", back_populates="condition")
 
-    @staticmethod
-    def create(name, description=None):
-        return InventoryCondition(
-            name=name,
-            description=description
-        )
-
-
 class InventoryCategory(Base):
     __tablename__ = 'inventory_category'
+    __table_args__ = {'extend_existing': True}
+
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
     short_name = Column(String(10), nullable=False, unique=True)
@@ -73,23 +53,17 @@ class InventoryCategory(Base):
 
     items = relationship("InventoryItem", back_populates="category")
 
-    @staticmethod
-    def create(name, short_name, description=None):
-        return InventoryCategory(
-            name=name,
-            short_name=short_name,
-            description=description
-        )
-
-
 class InventoryItem(Base):
+    __module__ = 'backend.core.entities'
     __tablename__ = 'inventory_items'
+    __table_args__ = {'extend_existing': True}
+
     id = Column(Integer, primary_key=True)
     number = Column(String(50), nullable=True, unique=True)
     name = Column(String(50), nullable=False)
     description = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False,
-                        default=lambda: datetime.now(timezone('Europe/Moscow')))
+                      default=lambda: datetime.now(timezone('Europe/Moscow')))
     updated_at = Column(DateTime(timezone=True), nullable=True)
 
     condition_id = Column(Integer, ForeignKey('inventory_conditions.id'), nullable=False)
@@ -108,36 +82,13 @@ class InventoryItem(Base):
     room = relationship("Room", back_populates="items")
     assigned_user = relationship("User", back_populates="assigned_items")
 
-    @staticmethod
-    def create(number, name, description, category_id, room_id, assigned_user_id,
-               photo=None, purchase_date=None, purchase_price=None, warranty_until=None):
-        return InventoryItem(
-            number=number,
-            name=name,
-            description=description,
-            category_id=category_id,
-            room_id=room_id,
-            assigned_user_id=assigned_user_id,
-            photo=photo,
-            purchase_date=purchase_date,
-            purchase_price=purchase_price,
-            warranty_until=warranty_until
-        )
-
-
 class Log(Base):
     __tablename__ = 'logs'
+    __table_args__ = {'extend_existing': True}
+
     id = Column(Integer, primary_key=True)
     description = Column(String, nullable=False)
     type = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False,
-                        default=lambda: datetime.now(timezone('Europe/Moscow')))
+                  default=lambda: datetime.now(timezone('Europe/Moscow')))
     related_entity_link = Column(String, nullable=True)
-
-    @staticmethod
-    def create(description, type, related_entity_link=None):
-        return Log(
-            description=description,
-            type=type,
-            related_entity_link=related_entity_link
-        )
