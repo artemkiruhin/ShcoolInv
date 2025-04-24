@@ -3,6 +3,9 @@ from backend.configurations.flask_utils import authorized, Response200, Response
 from backend.services.security import hash_data
 from flask import request
 
+from backend.services.services import UserService
+
+
 @authorized
 def get_users(service):
     try:
@@ -42,14 +45,14 @@ def create_user(service):
     except Exception as e:
         return Response400.send(message=str(e))
 
-def init(service):
+def init(service: UserService):
     try:
         dto = UserCreateDTO(
-            username='admin',
+            username='admin2',
             password_hash=hash_data('1'),
-            email='admin@mail.ru',
+            email='a2min@mail.ru',
             full_name='Иванов Сергей Витальевич',
-            phone_number='89991112233',
+            phone_number='43991112233',
             is_admin=True,
             avatar=None
         )
@@ -57,7 +60,7 @@ def init(service):
         user = service.create(dto)
         if not user:
             return Response400.send(message="User creation failed")
-        return Response201.send(data=user.__dict__)
+        return Response201.send(data=user.id)
     except Exception as e:
         print(e)
         return Response400.send(message=str(e))

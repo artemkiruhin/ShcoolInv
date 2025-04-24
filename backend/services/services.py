@@ -22,8 +22,11 @@ class UserService:
 
         db_user = self.user_repository.get_by_all_args(request.username,
                                                        request.email,
-                                                       request.full_name,
+                                                       None,
                                                        request.phone_number)
+
+        # print(db_user.username)
+
         if db_user: return None
 
         new_user = User.create(request.username,
