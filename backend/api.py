@@ -123,6 +123,4 @@ def handle_get_logs():
 
 if __name__ == "__main__":
     import sys
-
-    print("InventoryItem module:", sys.modules.get('backend.core.entities'))
     app.run(port=5123, host='localhost')
