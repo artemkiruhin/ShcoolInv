@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: manual DI">
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745478441306</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="upd: _">
+      <option name="closed" value="true" />
+      <created>1745605418403</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1745605418403</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,11 +191,11 @@
     <MESSAGE value="init_" />
     <MESSAGE value="add: entities" />
     <MESSAGE value="add: session for queries" />
-    <MESSAGE value="upd: _" />
     <MESSAGE value="add: repositories" />
     <MESSAGE value="add: hash_data" />
     <MESSAGE value="fix: proj fix" />
     <MESSAGE value="add: manual DI" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: manual DI" />
+    <MESSAGE value="upd: _" />
+    <option name="LAST_COMMIT_MESSAGE" value="upd: _" />
   </component>
 </project>
