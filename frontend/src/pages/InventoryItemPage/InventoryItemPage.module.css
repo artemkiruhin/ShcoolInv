@@ -1,0 +1,20 @@
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.notFound {
+    text-align: center;
+    padding: 2rem;
+    background: #fff3cd;
+    border-radius: 8px;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    margin-top: 2rem;
+}
+
+.notFound h2 {
+    margin-bottom: 1rem;
+    color: #856404;
+}
