@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Inventory from './pages/Inventory/Inventory';
+import Footer from './components/Footer/Footer';
 import './styles/global.css';
 import './styles/variables.css';
 import './styles/animations.css';
+import InventoryItemPage from "./pages/InventoryItemPage/InventoryItemPage";
 
 function App() {
     useEffect(() => {
@@ -17,9 +21,18 @@ function App() {
     }, []);
 
     return (
-        <div className="App">
-            <Dashboard />
-        </div>
+        <Router>
+            <div className="App">
+                <main>
+                    <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/inventory" element={<Inventory />} />
+                        <Route path="/items/:itemId" element={<InventoryItemPage />} />
+                    </Routes>
+                </main>
+                <Footer />
+            </div>
+        </Router>
     );
 }
 
