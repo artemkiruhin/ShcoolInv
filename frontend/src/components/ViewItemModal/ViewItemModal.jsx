@@ -1,7 +1,7 @@
 import Modal from '../common/Modal/Modal';
 import styles from './ViewItemModal.module.css';
 
-const ViewItemModal = ({ isOpen, onClose, item }) => {
+const ViewItemModal = ({ isOpen, onClose, item, onDetails }) => {
     if (!isOpen || !item) return null;
 
     const categoryMap = {
@@ -64,6 +64,12 @@ const ViewItemModal = ({ isOpen, onClose, item }) => {
                     </div>
                 </div>
                 <div className={styles.modalFooter}>
+                    <button
+                        className={`${styles.btn} ${styles.primary}`}
+                        onClick={onDetails}
+                    >
+                        Открыть подробную страницу
+                    </button>
                     <button
                         className={`${styles.btn} ${styles.primary}`}
                         onClick={onClose}

@@ -32,11 +32,15 @@ const InventoryItemPage = () => {
     const { itemId } = useParams();
     const [item, setItem] = useState(null);
 
+    console.log(itemId)
+
     useEffect(() => {
         const timer = setTimeout(() => {
             const foundItem = mockInventoryData.find(i => i.idx === `${itemId}`);
             setItem(foundItem || null);
         }, 500);
+
+        console.log(itemId)
 
         return () => clearTimeout(timer);
     }, [itemId]);

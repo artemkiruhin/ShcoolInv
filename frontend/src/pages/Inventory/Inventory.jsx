@@ -10,8 +10,11 @@ import QrModal from '../../components/QrModal/QrModal';
 import ViewItemModal from '../../components/ViewItemModal/ViewItemModal';
 import Button from '../../components/common/Button/Button';
 import styles from './Inventory.module.css';
+import {useNavigate} from "react-router-dom";
 
 const Inventory = () => {
+    const navigate = useNavigate();
+
     const [inventoryData, setInventoryData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -108,6 +111,10 @@ const Inventory = () => {
         setShowQrModal(true);
     };
 
+    const handleItemDetails = (item) => {
+        navigate(`/items/${item.id}`)
+    }
+
     const filterOptions = [
         { value: 'tech', label: 'Техника' },
         { value: 'furniture', label: 'Мебель' },
@@ -182,6 +189,7 @@ const Inventory = () => {
                 onClose={() => setShowViewModal(false)}
                 item={selectedItem}
                 onGenerateQr={handleGenerateQr}
+                onDetails={() => handleItemDetails(selectedItem)}
             />
         </div>
     );
