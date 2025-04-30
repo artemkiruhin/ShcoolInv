@@ -1,20 +1,81 @@
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 120px);
 }
 
-.notFound {
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.actionButton {
+    min-width: 120px;
+    padding: 0.5rem 1rem;
+}
+
+.loading {
     text-align: center;
     padding: 2rem;
-    background: #fff3cd;
-    border-radius: 8px;
-    border: 1px solid #ffeeba;
-    color: #856404;
-    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: #4f46e5;
 }
 
-.notFound h2 {
+.errorContainer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.errorContainer h2 {
+    color: #dc3545;
     margin-bottom: 1rem;
-    color: #856404;
+}
+
+.errorContainer p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.homeButton {
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
 }
