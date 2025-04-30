@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
 import StatsCard from '../../components/StatsCard/StatsCard';
-import InventoryTable from '../../components/InventoryTable/InventoryTable';
-import QrModal from '../../components/QrModal/QrModal';
-import AddItemModal from '../../components/AddItemModal/AddItemModal';
+import Button from '../../components/common/Button/Button';
 import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [showQrModal, setShowQrModal] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [isAdmin] = useState(true); // Заглушка для проверки прав админа
+
     const [inventory, setInventory] = useState([
         { id: '#INV-1001', name: 'Проектор Epson EB-X41', room: 'Каб. 203', status: 'good', date: '15.03.2023' },
         { id: '#INV-1002', name: 'Ноутбук Lenovo IdeaPad 5', room: 'Каб. 301', status: 'warning', date: '22.05.2023' },
@@ -28,9 +24,9 @@ const Dashboard = () => {
         }]);
     };
 
-    const handleQrClick = (item) => {
-        setSelectedItem(item);
-        setShowQrModal(true);
+    const handleQuickReport = (type) => {
+        console.log(`Генерация отчета: ${type}`);
+        alert(`Отчет по ${type} будет сгенерирован`);
     };
 
     return (
@@ -42,13 +38,13 @@ const Dashboard = () => {
                     <StatsCard
                         title="Всего предметов"
                         value="1,248"
-                        change="+12 за неделю"
+                        change="+24 за месяц"
                         gradient="purple"
                     />
                     <StatsCard
                         title="В ремонте"
                         value="47"
-                        change="-3 за неделю"
+                        change="+2 за месяц"
                         gradient="blue"
                     />
                     <StatsCard
@@ -65,25 +61,54 @@ const Dashboard = () => {
                     />
                 </section>
 
-                <InventoryTable
-                    data={inventory}
-                    onAddClick={() => setShowAddModal(true)}
-                    onQrClick={handleQrClick}
-                />
+                {isAdmin && (
+                    <section className={styles.adminSection}>
+                        <h2 className={styles.sectionTitle}>Администратор</h2>
+                        <div className={styles.statsSection}>
+                            <StatsCard
+                                title="Сотрудников"
+                                value="42"
+                                change="+3 за месяц"
+                                gradient="red"
+                            />
+                            <StatsCard
+                                title="Активных сессий"
+                                value="18"
+                                change="-2 за неделю"
+                                gradient="cyan"
+                            />
+                        </div>
+                        <div className={styles.adminActions}>
+                            <Button variant="outline" onClick={() => console.log('Переход к сотрудникам')}>
+                                Управление сотрудниками
+                            </Button>
+                            <Button variant="outline" onClick={() => console.log('Переход к кабинетам')}>
+                                Управление кабинетами
+                            </Button>
+                        </div>
+                    </section>
+                )}
+
+                <section className={styles.actionsSection}>
+                    <div className={styles.quickReports}>
+                        <h2 className={styles.sectionTitle}>Быстрые отчеты</h2>
+                        <div className={styles.reportButtons}>
+                            <Button variant="secondary" onClick={() => handleQuickReport('всему инвентарю')}>
+                                Полный отчет
+                            </Button>
+                            <Button variant="secondary" onClick={() => handleQuickReport('состоянию "Хорошее"')}>
+                                По состоянию "Хорошее"
+                            </Button>
+                            <Button variant="secondary" onClick={() => handleQuickReport('состоянию "Требует ремонта"')}>
+                                По состоянию "Требует ремонта"
+                            </Button>
+                            <Button variant="secondary" onClick={() => handleQuickReport('состоянию "Списано"')}>
+                                По состоянию "Списано"
+                            </Button>
+                        </div>
+                    </div>
+                </section>
             </main>
-            <Footer />
-
-            <AddItemModal
-                isOpen={showAddModal}
-                onClose={() => setShowAddModal(false)}
-                onSave={handleAddItem}
-            />
-
-            <QrModal
-                isOpen={showQrModal}
-                onClose={() => setShowQrModal(false)}
-                item={selectedItem}
-            />
         </div>
     );
 };
