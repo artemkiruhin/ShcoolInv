@@ -7,6 +7,8 @@ import './styles/global.css';
 import './styles/variables.css';
 import './styles/animations.css';
 import InventoryItemPage from "./pages/InventoryItemPage/InventoryItemPage";
+import UserProfile from "./pages/UserProfile/UserProfile";
+import Header from "./components/Header/Header";
 
 function App() {
     useEffect(() => {
@@ -28,6 +30,7 @@ function App() {
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/inventory" element={<Inventory />} />
                         <Route path="/items/:itemId" element={<InventoryItemPage />} />
+                        <Route path="/profile" element={<UserProfile isAdmin={true} />} />
                     </Routes>
                 </main>
                 <Footer />
