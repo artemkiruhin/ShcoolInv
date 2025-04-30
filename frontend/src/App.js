@@ -26,6 +26,7 @@ function App() {
         <Router>
             <div className="App">
                 <main>
+                    <Header />
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/inventory" element={<Inventory />} />

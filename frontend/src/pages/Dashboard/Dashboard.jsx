@@ -32,7 +32,6 @@ const Dashboard = () => {
     return (
         <div className={styles.dashboard}>
             <div className={styles.backgroundAnimation}></div>
-            <Header />
             <main>
                 <section className={styles.statsSection}>
                     <StatsCard

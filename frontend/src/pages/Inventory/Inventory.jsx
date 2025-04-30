@@ -125,7 +125,6 @@ const Inventory = () => {
     return (
         <div className={styles.inventoryPage}>
             <div className={styles.backgroundAnimation}></div>
-            <Header />
             <main>
                 <section className={styles.inventorySection}>
                     <div className={styles.sectionHeader}>
