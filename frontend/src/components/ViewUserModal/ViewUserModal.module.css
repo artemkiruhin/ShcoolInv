@@ -1,0 +1,136 @@
+.modalContent {
+    background: white;
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.modalHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    color: var(--dark-color);
+}
+
+.closeModal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    transition: var(--transition);
+}
+
+.closeModal:hover {
+    color: var(--dark-color);
+}
+
+.modalBody {
+    padding: 1.5rem;
+}
+
+.modalFooter {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.userViewContainer {
+    display: flex;
+    gap: 2rem;
+}
+
+.userImage {
+    flex: 0 0 150px;
+}
+
+.userImage img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+}
+
+.userDetails {
+    flex: 1;
+}
+
+.userDetails h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.detailRow {
+    display: flex;
+    margin-bottom: 0.75rem;
+}
+
+.detailRow.fullWidth {
+    flex-direction: column;
+}
+
+.detailLabel {
+    font-weight: 500;
+    color: var(--dark-color);
+    min-width: 120px;
+}
+
+.detailValue {
+    color: #555;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.btn.primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn.secondary {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .userViewContainer {
+        flex-direction: column;
+    }
+
+    .userImage {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+}
