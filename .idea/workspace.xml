@@ -4,7 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _" />
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _">
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddRoomModal/AddRoomModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddRoomModal/AddRoomModal.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddUserModal/AddUserModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddUserModal/AddUserModal.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/RoomDetails/RoomDetails.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/RoomDetails/RoomDetails.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/RoomsTable/RoomsTable.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/RoomsTable/RoomsTable.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UserDetails/UserDetails.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UserDetails/UserDetails.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UsersTable/UsersTable.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UsersTable/UsersTable.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ViewUserModal/ViewUserModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ViewUserModal/ViewUserModal.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/RoomPage/RoomPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/RoomPage/RoomPage.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Rooms/Rooms.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Rooms/Rooms.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/UserPage/UserPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/UserPage/UserPage.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Users/Users.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Users/Users.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

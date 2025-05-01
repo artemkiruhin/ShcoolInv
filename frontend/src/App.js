@@ -9,6 +9,10 @@ import './styles/animations.css';
 import InventoryItemPage from "./pages/InventoryItemPage/InventoryItemPage";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import Header from "./components/Header/Header";
+import Users from "./pages/Users/Users";
+import UserPage from "./pages/UserPage/UserPage";
+import Rooms from "./pages/Rooms/Rooms";
+import RoomPage from "./pages/RoomPage/RoomPage";
 
 function App() {
     useEffect(() => {
@@ -32,6 +36,10 @@ function App() {
                         <Route path="/inventory" element={<Inventory />} />
                         <Route path="/items/:itemId" element={<InventoryItemPage />} />
                         <Route path="/profile" element={<UserProfile isAdmin={true} />} />
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/users/:id" element={<UserPage />} />
+                        <Route path="/rooms" element={<Rooms />} />
+                        <Route path="/rooms/:roomId" element={<RoomPage />} />
                     </Routes>
                 </main>
                 <Footer />
