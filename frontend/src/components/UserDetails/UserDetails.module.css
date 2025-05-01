@@ -1,0 +1,122 @@
+.detailsContainer {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.imageSection {
+    text-align: center;
+}
+
+.userImage {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.imageUpload {
+    margin-top: 1rem;
+}
+
+.uploadButton {
+    background: #f0f2f5;
+    border: 1px dashed #ccc;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.uploadButton:hover {
+    background: #e9ecef;
+}
+
+.infoSection {
+    flex: 1;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.userName {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    background: #e9ecef;
+    color: #212529;
+    font-size: 0.9rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.detailGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detailLabel {
+    font-weight: 500;
+    color: #666;
+}
+
+.detailValue {
+    color: #333;
+}
+
+.editInput {
+    width: 200px;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.statusControls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.statusInfo {
+    font-size: 1rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .detailsContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .detailGrid {
+        grid-template-columns: 1fr;
+    }
+}
