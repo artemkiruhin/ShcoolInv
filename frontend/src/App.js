@@ -13,6 +13,8 @@ import Users from "./pages/Users/Users";
 import UserPage from "./pages/UserPage/UserPage";
 import Rooms from "./pages/Rooms/Rooms";
 import RoomPage from "./pages/RoomPage/RoomPage";
+import Consumables from "./pages/ConsumablesPage/Consumables";
+import ConsumableDetails from "./pages/ConsumableDetails/ConsumableDetails";
 
 function App() {
     useEffect(() => {
@@ -40,6 +42,8 @@ function App() {
                         <Route path="/users/:id" element={<UserPage />} />
                         <Route path="/rooms" element={<Rooms />} />
                         <Route path="/rooms/:roomId" element={<RoomPage />} />
+                        <Route path="/consumables" element={<Consumables />} />
+                        <Route path="/consumables/:id" element={<ConsumableDetails />} />
                     </Routes>
                 </main>
                 <Footer />
