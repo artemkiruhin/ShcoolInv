@@ -124,6 +124,21 @@ class InventoryItem(Base):
             warranty_until=warranty_until
         )
 
+class Consumable(Base):
+    __tablename__ = 'сonsumables'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    description = Column(String, nullable=True)
+    quantity = Column(Integer, nullable=False)
+
+    @staticmethod
+    def create(name: str, description: str = None, quantity: int = 0):
+        return InventoryItem(
+            name=name,
+            description=description,
+            quantity=quantity
+        )
+
 
 class Log(Base):
     __tablename__ = 'logs'

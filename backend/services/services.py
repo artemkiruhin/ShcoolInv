@@ -1,12 +1,15 @@
 from datetime import datetime
-from typing import Type
+from typing import Type, Optional
 
-from backend.core.dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, InventoryCategoryDTO, \
-    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO, LoginDTO
-from backend.core.entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log
-from backend.core.repositories import UserRepository, RoomRepository, InventoryConditionRepository, InventoryCategoryRepository, \
+from backend.core.dtos import UserCreateDTO, UserDTO, UserUpdateDTO, RoomDTO, InventoryConditionDTO, \
+    InventoryCategoryDTO, \
+    InventoryItemDTO, InventoryItemShortDTO, InventoryItemCreateDTO, InventoryItemUpdateDTO, LogType, LogDTO, LoginDTO, \
+    ConsumableDTO
+from backend.core.entities import User, Room, InventoryCondition, InventoryCategory, InventoryItem, Log, Consumable
+from backend.core.repositories import UserRepository, RoomRepository, InventoryConditionRepository, \
+    InventoryCategoryRepository, \
  \
-    InventoryItemRepository, LogRepository
+    InventoryItemRepository, LogRepository, ConsumableRepository
 from backend.services.security import create_jwt_token
 
 
@@ -495,4 +498,69 @@ class LogService:
             log.type,
             log.created_at,
             log.related_entity_link
+        )
+
+
+class ConsumableService:
+    def __init__(self, consumable_repository: ConsumableRepository):
+        self.consumable_repository = consumable_repository
+
+    def create(self, name: str, description: str = None, quantity: int = 0) -> Optional[int]:
+        existing_consumable = self.consumable_repository.get_by_name(name)
+        if existing_consumable: return None
+
+        new_consumable = Consumable.create(name, description, quantity)
+        created_consumable = self.consumable_repository.create(new_consumable)
+        return created_consumable.id
+
+    def update(self, consumable_id: int, name: str = None, description: str = None, quantity: int = None) -> Optional[
+        int]:
+        consumable = self.consumable_repository.get_by_id(consumable_id)
+        if not consumable:
+            return None
+
+        if name and name != consumable.name:
+            existing_consumable = self.consumable_repository.get_by_name(name)
+            if existing_consumable:
+                return None
+
+        if name is not None:
+            consumable.name = name
+        if description is not None:
+            consumable.description = description
+        if quantity is not None:
+            consumable.quantity = quantity
+
+        updated_consumable = self.consumable_repository.update(consumable)
+        return updated_consumable.id
+
+    def delete(self, consumable_id: int) -> bool:
+        consumable = self.consumable_repository.get_by_id(consumable_id)
+        if not consumable:
+            return False
+        return self.consumable_repository.delete(consumable)
+
+    def get_all(self) -> [ConsumableDTO]:
+        consumables = self.consumable_repository.get_all()
+        return [self.map_to_dto(consumable) for consumable in consumables]
+
+    def get_by_id(self, consumable_id: int) -> Optional[ConsumableDTO]:
+        consumable = self.consumable_repository.get_by_id(consumable_id)
+        if not consumable:
+            return None
+        return self.map_to_dto(consumable)
+
+    def get_by_name(self, name: str) -> Optional[ConsumableDTO]:
+        consumable = self.consumable_repository.get_by_name(name)
+        if not consumable:
+            return None
+        return self.map_to_dto(consumable)
+
+    @staticmethod
+    def map_to_dto(entity: Consumable) -> ConsumableDTO:
+        return ConsumableDTO(
+            consumable_id=entity.id,
+            name=entity.name,
+            description=entity.description,
+            quantity=entity.quantity
         )

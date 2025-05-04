@@ -3,11 +3,12 @@ from typing import Dict, Any
 
 from backend.core.repositories import (
     UserRepository, RoomRepository, InventoryConditionRepository,
-    InventoryCategoryRepository, InventoryItemRepository, LogRepository
+    InventoryCategoryRepository, InventoryItemRepository, LogRepository, ConsumableRepository
 )
 from backend.services.security import create_jwt_token
 from backend.configurations.config import SECRET_KEY, CORS_CONFIGURATION, DEFAULT_JWT_EXPIRES_SECONDS, DATABASE_URL, \
     SessionLocal
+from backend.services.services import ConsumableService
 
 _repositories: Dict[str, Any] = {}
 _services: Dict[str, Any] = {}
@@ -79,6 +80,11 @@ def get_log_repository() -> LogRepository:
         _repositories["log_repository"] = LogRepository(get_db_session())
     return _repositories["log_repository"]
 
+def get_consumable_repository() -> ConsumableRepository:
+    if "consumable_repository" not in _repositories:
+        _repositories["consumable_repository"] = ConsumableRepository(get_db_session())
+    return _repositories["consumable_repository"]
+
 
 # Service initialization functions
 def get_user_service():
@@ -137,6 +143,12 @@ def get_log_service():
         _services["log_service"] = LogService(get_log_repository())
     return _services["log_service"]
 
+def get_consumable_service() -> ConsumableService:
+    if "consumable_service" not in _repositories:
+        from backend.services.services import ConsumableService
+        _services["consumable_service"] = ConsumableService(get_consumable_repository())
+    return _services["consumable_service"]
+
 
 def init_all_dependencies():
     """Initialize all services and repositories at once"""
@@ -146,6 +158,7 @@ def init_all_dependencies():
     get_inventory_category_service()
     get_inventory_item_service()
     get_log_service()
+    get_consumable_service()
 
 
 def reset_dependencies():

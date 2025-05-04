@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
+
+from backend.configurations.manual_dependencies import get_consumable_service
 from configurations.config import SECRET_KEY, CORS_CONFIGURATION, DEFAULT_JWT_EXPIRES_SECONDS
 from configurations.manual_dependencies import (
     get_user_service, get_room_service, get_inventory_condition_service,
@@ -11,6 +13,7 @@ import endpoints.users_endpoints as users
 import endpoints.rooms_endpoints as rooms
 import endpoints.inventory_endpoints as inventory
 import endpoints.logs_endpoints as logs
+import endpoints.consumable_endpoints as consumables
 
 app = Flask(__name__)
 CORS(app, resources=CORS_CONFIGURATION)
@@ -120,6 +123,23 @@ def handle_delete_inventory_item(item_id):
 @app.route("/logs", methods=['GET'])
 def handle_get_logs():
     return logs.get_logs(get_log_service())
+
+# ---- CONSUMABLES ----
+@app.route("/consumables/all", methods=['GET'])
+def handle_get_consumables():
+    return consumables.get_consumables(get_consumable_service())
+
+@app.route("/consumables/create", methods=['POST'])
+def handle_create_consumables():
+    return consumables.create_consumable(get_consumable_service())
+
+@app.route("/consumables/update", methods=['PATCH'])
+def handle_update_consumables():
+    return consumables.update_consumable(get_consumable_service())
+
+@app.route("/consumables/delete/<int:item_id>", methods=['DELETE'])
+def handle_delete_consumables(item_id):
+    return consumables.delete_consumable(item_id, get_consumable_service())
 
 if __name__ == "__main__":
     import sys

@@ -388,3 +388,63 @@ class LogType(enum.Enum):
     Info = 1
     Warning = 2
     Error = 3
+
+
+class ConsumableDTO(BaseModel):
+    consumable_id: int
+    name: str
+    description: Optional[str] = None
+    quantity: int
+
+    def __init__(
+            self,
+            consumable_id: int,
+            name: str,
+            quantity: int,
+            description: Optional[str] = None
+    ):
+        super().__init__(
+            consumable_id=consumable_id,
+            name=name,
+            description=description,
+            quantity=quantity
+        )
+
+
+class ConsumableCreateDTO(BaseModel):
+    name: str
+    description: Optional[str] = None
+    quantity: int
+
+    def __init__(
+            self,
+            name: str,
+            quantity: int,
+            description: Optional[str] = None
+    ):
+        super().__init__(
+            name=name,
+            description=description,
+            quantity=quantity
+        )
+
+
+class ConsumableUpdateDTO(BaseModel):
+    consumable_id: int
+    name: str
+    description: Optional[str] = None
+    quantity: int
+
+    def __init__(
+            self,
+            consumable_id: int,
+            name: str,
+            quantity: int,
+            description: Optional[str] = None
+    ):
+        super().__init__(
+            consumable_id=consumable_id,
+            name=name,
+            description=description,
+            quantity=quantity
+        )

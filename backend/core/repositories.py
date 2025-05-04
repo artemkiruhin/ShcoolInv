@@ -2,7 +2,7 @@ from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session, Query
 from sqlalchemy import desc, or_
 from backend.core.dtos import LogType
-from backend.core.entities import InventoryCategory, InventoryItem, InventoryCondition, User, Room, Log
+from backend.core.entities import InventoryCategory, InventoryItem, InventoryCondition, User, Room, Log, Consumable
 from typing import List, Optional, Union
 from sqlalchemy.orm import Session, Query
 from sqlalchemy import or_, and_
@@ -284,3 +284,11 @@ class LogRepository(BaseRepository):
 
     def get_by_status(self, log_status: LogType) -> [Log]:
         return self.session.query(Log).filter_by(type=log_status)
+
+
+class ConsumableRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(Consumable, session)
+
+    def get_by_name(self, name: str) -> Optional[Consumable]:
+        return self.session.query(Consumable).filter(Consumable.name.ilike(name)).first()
