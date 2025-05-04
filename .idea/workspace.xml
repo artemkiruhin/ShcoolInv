@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _">
-      <change afterPath="$PROJECT_DIR$/backend/endpoints/consumable_endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/configurations/manual_dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/configurations/manual_dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/dtos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/dtos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/entities.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/entities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/repositories.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/repositories.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/services/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/services/services.py" afterDir="false" />
-    </list>
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: consumables" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745605418403</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add: consumables">
+      <option name="closed" value="true" />
+      <created>1746380579793</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1746380579793</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -203,6 +202,7 @@
     <MESSAGE value="fix: proj fix" />
     <MESSAGE value="add: manual DI" />
     <MESSAGE value="upd: _" />
-    <option name="LAST_COMMIT_MESSAGE" value="upd: _" />
+    <MESSAGE value="add: consumables" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: consumables" />
   </component>
 </project>
