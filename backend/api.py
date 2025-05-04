@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from backend.configurations.manual_dependencies import get_consumable_service
+from backend.configurations.manual_dependencies import get_consumable_service, get_inventory_condition_repository
 from configurations.config import SECRET_KEY, CORS_CONFIGURATION, DEFAULT_JWT_EXPIRES_SECONDS
 from configurations.manual_dependencies import (
     get_user_service, get_room_service, get_inventory_condition_service,
@@ -14,6 +14,7 @@ import endpoints.rooms_endpoints as rooms
 import endpoints.inventory_endpoints as inventory
 import endpoints.logs_endpoints as logs
 import endpoints.consumable_endpoints as consumables
+import endpoints.dev_endpoints as dev_end
 
 app = Flask(__name__)
 CORS(app, resources=CORS_CONFIGURATION)
@@ -140,6 +141,11 @@ def handle_update_consumables():
 @app.route("/consumables/delete/<int:item_id>", methods=['DELETE'])
 def handle_delete_consumables(item_id):
     return consumables.delete_consumable(item_id, get_consumable_service())
+
+
+@app.route("/dev/init-db", methods=['POST'])
+def init_db():
+    return dev_end.init_db(get_user_service(), get_room_service(), get_inventory_condition_service(), get_inventory_category_service(), get_inventory_item_service(), get_consumable_service(), get_log_service())
 
 if __name__ == "__main__":
     import sys
