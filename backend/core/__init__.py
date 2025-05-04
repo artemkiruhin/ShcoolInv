@@ -4,7 +4,8 @@ from .entities import (
     InventoryCategory,
     InventoryCondition,
     InventoryItem,
-    Log
+    Log,
+    Consumable
 )
 from .repositories import (
     BaseRepository,
@@ -13,7 +14,8 @@ from .repositories import (
     InventoryCategoryRepository,
     InventoryConditionRepository,
     InventoryItemRepository,
-    LogRepository
+    LogRepository,
+    ConsumableRepository
 )
 
 __all__ = [
@@ -21,5 +23,5 @@ __all__ = [
     'InventoryItem', 'Log',
     'BaseRepository', 'UserRepository', 'RoomRepository',
     'InventoryCategoryRepository', 'InventoryConditionRepository',
-    'InventoryItemRepository', 'LogRepository'
+    'InventoryItemRepository', 'LogRepository', 'Consumable', 'ConsumableRepository'
 ]

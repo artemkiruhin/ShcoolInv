@@ -12,7 +12,8 @@ from backend.core.entities import (
     InventoryCondition,
     InventoryCategory,
     InventoryItem,
-    Log
+    Log,
+    Consumable
 )
 
 config = context.config

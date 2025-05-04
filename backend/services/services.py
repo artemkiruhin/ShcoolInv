@@ -327,6 +327,8 @@ class InventoryItemService:
         return f'{category.short_name.upper()} - {room.short_name.upper()} - {item_id:05d}'
 
     def create(self, request: InventoryItemCreateDTO) -> int | None:
+        if not request or not request.room_id or not request.assigned_user_id:
+            return None
         item = self.inventory_item_repository.search({"name": request.name})[0]
         if item: return None
         new_item = InventoryItem.create(

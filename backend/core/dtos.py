@@ -303,10 +303,10 @@ class InventoryItemCreateDTO(BaseModel):
     category_id: int
     room_id: int
     assigned_user_id: int
-    photo: Optional[bytes]
-    purchase_date: Optional[datetime]
-    purchase_price: Optional[float]
-    warranty_until: Optional[datetime]
+    photo: Optional[bytes] = None
+    purchase_date: Optional[datetime] = None
+    purchase_price: Optional[float] = None
+    warranty_until: Optional[datetime] = None
 
     def __init__(
         self,
