@@ -9,7 +9,6 @@ from backend.configurations.config import Base
 from backend.core.entities import (
     User,
     Room,
-    InventoryCondition,
     InventoryCategory,
     InventoryItem,
     Log,
