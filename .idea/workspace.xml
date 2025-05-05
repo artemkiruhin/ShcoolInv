@@ -4,27 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: initialize db endpoint">
-      <change afterPath="$PROJECT_DIR$/backend/configurations/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/core/init_endpoints.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/core/schemas.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/endpoints/endpoints.py" afterDir="false" />
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/alembic/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/configurations/manual_dependencies.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/dtos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/dtos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/entities.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/entities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/repositories.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/repositories.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/consumable_endpoints.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/dev_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/dev_endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/inventory_endpoints.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/logs_endpoints.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/rooms_endpoints.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/users_endpoints.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/services/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/services/services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +65,7 @@
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\endpoints" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\endpoints" />
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend" />
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\s" />
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\configurations" />
@@ -242,7 +224,103 @@
       <option name="project" value="LOCAL" />
       <updated>1746385719198</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="fix: entities">
+      <option name="closed" value="true" />
+      <created>1746451906799</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451906799</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix: repos">
+      <option name="closed" value="true" />
+      <created>1746451913513</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451913513</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fix: core init">
+      <option name="closed" value="true" />
+      <created>1746451921884</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451921884</updated>
+    </task>
+    <task id="LOCAL-00018" summary="add: all endpoints">
+      <option name="closed" value="true" />
+      <created>1746451936628</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451936628</updated>
+    </task>
+    <task id="LOCAL-00019" summary="add: dev initial endpoints">
+      <option name="closed" value="true" />
+      <created>1746451945129</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451945129</updated>
+    </task>
+    <task id="LOCAL-00020" summary="add: contracts">
+      <option name="closed" value="true" />
+      <created>1746451958105</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451958105</updated>
+    </task>
+    <task id="LOCAL-00021" summary="add: database configuration">
+      <option name="closed" value="true" />
+      <created>1746451998538</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1746451998538</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix: api file">
+      <option name="closed" value="true" />
+      <created>1746452011997</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1746452011997</updated>
+    </task>
+    <task id="LOCAL-00023" summary="upd: init endpoints remove">
+      <option name="closed" value="true" />
+      <created>1746452101196</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1746452101196</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fix: env for alembic migrations">
+      <option name="closed" value="true" />
+      <created>1746452113822</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1746452113822</updated>
+    </task>
+    <task id="LOCAL-00025" summary="upd: _">
+      <option name="closed" value="true" />
+      <created>1746452124533</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1746452124533</updated>
+    </task>
+    <task id="LOCAL-00026" summary="upd: _">
+      <option name="closed" value="true" />
+      <created>1746452128653</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1746452128653</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -265,10 +343,20 @@
     <MESSAGE value="add: hash_data" />
     <MESSAGE value="fix: proj fix" />
     <MESSAGE value="add: manual DI" />
-    <MESSAGE value="upd: _" />
     <MESSAGE value="add: consumables" />
     <MESSAGE value="add: consumables table" />
     <MESSAGE value="add: initialize db endpoint" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: initialize db endpoint" />
+    <MESSAGE value="fix: entities" />
+    <MESSAGE value="fix: repos" />
+    <MESSAGE value="fix: core init" />
+    <MESSAGE value="add: all endpoints" />
+    <MESSAGE value="add: dev initial endpoints" />
+    <MESSAGE value="add: contracts" />
+    <MESSAGE value="add: database configuration" />
+    <MESSAGE value="fix: api file" />
+    <MESSAGE value="upd: init endpoints remove" />
+    <MESSAGE value="fix: env for alembic migrations" />
+    <MESSAGE value="upd: _" />
+    <option name="LAST_COMMIT_MESSAGE" value="upd: _" />
   </component>
 </project>
