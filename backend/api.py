@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 import uvicorn
-from backend.core.init_endpoints import init_router
+from backend.endpoints.init_endpoints import init_router
 from backend.endpoints.endpoints import router
 from backend.configurations.database import Base, engine
 
