@@ -4,13 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: consumables">
-      <change afterPath="$PROJECT_DIR$/backend/endpoints/dev_endpoints.py" afterDir="false" />
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="add: initialize db endpoint">
+      <change afterPath="$PROJECT_DIR$/backend/configurations/database.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/core/init_endpoints.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/core/schemas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/endpoints/endpoints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/alembic/env.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/configurations/manual_dependencies.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/core/dtos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/dtos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/core/entities.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/entities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/core/repositories.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/repositories.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/auth_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/consumable_endpoints.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/dev_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/dev_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/inventory_endpoints.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/logs_endpoints.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/rooms_endpoints.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/endpoints/users_endpoints.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/services/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/services/services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,19 +63,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.api.executor": "Run",
-    "Python.dev_endpoints.executor": "Run",
-    "Python.entities.executor": "Run",
-    "Python.flask_utils.executor": "Run",
-    "Python.reader.executor": "Run",
-    "Python.services.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/programming/projects/Diploma/ShcoolInv/ShcoolInv/backend"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.api.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dev_endpoints.executor&quot;: &quot;Run&quot;,
+    &quot;Python.entities.executor&quot;: &quot;Run&quot;,
+    &quot;Python.flask_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.services.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/programming/projects/Diploma/ShcoolInv/ShcoolInv/backend&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend" />
@@ -75,6 +88,31 @@
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\s" />
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend\configurations" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="api" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="api.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -188,7 +226,23 @@
       <option name="project" value="LOCAL" />
       <updated>1746380579793</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add: consumables table">
+      <option name="closed" value="true" />
+      <created>1746385698082</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1746385698082</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add: initialize db endpoint">
+      <option name="closed" value="true" />
+      <created>1746385719198</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1746385719198</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +267,8 @@
     <MESSAGE value="add: manual DI" />
     <MESSAGE value="upd: _" />
     <MESSAGE value="add: consumables" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: consumables" />
+    <MESSAGE value="add: consumables table" />
+    <MESSAGE value="add: initialize db endpoint" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: initialize db endpoint" />
   </component>
 </project>
