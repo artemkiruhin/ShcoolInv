@@ -3,9 +3,9 @@
  */
 
 export const INVENTORY_CONDITIONS = {
-    NORMAL: 'NORMAL',
-    REQUIRES_REPAIR: 'REQUIRES_REPAIR',
-    WRITTEN_OFF: 'WRITTEN_OFF'
+    NORMAL: 'Нормальное',
+    REQUIRES_REPAIR: 'Требует ремонта',
+    WRITTEN_OFF: 'Списано'
 };
 
 export const LOG_TYPES = {

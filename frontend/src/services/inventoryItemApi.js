@@ -23,6 +23,10 @@ const inventoryItemApi = {
         return apiClient.get(`/inventory/items/?skip=${skip}&limit=${limit}`);
     },
 
+    getAll: () => {
+        return apiClient.get(`/inventory/items/`);
+    },
+
     /**
      * Get item by ID
      * @param {number} itemId - Item ID
