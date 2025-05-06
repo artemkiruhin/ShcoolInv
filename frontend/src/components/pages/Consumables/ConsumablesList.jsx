@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import api from '../../../services/';
 import Table from '../../common/Table';
 import Button from '../../common/Button';
+import {ReportType} from "../../../services/constants";
 
 const ConsumablesList = () => {
     const [consumables, setConsumables] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [exportLoading, setExportLoading] = useState(false);
 
     useEffect(() => {
         const fetchConsumables = async () => {
@@ -61,6 +63,28 @@ const ConsumablesList = () => {
         }
     };
 
+    const handleExport = async () => {
+        setExportLoading(true);
+        try {
+            const blob = await api.reports.generateExcelReport(ReportType.CONSUMABLES);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+            a.download = `consumables_export_${dateStr}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err) {
+            console.error('Error exporting consumables:', err);
+            alert('Failed to export consumables. Please try again.');
+        } finally {
+            setExportLoading(false);
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -68,9 +92,18 @@ const ConsumablesList = () => {
         <div>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="page-title">Consumables</h1>
-                <Link to="/consumables/new" className="btn primary">
-                    Add New Consumable
-                </Link>
+                <div className="flex space-x-3">
+                    <Button
+                        variant="secondary"
+                        onClick={handleExport}
+                        disabled={exportLoading}
+                    >
+                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                    </Button>
+                    <Link to="/consumables/new" className="btn primary">
+                        Add New Consumable
+                    </Link>
+                </div>
             </div>
 
             <Table
