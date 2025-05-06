@@ -8,6 +8,7 @@ import categoryApi from './categoryApi';
 import inventoryItemApi from './inventoryItemApi';
 import consumableApi from './consumableApi';
 import logApi from './logApi';
+import reportApi from './reportApi';
 import * as constants from './constants';
 
 export {
@@ -18,7 +19,8 @@ export {
     inventoryItemApi,
     consumableApi,
     logApi,
-    constants
+    constants,
+    reportApi
 };
 
 const api = {
@@ -29,6 +31,7 @@ const api = {
     inventoryItems: inventoryItemApi,
     consumables: consumableApi,
     logs: logApi,
+    reports: reportApi,
     constants
 };
 

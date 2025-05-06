@@ -22,8 +22,23 @@ export const ERROR_MESSAGES = {
     VALIDATION: 'Please check your input and try again.'
 };
 
+/**
+ * Report types enum matching the backend
+ */
+export const ReportType = {
+    USERS: "users",
+    ROOMS: "rooms",
+    INVENTORY_CATEGORIES: "inventory_categories",
+    INVENTORY_ITEMS: "inventory_items",
+    CONSUMABLES: "consumables",
+    LOGS: "logs",
+    LOW_STOCK: "low_stock",
+    INVENTORY_BY_CONDITION: "inventory_by_condition"
+};
+
 export default {
     INVENTORY_CONDITIONS,
     LOG_TYPES,
-    ERROR_MESSAGES
+    ERROR_MESSAGES,
+    ReportType
 };
