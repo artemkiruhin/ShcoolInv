@@ -136,3 +136,13 @@ class LogResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class ReportType(str, Enum):
+    USERS = "users"
+    ROOMS = "rooms"
+    INVENTORY_CATEGORIES = "inventory_categories"
+    INVENTORY_ITEMS = "inventory_items"
+    CONSUMABLES = "consumables"
+    LOGS = "logs"
+    LOW_STOCK = "low_stock"
+    INVENTORY_BY_CONDITION = "inventory_by_condition"
