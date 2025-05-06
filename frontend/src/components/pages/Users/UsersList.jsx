@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom';
 import api from '../../../services/';
 import Table from '../../common/Table';
 import Button from '../../common/Button';
+import { ReportType } from '../../../services/constants';
+import { reportApi } from '../../../services';
 
 const UsersList = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [exportLoading, setExportLoading] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -35,6 +38,28 @@ const UsersList = () => {
         }
     };
 
+    const handleExport = async () => {
+        setExportLoading(true);
+        try {
+            const blob = await reportApi.generateExcelReport(ReportType.USERS);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+            a.download = `users_export_${dateStr}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err) {
+            console.error('Error exporting users:', err);
+            alert('Failed to export users. Please try again.');
+        } finally {
+            setExportLoading(false);
+        }
+    };
+
     if (loading) return <div className="loading-spinner">Loading...</div>;
     if (error) return <div className="error-message">Error: {error}</div>;
 
@@ -42,9 +67,19 @@ const UsersList = () => {
         <div className="users-list">
             <div className="users-header">
                 <h1 className="users-title">Users</h1>
-                <Link to="/users/new" className="btn btn-primary">
-                    Add New User
-                </Link>
+                <div className="header-actions">
+                    <Button
+                        variant="secondary"
+                        onClick={handleExport}
+                        disabled={exportLoading}
+                        className="btn btn-secondary"
+                    >
+                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                    </Button>
+                    <Link to="/users/new" className="btn btn-primary">
+                        Add New User
+                    </Link>
+                </div>
             </div>
 
             <Table
