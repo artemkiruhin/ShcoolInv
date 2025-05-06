@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+import io
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from enum import Enum
 
@@ -18,10 +19,14 @@ from backend.core.schemas import (
     InventoryCategoryCreate, InventoryCategoryResponse,
     InventoryItemCreate, InventoryItemUpdate, InventoryItemResponse,
     ConsumableCreate, ConsumableUpdate, ConsumableResponse,
-    LogResponse
+    LogResponse, ReportType
 )
 
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+
 from backend.configurations.database import get_db
+from backend.services.export import *
 
 router = APIRouter()
 
@@ -416,3 +421,71 @@ def read_log(log_id: int, db: Session = Depends(get_db)):
     if db_log is None:
         raise HTTPException(status_code=404, detail="Log not found")
     return db_log
+
+@router.get("/reports/excel")
+def generate_excel_report(
+        report_type: ReportType,
+        condition: Optional[str] = None,
+        db: Session = Depends(get_db)
+):
+    """
+    Generate Excel reports for different data types.
+
+    Parameters:
+    - report_type: Type of report to generate
+    - condition: Optional condition filter for inventory items report
+
+    Returns:
+    - Excel file as a downloadable response
+    """
+    wb = Workbook()
+    ws = wb.active
+
+    # Apply custom styling
+    title_font = Font(bold=True, size=12)
+    header_font = Font(bold=True, size=11, color="FFFFFF")
+    header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")
+    header_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+    thin_border = Border(
+        left=Side(style="thin"),
+        right=Side(style="thin"),
+        top=Side(style="thin"),
+        bottom=Side(style="thin")
+    )
+
+    if report_type == ReportType.USERS:
+        generate_users_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.ROOMS:
+        generate_rooms_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.INVENTORY_CATEGORIES:
+        generate_categories_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.INVENTORY_ITEMS:
+        generate_inventory_items_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.CONSUMABLES:
+        generate_consumables_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.LOGS:
+        generate_logs_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.LOW_STOCK:
+        generate_low_stock_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border)
+    elif report_type == ReportType.INVENTORY_BY_CONDITION:
+        if not condition:
+            raise HTTPException(status_code=400,
+                                detail="Condition parameter is required for inventory_by_condition report")
+        generate_inventory_by_condition_report(ws, db, condition, title_font, header_font, header_fill,
+                                               header_alignment, thin_border)
+
+    buffer = io.BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+
+    filename = f"{report_type}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    headers = {
+        'Content-Disposition': f'attachment; filename="{filename}"'
+    }
+
+    return Response(
+        content=buffer.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers=headers
+    )
