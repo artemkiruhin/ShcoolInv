@@ -110,14 +110,14 @@ const InventoryItemForm = () => {
     return (
         <div>
             <h1 className="page-title">
-                {isEditMode ? 'Edit Inventory Item' : 'Create New Inventory Item'}
+                {isEditMode ? 'Редактирование' : 'Добавление'}
             </h1>
 
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="form-group">
-                            <label className="form-label">Inventory Number</label>
+                            <label className="form-label">Инвентаризационный номер</label>
                             <input
                                 type="text"
                                 name="inventory_number"
@@ -129,7 +129,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Name</label>
+                            <label className="form-label">Название</label>
                             <input
                                 type="text"
                                 name="name"
@@ -141,7 +141,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">Описание</label>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -152,7 +152,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Category</label>
+                            <label className="form-label">Категория</label>
                             <select
                                 name="category_id"
                                 value={formData.category_id}
@@ -160,7 +160,7 @@ const InventoryItemForm = () => {
                                 className="form-control"
                                 required
                             >
-                                <option value="">Select Category</option>
+                                <option value="">Выберите категорию</option>
                                 {categories.map(category => (
                                     <option key={category.id} value={category.id}>
                                         {category.name}
@@ -170,7 +170,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Condition</label>
+                            <label className="form-label">Состояние</label>
                             <select
                                 name="condition"
                                 value={formData.condition}
@@ -185,14 +185,14 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Room</label>
+                            <label className="form-label">Кабинет</label>
                             <select
                                 name="room_id"
                                 value={formData.room_id}
                                 onChange={handleChange}
                                 className="form-control"
                             >
-                                <option value="">Select Room</option>
+                                <option value="">Выберите кабинет</option>
                                 {rooms.map(room => (
                                     <option key={room.id} value={room.id}>
                                         {room.name}
@@ -202,14 +202,14 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Assigned User</label>
+                            <label className="form-label">Ответственный</label>
                             <select
                                 name="user_id"
                                 value={formData.user_id}
                                 onChange={handleChange}
                                 className="form-control"
                             >
-                                <option value="">Select User</option>
+                                <option value="">Выберите ответственного</option>
                                 {users.map(user => (
                                     <option key={user.id} value={user.id}>
                                         {user.full_name}
@@ -219,7 +219,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Photo</label>
+                            <label className="form-label">Фотография</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -238,7 +238,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Purchase Date</label>
+                            <label className="form-label">Дата покупки</label>
                             <input
                                 type="date"
                                 name="purchase_date"
@@ -249,7 +249,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Purchase Price</label>
+                            <label className="form-label">Стоимость</label>
                             <input
                                 type="number"
                                 step="0.01"
@@ -261,7 +261,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Warranty Until</label>
+                            <label className="form-label">Дата окончания гарантии</label>
                             <input
                                 type="date"
                                 name="warranty_until"
@@ -278,10 +278,10 @@ const InventoryItemForm = () => {
                             variant="secondary"
                             onClick={() => navigate('/inventory')}
                         >
-                            Cancel
+                            Отмена
                         </Button>
                         <Button type="submit" variant="primary">
-                            {isEditMode ? 'Update Item' : 'Create Item'}
+                            {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
                 </form>

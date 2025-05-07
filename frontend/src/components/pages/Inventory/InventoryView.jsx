@@ -40,7 +40,7 @@ const InventoryView = () => {
     }, [id]);
 
     const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this item?')) {
+        if (window.confirm('Вы уверены, что хотите удалить запись?')) {
             try {
                 await api.inventoryItems.deleteItem(parseInt(id));
                 navigate('/inventory');
@@ -51,7 +51,7 @@ const InventoryView = () => {
     };
 
     const handleWriteOff = async () => {
-        if (window.confirm('Are you sure you want to write off this item?')) {
+        if (window.confirm('Вы уверены, что хотите сделать списание?')) {
             try {
                 const updatedItem = await api.inventoryItems.writeOffItem(parseInt(id));
                 setItem(updatedItem);
@@ -61,15 +61,15 @@ const InventoryView = () => {
         }
     };
 
-    if (loading) return <div className="loading-spinner">Loading...</div>;
-    if (error) return <div className="error-message">Error: {error}</div>;
-    if (!item) return <div className="not-found">Item not found</div>;
+    if (loading) return <div className="loading-spinner">Загрузка...</div>;
+    if (error) return <div className="error-message">Ошибка: {error}</div>;
+    if (!item) return <div className="not-found">Инвентарь не найден</div>;
 
     return (
         <div className="inventory-view">
             <div className="header-section">
                 <h1 className="page-title">
-                    <span className="title-text">Inventory Item:</span>
+                    <span className="title-text">Инвентарь:</span>
                     <span className="item-name">{item.name}</span>
                 </h1>
                 <div className="action-buttons">
@@ -78,20 +78,20 @@ const InventoryView = () => {
                         onClick={() => setShowQRModal(true)}
                         className="qr-button"
                     >
-                        Generate QR Code
+                        Сгенерировать QR код
                     </Button>
                     <Link
                         to={`/inventory/${id}/edit`}
                         className="btn warning edit-button"
                     >
-                        Edit
+                        Редактировать
                     </Link>
                     <Button
                         variant="danger"
                         onClick={handleDelete}
                         className="delete-button"
                     >
-                        Delete
+                        Удалить
                     </Button>
                     {item.condition !== 'WRITTEN_OFF' && (
                         <Button
@@ -99,7 +99,7 @@ const InventoryView = () => {
                             onClick={handleWriteOff}
                             className="writeoff-button"
                         >
-                            Write Off
+                            Списать
                         </Button>
                     )}
                 </div>
@@ -110,19 +110,19 @@ const InventoryView = () => {
                     <Card className="details-card">
                         <div className="detail-grid">
                             <div className="detail-group">
-                                <h4 className="detail-label">Inventory Number</h4>
+                                <h4 className="detail-label">Инвентаризационный номер</h4>
                                 <p className="detail-value">{item.inventory_number}</p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Name</h4>
+                                <h4 className="detail-label">Название</h4>
                                 <p className="detail-value">{item.name}</p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Category</h4>
+                                <h4 className="detail-label">Категория</h4>
                                 <p className="detail-value">{item.category?.name}</p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Condition</h4>
+                                <h4 className="detail-label">Состояние</h4>
                                 <p className="detail-value">
                   <span className={`status-badge ${item.condition.toLowerCase()}`}>
                     {api.constants.INVENTORY_CONDITIONS[item.condition]}
@@ -130,11 +130,11 @@ const InventoryView = () => {
                                 </p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Room</h4>
+                                <h4 className="detail-label">Кабинет</h4>
                                 <p className="detail-value">{item.room?.name || '-'}</p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Assigned User</h4>
+                                <h4 className="detail-label">Ответственный</h4>
                                 <p className="detail-value">
                                     {item.user ? (
                                         <Link to={`/users/${item.user.id}`} className="user-link">
@@ -144,36 +144,36 @@ const InventoryView = () => {
                                 </p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Purchase Date</h4>
+                                <h4 className="detail-label">Дата покупки</h4>
                                 <p className="detail-value">
                                     {item.purchase_date ? new Date(item.purchase_date).toLocaleDateString() : '-'}
                                 </p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Purchase Price</h4>
+                                <h4 className="detail-label">Стоимость</h4>
                                 <p className="detail-value">
                                     {item.purchase_price ? `$${item.purchase_price}` : '-'}
                                 </p>
                             </div>
                             <div className="detail-group">
-                                <h4 className="detail-label">Warranty Until</h4>
+                                <h4 className="detail-label">Дата окончания гарантии</h4>
                                 <p className="detail-value">
                                     {item.warranty_until ? (
                                         <>
                                             {new Date(item.warranty_until).toLocaleDateString()}
                                             {new Date(item.warranty_until) > new Date() ? (
-                                                <span className="warranty-active"> (Active)</span>
+                                                <span className="warranty-active"> (Активный)</span>
                                             ) : (
-                                                <span className="warranty-expired"> (Expired)</span>
+                                                <span className="warranty-expired"> (Не активный)</span>
                                             )}
                                         </>
                                     ) : '-'}
                                 </p>
                             </div>
                             <div className="detail-group full-width">
-                                <h4 className="detail-label">Description</h4>
+                                <h4 className="detail-label">Описание</h4>
                                 <p className="detail-value">
-                                    {item.description || 'No description available'}
+                                    {item.description || 'Нет'}
                                 </p>
                             </div>
                         </div>
@@ -183,7 +183,7 @@ const InventoryView = () => {
                 <div className="sidebar-section">
                     {item.photo && (
                         <Card className="photo-card">
-                            <h3 className="card-title">Item Photo</h3>
+                            <h3 className="card-title">Фотография</h3>
                             <div className="photo-container">
                                 <img
                                     src={item.photo}
@@ -196,7 +196,7 @@ const InventoryView = () => {
 
                     {relatedItems.length > 0 && (
                         <Card className="related-items-card">
-                            <h3 className="card-title">Related Items</h3>
+                            <h3 className="card-title">Сопутствующие товары</h3>
                             <ul className="related-items-list">
                                 {relatedItems.map(relatedItem => (
                                     <li key={relatedItem.id} className="related-item">

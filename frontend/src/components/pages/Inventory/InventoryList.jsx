@@ -18,6 +18,7 @@ const InventoryList = () => {
         const fetchInventoryItems = async () => {
             try {
                 const data = await api.inventoryItems.getAll();
+                console.log(data);
                 setInventoryItems(data);
                 setLoading(false);
             } catch (err) {
@@ -30,7 +31,7 @@ const InventoryList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this item?')) {
+        if (window.confirm('Вы уверены, что хотите удалить запись?')) {
             try {
                 await api.inventoryItems.deleteItem(id);
                 setInventoryItems(inventoryItems.filter(item => item.id !== id));
@@ -41,7 +42,7 @@ const InventoryList = () => {
     };
 
     const handleWriteOff = async (id) => {
-        if (window.confirm('Are you sure you want to write off this item?')) {
+        if (window.confirm('Вы уверены, что хотите списать инвентарь?')) {
             try {
                 const updatedItem = await api.inventoryItems.writeOffItem(id);
                 setInventoryItems(inventoryItems.map(item =>
@@ -74,35 +75,35 @@ const InventoryList = () => {
             document.body.removeChild(a);
         } catch (err) {
             console.error('Error exporting inventory:', err);
-            alert('Failed to export inventory. Please try again.');
+            alert('Ошибка экспорта, попробуйте снова.');
         } finally {
             setExportLoading(false);
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div>Ошибка: {error}</div>;
 
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="page-title">Inventory Items</h1>
+                <h1 className="page-title">Инвентарь</h1>
                 <div className="flex space-x-3">
                     <Button
                         variant="secondary"
                         onClick={handleExport}
                         disabled={exportLoading}
                     >
-                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                        {exportLoading ? 'Экспортируется...' : 'Отчет в Excel'}
                     </Button>
                     <Link to="/inventory/new" className="btn primary">
-                        Add New Item
+                        Добавить запись
                     </Link>
                 </div>
             </div>
 
             <Table
-                headers={['Inventory Number', 'Name', 'Category', 'Condition', 'Room', 'Actions']}
+                headers={['Инвентаризационный номер', 'Название', 'Категория', 'Состояние', 'Кабинет', 'Действия']}
                 data={inventoryItems}
                 renderRow={(item) => (
                     <tr key={item.id}>
@@ -118,20 +119,20 @@ const InventoryList = () => {
                         <td>
                             <div className="flex space-x-2">
                                 <Button variant="secondary" size="sm" onClick={() => handleShowQR(item)}>
-                                    QR Code
+                                    QR-код
                                 </Button>
                                 <Link to={`/inventory/${item.id}`} className="btn primary sm">
-                                    View
+                                    Подробнее
                                 </Link>
                                 <Link to={`/inventory/${item.id}/edit`} className="btn warning sm">
-                                    Edit
+                                    Редактировать
                                 </Link>
                                 <Button variant="danger" size="sm" onClick={() => handleDelete(item.id)}>
-                                    Delete
+                                    Удалить
                                 </Button>
                                 {item.condition !== 'WRITTEN_OFF' && (
                                     <Button variant="danger" size="sm" onClick={() => handleWriteOff(item.id)}>
-                                        Write Off
+                                        Списать
                                     </Button>
                                 )}
                             </div>
