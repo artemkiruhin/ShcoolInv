@@ -4,13 +4,13 @@ import Button from '../common/Button';
 
 const Header = () => {
     const navItems = [
-        { path: '/', name: 'Dashboard' },
-        { path: '/inventory', name: 'Inventory' },
-        { path: '/categories', name: 'Categories' },
-        { path: '/consumables', name: 'Consumables' },
-        { path: '/rooms', name: 'Rooms' },
-        { path: '/users', name: 'Users' },
-        { path: '/logs', name: 'Logs' },
+        { path: '/', name: 'Главная' },
+        { path: '/inventory', name: 'Инвентарь' },
+        { path: '/categories', name: 'Категории' },
+        { path: '/consumables', name: 'Расходники' },
+        { path: '/rooms', name: 'Кабинеты' },
+        { path: '/users', name: 'Пользователи' },
+        { path: '/logs', name: 'Логи' },
     ];
 
     return (
@@ -19,7 +19,7 @@ const Header = () => {
                 <div className="header-brand">
                     <NavLink to="/" className="logo-link">
                         <span className="logo-icon">📦</span>
-                        <span className="logo-text">InventoryPro</span>
+                        <span className="logo-text">Инвентарь</span>
                     </NavLink>
                 </div>
 
@@ -44,7 +44,7 @@ const Header = () => {
                 <div className="header-actions">
                     <Button variant="secondary" className="logout-btn">
                         <span className="btn-icon">👋</span>
-                        <span>Logout</span>
+                        <span>Выйти</span>
                     </Button>
                 </div>
             </div>
