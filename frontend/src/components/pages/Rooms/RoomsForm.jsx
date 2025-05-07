@@ -66,14 +66,14 @@ const RoomForm = () => {
     return (
         <div>
             <h1 className="page-title">
-                {isEditMode ? 'Edit Room' : 'Create New Room'}
+                {isEditMode ? 'Редактирование' : 'Добавление'}
             </h1>
 
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 gap-6">
                         <div className="form-group">
-                            <label className="form-label">Name</label>
+                            <label className="form-label">Название</label>
                             <input
                                 type="text"
                                 name="name"
@@ -85,7 +85,7 @@ const RoomForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">Описание</label>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -102,10 +102,10 @@ const RoomForm = () => {
                             variant="secondary"
                             onClick={() => navigate('/rooms')}
                         >
-                            Cancel
+                            Отмена
                         </Button>
                         <Button type="submit" variant="primary">
-                            {isEditMode ? 'Update Room' : 'Create Room'}
+                            {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
                 </form>

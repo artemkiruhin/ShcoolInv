@@ -28,7 +28,7 @@ const RoomsList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this room?')) {
+        if (window.confirm('Вы уверены, что хотите удалить запись?')) {
             try {
                 await api.rooms.deleteRoom(id);
                 setRooms(rooms.filter(room => room.id !== id));
@@ -60,29 +60,29 @@ const RoomsList = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div>Ошибка: {error}</div>;
 
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="page-title">Rooms</h1>
+                <h1 className="page-title">Кабинеты</h1>
                 <div className="flex space-x-3">
                     <Button
                         variant="secondary"
                         onClick={handleExport}
                         disabled={exportLoading}
                     >
-                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                        {exportLoading ? 'Экспортируется...' : 'Сформировать отчет'}
                     </Button>
                     <Link to="/rooms/new" className="btn primary">
-                        Add New Room
+                        Добавить новую запись
                     </Link>
                 </div>
             </div>
 
             <Table
-                headers={['Name', 'Description', 'Actions']}
+                headers={['Название', 'Описание', 'Действия']}
                 data={rooms}
                 renderRow={(room) => (
                     <tr key={room.id}>
@@ -91,10 +91,10 @@ const RoomsList = () => {
                         <td>
                             <div className="flex space-x-2">
                                 <Link to={`/rooms/${room.id}/edit`} className="btn warning sm">
-                                    Edit
+                                    Редактировать
                                 </Link>
                                 <Button variant="danger" size="sm" onClick={() => handleDelete(room.id)}>
-                                    Delete
+                                    Удалить
                                 </Button>
                             </div>
                         </td>
