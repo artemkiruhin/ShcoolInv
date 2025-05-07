@@ -16,7 +16,6 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch statistics
                 const inventoryResponse = await api.inventoryItems.getAll();
                 const consumablesResponse = await api.consumables.getConsumables();
                 const usersResponse = await api.users.getUsers();
@@ -34,7 +33,7 @@ const Dashboard = () => {
                 setRecentItems(recentItemsResponse);
 
                 // Fetch low stock consumables
-                const lowStockResponse = await api.consumables.getLowStock();
+                const lowStockResponse = await api.consumables.getLowStockConsumables();
                 setLowStockConsumables(lowStockResponse);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -46,29 +45,29 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <h1 className="dashboard-title">Dashboard</h1>
+            <h1 className="dashboard-title">Главная страница</h1>
 
             <div className="stats-grid">
                 <Card className="stat-card">
-                    <h3 className="stat-title">Inventory Items</h3>
+                    <h3 className="stat-title">Инвентарь</h3>
                     <p className="stat-value">{stats.inventoryItems}</p>
                 </Card>
                 <Card className="stat-card">
-                    <h3 className="stat-title">Consumables</h3>
+                    <h3 className="stat-title">Расходники</h3>
                     <p className="stat-value">{stats.consumables}</p>
                 </Card>
                 <Card className="stat-card">
-                    <h3 className="stat-title">Users</h3>
+                    <h3 className="stat-title">Пользователи</h3>
                     <p className="stat-value">{stats.users}</p>
                 </Card>
                 <Card className="stat-card">
-                    <h3 className="stat-title">Rooms</h3>
+                    <h3 className="stat-title">Кабинеты</h3>
                     <p className="stat-value">{stats.rooms}</p>
                 </Card>
             </div>
 
             <div className="dashboard-content">
-                <Card className="dashboard-card" title="Recent Inventory Items">
+                <Card className="dashboard-card" title="Недавно добавленный инвентарь">
                     {recentItems.length > 0 ? (
                         <ul className="items-list">
                             {recentItems.map((item) => (
@@ -84,11 +83,11 @@ const Dashboard = () => {
                             ))}
                         </ul>
                     ) : (
-                        <p className="no-data-message">No recent inventory items</p>
+                        <p className="no-data-message">Нет</p>
                     )}
                 </Card>
 
-                <Card className="dashboard-card" title="Low Stock Consumables">
+                <Card className="dashboard-card" title="Расходники, которые заканчиваются">
                     {lowStockConsumables.length > 0 ? (
                         <ul className="items-list">
                             {lowStockConsumables.map((consumable) => (
@@ -104,7 +103,7 @@ const Dashboard = () => {
                             ))}
                         </ul>
                     ) : (
-                        <p className="no-data-message">No low stock consumables</p>
+                        <p className="no-data-message">Нет</p>
                     )}
                 </Card>
             </div>
