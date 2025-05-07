@@ -68,14 +68,14 @@ const CategoryForm = () => {
     return (
         <div>
             <h1 className="page-title">
-                {isEditMode ? 'Edit Category' : 'Create New Category'}
+                {isEditMode ? 'Редактирование' : 'Добавление'}
             </h1>
 
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 gap-6">
                         <div className="form-group">
-                            <label className="form-label">Name</label>
+                            <label className="form-label">Название</label>
                             <input
                                 type="text"
                                 name="name"
@@ -87,7 +87,7 @@ const CategoryForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Short Name</label>
+                            <label className="form-label">Сокращенное название</label>
                             <input
                                 type="text"
                                 name="short_name"
@@ -100,7 +100,7 @@ const CategoryForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">Описание</label>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -117,10 +117,10 @@ const CategoryForm = () => {
                             variant="secondary"
                             onClick={() => navigate('/categories')}
                         >
-                            Cancel
+                            Отменить
                         </Button>
                         <Button type="submit" variant="primary">
-                            {isEditMode ? 'Update Category' : 'Create Category'}
+                            {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
                 </form>
