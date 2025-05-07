@@ -28,7 +28,7 @@ const UsersList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this user?')) {
+        if (window.confirm('Вы уверены, что хотите удалить пользователя из системы?')) {
             try {
                 await api.users.deleteUser(id);
                 setUsers(users.filter(user => user.id !== id));
@@ -54,19 +54,19 @@ const UsersList = () => {
             document.body.removeChild(a);
         } catch (err) {
             console.error('Error exporting users:', err);
-            alert('Failed to export users. Please try again.');
+            alert('Ошибка экспорта, попробуйте снова.');
         } finally {
             setExportLoading(false);
         }
     };
 
-    if (loading) return <div className="loading-spinner">Loading...</div>;
-    if (error) return <div className="error-message">Error: {error}</div>;
+    if (loading) return <div className="loading-spinner">Загрузка...</div>;
+    if (error) return <div className="error-message">Ошибка: {error}</div>;
 
     return (
         <div className="users-list">
             <div className="users-header">
-                <h1 className="users-title">Users</h1>
+                <h1 className="users-title">Пользователи</h1>
                 <div className="header-actions">
                     <Button
                         variant="secondary"
@@ -74,16 +74,16 @@ const UsersList = () => {
                         disabled={exportLoading}
                         className="btn btn-secondary"
                     >
-                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                        {exportLoading ? 'Экспортируется...' : 'Сформировать отчет'}
                     </Button>
                     <Link to="/users/new" className="btn btn-primary">
-                        Add New User
+                        Добавить новую запись
                     </Link>
                 </div>
             </div>
 
             <Table
-                headers={['Username', 'Full Name', 'Email', 'Phone', 'Admin', 'Status', 'Actions']}
+                headers={['Логин', 'ФИО', 'Email', 'Номер телефона', 'Статус администратора', 'Статус', 'Действия']}
                 data={users}
                 renderRow={(user) => (
                     <tr key={user.id} className="user-row">
@@ -93,22 +93,22 @@ const UsersList = () => {
                         <td>{user.phone_number}</td>
                         <td>
                             {user.is_admin ? (
-                                <span className="badge badge-primary">Yes</span>
+                                <span className="badge badge-primary">Да</span>
                             ) : (
-                                <span className="badge badge-secondary">No</span>
+                                <span className="badge badge-secondary">Нет</span>
                             )}
                         </td>
                         <td>
                             {user.is_active ? (
-                                <span className="badge badge-success">Active</span>
+                                <span className="badge badge-success">Активен</span>
                             ) : (
-                                <span className="badge badge-danger">Inactive</span>
+                                <span className="badge badge-danger">Неактивен</span>
                             )}
                         </td>
                         <td>
                             <div className="user-actions">
                                 <Link to={`/users/${user.id}/edit`} className="btn btn-warning btn-sm">
-                                    Edit
+                                    Редактировать
                                 </Link>
                                 <Button
                                     variant="danger"
@@ -116,7 +116,7 @@ const UsersList = () => {
                                     onClick={() => handleDelete(user.id)}
                                     className="btn btn-danger btn-sm"
                                 >
-                                    Delete
+                                    Удалить
                                 </Button>
                             </div>
                         </td>

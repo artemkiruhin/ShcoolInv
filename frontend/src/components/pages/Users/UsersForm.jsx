@@ -92,14 +92,14 @@ const UserForm = () => {
     return (
         <div>
             <h1 className="page-title">
-                {isEditMode ? 'Edit User' : 'Create New User'}
+                {isEditMode ? 'Редактирование' : 'Добавление'}
             </h1>
 
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="form-group">
-                            <label className="form-label">Username</label>
+                            <label className="form-label">Логин</label>
                             <input
                                 type="text"
                                 name="username"
@@ -123,7 +123,7 @@ const UserForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Full Name</label>
+                            <label className="form-label">ФИО</label>
                             <input
                                 type="text"
                                 name="full_name"
@@ -135,7 +135,7 @@ const UserForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Phone Number</label>
+                            <label className="form-label">Номер телефона</label>
                             <input
                                 type="text"
                                 name="phone_number"
@@ -147,7 +147,7 @@ const UserForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Password</label>
+                            <label className="form-label">Пароль</label>
                             <input
                                 type="password"
                                 name="password_hash"
@@ -159,7 +159,7 @@ const UserForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Avatar</label>
+                            <label className="form-label">Аватар</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -187,7 +187,7 @@ const UserForm = () => {
                                 className="mr-2"
                             />
                             <label htmlFor="is_admin" className="form-label mb-0">
-                                Administrator
+                                Статус администратора
                             </label>
                         </div>
 
@@ -201,7 +201,7 @@ const UserForm = () => {
                                 className="mr-2"
                             />
                             <label htmlFor="is_active" className="form-label mb-0">
-                                Active
+                                Статус
                             </label>
                         </div>
                     </div>
@@ -212,10 +212,10 @@ const UserForm = () => {
                             variant="secondary"
                             onClick={() => navigate('/users')}
                         >
-                            Cancel
+                            Отмена
                         </Button>
                         <Button type="submit" variant="primary">
-                            {isEditMode ? 'Update User' : 'Create User'}
+                            {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
                 </form>
