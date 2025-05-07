@@ -27,7 +27,7 @@ const ConsumablesList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this consumable?')) {
+        if (window.confirm('Вы уверены, что хотите удалить этот расходник?')) {
             try {
                 await api.consumables.deleteConsumable(id);
                 setConsumables(consumables.filter(consumable => consumable.id !== id));
@@ -38,11 +38,11 @@ const ConsumablesList = () => {
     };
 
     const handleIncrease = async (id) => {
-        const amount = prompt('Enter amount to increase:');
+        const amount = prompt('Введите количество, на которое надо увеличить:');
         if (amount && !isNaN(amount)) {
             try {
-                await api.consumables.increaseQuantity(id, parseInt(amount));
-                const updatedConsumables = await api.consumables.getAll();
+                await api.consumables.increaseConsumable(id, parseInt(amount));
+                const updatedConsumables = await api.consumables.getConsumables();
                 setConsumables(updatedConsumables);
             } catch (err) {
                 console.error('Error increasing quantity:', err);
@@ -51,11 +51,11 @@ const ConsumablesList = () => {
     };
 
     const handleDecrease = async (id) => {
-        const amount = prompt('Enter amount to decrease:');
+        const amount = prompt('Введите количество, на которое надо уменьшить:');
         if (amount && !isNaN(amount)) {
             try {
-                await api.consumables.decreaseQuantity(id, parseInt(amount));
-                const updatedConsumables = await api.consumables.getAll();
+                await api.consumables.decreaseConsumable(id, parseInt(amount));
+                const updatedConsumables = await api.consumables.getConsumables();
                 setConsumables(updatedConsumables);
             } catch (err) {
                 console.error('Error decreasing quantity:', err);
@@ -79,35 +79,35 @@ const ConsumablesList = () => {
             document.body.removeChild(a);
         } catch (err) {
             console.error('Error exporting consumables:', err);
-            alert('Failed to export consumables. Please try again.');
+            alert('Ошибка экспорта, попробуйте снова.');
         } finally {
             setExportLoading(false);
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div>Ошибка: {error}</div>;
 
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="page-title">Consumables</h1>
+                <h1 className="page-title">Расходники</h1>
                 <div className="flex space-x-3">
                     <Button
                         variant="secondary"
                         onClick={handleExport}
                         disabled={exportLoading}
                     >
-                        {exportLoading ? 'Exporting...' : 'Export to Excel'}
+                        {exportLoading ? 'Экспортируется...' : 'Сформировать отчет'}
                     </Button>
                     <Link to="/consumables/new" className="btn primary">
-                        Add New Consumable
+                        Добавить запись
                     </Link>
                 </div>
             </div>
 
             <Table
-                headers={['Name', 'Description', 'Quantity', 'Min Quantity', 'Unit', 'Actions']}
+                headers={['Название', 'Описание', 'Количество', 'Минимальное количество', 'Мера', 'Действия']}
                 data={consumables}
                 renderRow={(consumable) => (
                     <tr key={consumable.id}>
@@ -125,24 +125,24 @@ const ConsumablesList = () => {
                                     size="sm"
                                     onClick={() => handleIncrease(consumable.id)}
                                 >
-                                    Increase
+                                    Увеличить
                                 </Button>
                                 <Button
                                     variant="warning"
                                     size="sm"
                                     onClick={() => handleDecrease(consumable.id)}
                                 >
-                                    Decrease
+                                    Уменьшить
                                 </Button>
                                 <Link to={`/consumables/${consumable.id}/edit`} className="btn warning sm">
-                                    Edit
+                                    Редактировать
                                 </Link>
                                 <Button
                                     variant="danger"
                                     size="sm"
                                     onClick={() => handleDelete(consumable.id)}
                                 >
-                                    Delete
+                                    Удалить
                                 </Button>
                             </div>
                         </td>

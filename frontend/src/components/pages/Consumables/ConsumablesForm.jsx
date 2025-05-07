@@ -72,14 +72,14 @@ const ConsumableForm = () => {
     return (
         <div>
             <h1 className="page-title">
-                {isEditMode ? 'Edit Consumable' : 'Create New Consumable'}
+                {isEditMode ? 'Редактирование' : 'Добавление'}
             </h1>
 
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 gap-6">
                         <div className="form-group">
-                            <label className="form-label">Name</label>
+                            <label className="form-label">Название</label>
                             <input
                                 type="text"
                                 name="name"
@@ -91,7 +91,7 @@ const ConsumableForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">Описание</label>
                             <textarea
                                 name="description"
                                 value={formData.description}
@@ -103,7 +103,7 @@ const ConsumableForm = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="form-group">
-                                <label className="form-label">Quantity</label>
+                                <label className="form-label">Количество</label>
                                 <input
                                     type="number"
                                     name="quantity"
@@ -115,7 +115,7 @@ const ConsumableForm = () => {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Min Quantity</label>
+                                <label className="form-label">Минимальное количество</label>
                                 <input
                                     type="number"
                                     name="min_quantity"
@@ -128,7 +128,7 @@ const ConsumableForm = () => {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Unit</label>
+                                <label className="form-label">Мера</label>
                                 <select
                                     name="unit"
                                     value={formData.unit}
@@ -151,10 +151,10 @@ const ConsumableForm = () => {
                             variant="secondary"
                             onClick={() => navigate('/consumables')}
                         >
-                            Cancel
+                            Отмена
                         </Button>
                         <Button type="submit" variant="primary">
-                            {isEditMode ? 'Update Consumable' : 'Create Consumable'}
+                            {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
                 </form>
