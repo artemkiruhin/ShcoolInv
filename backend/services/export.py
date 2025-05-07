@@ -22,16 +22,16 @@ def apply_cell_style(cell, thin_border, wrap_text=True):
 
 
 def generate_users_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Users Report"
+    ws.title = "Отчет по пользователям"
 
     ws.merge_cells('A1:H1')
-    title_cell = ws.cell(row=1, column=1, value="Users Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по пользователям")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Username", "Email", "Full Name", "Phone Number", "Admin", "Active", "Registered At"]
+    headers = ["ID", "Логин", "Email", "ФИО", "Телефон", "Админ", "Активен", "Дата регистрации"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = UserRepository(db)
@@ -44,8 +44,8 @@ def generate_users_report(ws, db, title_font, header_font, header_fill, header_a
             ws.cell(row=i, column=3, value=user.email),
             ws.cell(row=i, column=4, value=user.full_name),
             ws.cell(row=i, column=5, value=user.phone_number),
-            ws.cell(row=i, column=6, value="Yes" if user.is_admin else "No"),
-            ws.cell(row=i, column=7, value="Yes" if user.is_active else "No"),
+            ws.cell(row=i, column=6, value="Да" if user.is_admin else "Нет"),
+            ws.cell(row=i, column=7, value="Да" if user.is_active else "Нет"),
             ws.cell(row=i, column=8, value=user.registered_at.strftime('%Y-%m-%d %H:%M:%S')),
         ]
 
@@ -66,16 +66,16 @@ def generate_users_report(ws, db, title_font, header_font, header_fill, header_a
 
 
 def generate_rooms_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Rooms Report"
+    ws.title = "Отчет по помещениям"
 
     ws.merge_cells('A1:C1')
-    title_cell = ws.cell(row=1, column=1, value="Rooms Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по помещениям")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Name", "Description"]
+    headers = ["ID", "Название", "Описание"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = RoomRepository(db)
@@ -105,16 +105,16 @@ def generate_rooms_report(ws, db, title_font, header_font, header_fill, header_a
 
 
 def generate_categories_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Categories Report"
+    ws.title = "Отчет по категориям"
 
     ws.merge_cells('A1:D1')
-    title_cell = ws.cell(row=1, column=1, value="Inventory Categories Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по категориям инвентаря")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Name", "Short Name", "Description"]
+    headers = ["ID", "Название", "Короткое название", "Описание"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = InventoryCategoryRepository(db)
@@ -145,17 +145,17 @@ def generate_categories_report(ws, db, title_font, header_font, header_fill, hea
 
 
 def generate_inventory_items_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Inventory Items Report"
+    ws.title = "Отчет по инвентарю"
 
     ws.merge_cells('A1:I1')
-    title_cell = ws.cell(row=1, column=1, value="Inventory Items Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по инвентарным объектам")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Inventory Number", "Name", "Category", "Condition", "Room", "User", "Purchase Date",
-               "Purchase Price"]
+    headers = ["ID", "Инвентарный номер", "Название", "Категория", "Состояние", "Помещение", "Пользователь",
+               "Дата покупки", "Цена покупки"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = InventoryItemRepository(db)
@@ -201,16 +201,16 @@ def generate_inventory_items_report(ws, db, title_font, header_font, header_fill
 
 
 def generate_consumables_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Consumables Report"
+    ws.title = "Отчет по расходникам"
 
     ws.merge_cells('A1:F1')
-    title_cell = ws.cell(row=1, column=1, value="Consumables Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по расходным материалам")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Name", "Description", "Quantity", "Min Quantity", "Unit"]
+    headers = ["ID", "Название", "Описание", "Количество", "Мин. количество", "Единица измерения"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = ConsumableRepository(db)
@@ -247,16 +247,16 @@ def generate_consumables_report(ws, db, title_font, header_font, header_fill, he
 
 
 def generate_logs_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Logs Report"
+    ws.title = "Отчет по логам"
 
     ws.merge_cells('A1:E1')
-    title_cell = ws.cell(row=1, column=1, value="System Logs Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по системным логам")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Description", "Type", "Created At", "User"]
+    headers = ["ID", "Описание", "Тип", "Дата создания", "Пользователь"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = LogRepository(db)
@@ -265,10 +265,10 @@ def generate_logs_report(ws, db, title_font, header_font, header_fill, header_al
     user_repo = UserRepository(db)
 
     log_types = {
-        1: "Info",
-        2: "Warning",
-        3: "Error",
-        4: "Critical"
+        1: "Информация",
+        2: "Предупреждение",
+        3: "Ошибка",
+        4: "Критическая"
     }
 
     for i, log in enumerate(logs, start=5):
@@ -310,16 +310,16 @@ def generate_logs_report(ws, db, title_font, header_font, header_fill, header_al
 
 
 def generate_low_stock_report(ws, db, title_font, header_font, header_fill, header_alignment, thin_border):
-    ws.title = "Low Stock Report"
+    ws.title = "Отчет по низким запасам"
 
     ws.merge_cells('A1:F1')
-    title_cell = ws.cell(row=1, column=1, value="Low Stock Consumables Report")
+    title_cell = ws.cell(row=1, column=1, value="Отчет по расходникам с низкими запасами")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Name", "Description", "Current Quantity", "Min Quantity", "Unit"]
+    headers = ["ID", "Название", "Описание", "Текущее количество", "Мин. количество", "Единица измерения"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = ConsumableRepository(db)
@@ -340,7 +340,7 @@ def generate_low_stock_report(ws, db, title_font, header_font, header_fill, head
             apply_cell_style(cell, thin_border)
 
     summary_row = len(low_stock_items) + 6
-    summary_cell = ws.cell(row=summary_row, column=1, value=f"Total low stock items: {len(low_stock_items)}")
+    summary_cell = ws.cell(row=summary_row, column=1, value=f"Всего позиций с низким запасом: {len(low_stock_items)}")
     summary_cell.font = Font(bold=True)
 
     for col_idx in range(1, 7):
@@ -358,24 +358,24 @@ def generate_low_stock_report(ws, db, title_font, header_font, header_fill, head
 
 def generate_inventory_by_condition_report(ws, db, condition, title_font, header_font, header_fill, header_alignment,
                                            thin_border):
-    ws.title = f"{condition.capitalize()} Items Report"
+    ws.title = f"Отчет по состоянию {condition}"
 
     ws.merge_cells('A1:I1')
-    title_cell = ws.cell(row=1, column=1, value=f"Inventory Items in {condition.upper()} Condition")
+    title_cell = ws.cell(row=1, column=1, value=f"Отчет по инвентарю в состоянии {condition.upper()}")
     title_cell.font = title_font
     title_cell.alignment = Alignment(horizontal="center")
 
-    timestamp_cell = ws.cell(row=2, column=1, value=f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    timestamp_cell = ws.cell(row=2, column=1, value=f"Сформирован: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    headers = ["ID", "Inventory Number", "Name", "Category", "Room", "User", "Purchase Date", "Purchase Price",
-               "Last Updated"]
+    headers = ["ID", "Инвентарный номер", "Название", "Категория", "Помещение", "Пользователь",
+               "Дата покупки", "Цена покупки", "Последнее обновление"]
     apply_header_style(ws, 4, headers, header_font, header_fill, header_alignment, thin_border)
 
     repo = InventoryItemRepository(db)
     try:
         items = repo.get_by_condition(condition.upper())
     except ValueError:
-        raise HTTPException(status_code=400, detail=f"Invalid condition: {condition}")
+        raise HTTPException(status_code=400, detail=f"Некорректное состояние: {condition}")
 
     category_repo = InventoryCategoryRepository(db)
     room_repo = RoomRepository(db)
@@ -406,7 +406,7 @@ def generate_inventory_by_condition_report(ws, db, condition, title_font, header
 
     summary_row = len(items) + 6
     summary_cell = ws.cell(row=summary_row, column=1,
-                           value=f"Total items in {condition.upper()} condition: {len(items)}")
+                           value=f"Всего объектов в состоянии {condition.upper()}: {len(items)}")
     summary_cell.font = Font(bold=True)
     for col_idx in range(1, 10):
         max_length = 0
