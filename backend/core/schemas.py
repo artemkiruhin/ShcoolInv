@@ -146,3 +146,13 @@ class ReportType(str, Enum):
     LOGS = "logs"
     LOW_STOCK = "low_stock"
     INVENTORY_BY_CONDITION = "inventory_by_condition"
+
+
+class AuthResponse(BaseModel):
+    is_admin: bool
+    user_id: int
+    full_name: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
