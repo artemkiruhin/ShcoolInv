@@ -2,55 +2,51 @@ import apiClient from './apiClient';
 
 /**
  * API functions for authentication
- * Note: This is a placeholder for auth endpoints which are not explicitly defined in your FastAPI code
- * You'll need to adjust this to match your actual authentication implementation
  */
 const authApi = {
     /**
-     * Login with username and password
+     * Login user with username and password
      * @param {string} username - User's username
      * @param {string} password - User's password
-     * @returns {Promise} - Auth token and user info
+     * @returns {Promise} - Auth response with user data
      */
     login: (username, password) => {
-        return apiClient.post('/auth/login', { username, password });
+        return apiClient.post('/login', { username, password });
     },
 
     /**
-     * Logout the current user
-     * @returns {Promise} - Success message
+     * Logout user (clears local storage)
+     * Note: This is client-side only, you may want to add an API endpoint for server-side logout
      */
     logout: () => {
-        return apiClient.post('/auth/logout');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
     },
 
     /**
-     * Get the current authenticated user
-     * @returns {Promise} - Current user info
+     * Get stored user data from local storage
+     * @returns {Object|null} - Parsed user data or null if not logged in
      */
     getCurrentUser: () => {
-        return apiClient.get('/auth/me');
+        const userData = localStorage.getItem('userData');
+        return userData ? JSON.parse(userData) : null;
     },
 
     /**
-     * Change user password
-     * @param {string} oldPassword - Current password
-     * @param {string} newPassword - New password
-     * @returns {Promise} - Success message
+     * Check if user is authenticated (has valid token)
+     * @returns {boolean} - True if authenticated
      */
-    changePassword: (oldPassword, newPassword) => {
-        return apiClient.post('/auth/change-password', {
-            old_password: oldPassword,
-            new_password: newPassword
-        });
+    isAuthenticated: () => {
+        return !!localStorage.getItem('authToken');
     },
 
     /**
-     * Check if auth token is valid
-     * @returns {Promise} - Token validity status
+     * Check if current user is admin
+     * @returns {boolean} - True if user is admin
      */
-    validateToken: () => {
-        return apiClient.get('/auth/validate');
+    isAdmin: () => {
+        const user = authApi.getCurrentUser();
+        return user ? user.is_admin : false;
     }
 };
 
