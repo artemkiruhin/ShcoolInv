@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 import hashlib
+
+import bcrypt
 import jwt
 from backend.configurations.config import SECRET_KEY, ALGORITHM, DEFAULT_JWT_EXPIRES_HOURS
 
@@ -33,6 +35,8 @@ def validate_jwt_token(token: str) -> dict:
 
 def hash_data(data: str) -> str:
     """
-    Хеширует данные с помощью SHA-256
+    Хеширует данные с помощью bcrypt
     """
-    return hashlib.sha256(data.encode('utf-8')).hexdigest()
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(data.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
