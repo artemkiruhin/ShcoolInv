@@ -1,5 +1,8 @@
 import io
+
+import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Response
+from rest_framework import status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
@@ -7,7 +10,7 @@ from enum import Enum
 
 from backend.core.entities import (
     User, Room, InventoryCategory, InventoryItem,
-    Consumable, Log, InventoryCondition
+    Consumable, Log, InventoryCondition, LogType
 )
 from backend.core.repositories import (
     UserRepository, RoomRepository, InventoryCategoryRepository,
@@ -19,7 +22,7 @@ from backend.core.schemas import (
     InventoryCategoryCreate, InventoryCategoryResponse,
     InventoryItemCreate, InventoryItemUpdate, InventoryItemResponse,
     ConsumableCreate, ConsumableUpdate, ConsumableResponse,
-    LogResponse, ReportType
+    LogResponse, ReportType, AuthResponse, LoginRequest
 )
 
 from openpyxl import Workbook
@@ -27,6 +30,7 @@ from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 
 from backend.configurations.database import get_db
 from backend.services.export import *
+from backend.services.security import hash_data
 
 router = APIRouter()
 
@@ -35,6 +39,51 @@ class InventoryCondition(str, Enum):
     NORMAL = "NORMAL"
     REQUIRES_REPAIR = "REQUIRES_REPAIR"
     WRITTEN_OFF = "WRITTEN_OFF"
+
+
+@router.post("/login", response_model=AuthResponse)
+async def login(
+    credentials: LoginRequest,
+    db: Session = Depends(get_db)
+):
+    username = credentials.username
+    password = credentials.password
+    user_repo = UserRepository(db)
+    user = user_repo.get_by_username(username)
+    log_repo = LogRepository(db)
+
+    if not user:
+        log_repo.create(Log.create(
+            description=f"Failed login attempt - user not found: {username}",
+            type=LogType.WARNING.value,
+            related_entity_link=f"/users/?username={username}"
+        ))
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+    if not bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
+        log_repo.create(Log.create(
+            description=f"Failed login attempt - wrong password for user: {username}",
+            type=LogType.WARNING.value,
+            related_entity_link=f"/users/{user.id}"
+        ))
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+    log_repo.create(Log.create(
+        description=f"User logged in: {username}",
+        type=LogType.INFO.value,
+        related_entity_link=f"/users/{user.id}",
+        user_id=user.id
+    ))
+
+    return AuthResponse(
+        is_admin=user.is_admin,
+        user_id=user.id,
+        full_name=user.full_name
+    )
 
 
 @router.post("/users/", response_model=UserResponse)
