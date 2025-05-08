@@ -1,11 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import api from '../../../services/';
 import Button from '../../common/Button';
 import Card from '../../common/Card';
-import Modal from '../../common/Modal';
-import QRCodeGenerator from '../../common/QRCodeGenerator';
 
+
+const QRCodeModal = ({ item, show, onClose }) => {
+    const modalRef = useRef(null);
+    const [downloadUrl, setDownloadUrl] = useState('');
+
+    useEffect(() => {
+        if (show && modalRef.current) {
+            const svg = modalRef.current.querySelector('svg');
+            if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    setDownloadUrl(canvas.toDataURL('image/png'));
+                };
+
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            }
+        }
+    }, [show]);
+
+    const handleDownload = () => {
+        if (!downloadUrl) return;
+        const link = document.createElement('a');
+        link.download = `qr-code-${item.inventory_number}.png`;
+        link.href = downloadUrl;
+        link.click();
+    };
+
+    if (!show || !item) return null;
+
+    return (
+        <div className="modal-overlay">
+            <div className="modal-container">
+                <div className="modal-header">
+                    <h3 className="modal-title">QR-код для {item.name}</h3>
+                    <button
+                        onClick={onClose}
+                        className="modal-close-button"
+                        aria-label="Закрыть"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                <div ref={modalRef} className="qr-code-container">
+                    <QRCodeSVG
+                        value={`${window.location.origin}/inventory/${item.id}`}
+                        size={240}
+                        level="H"
+                        includeMargin={true}
+                    />
+                </div>
+
+                <div className="modal-content">
+                    <p className="inventory-number">Инв. номер: {item.inventory_number}</p>
+                    <p className="modal-description">
+                        Отсканируйте QR-код для быстрого доступа к странице инвентаря
+                    </p>
+                </div>
+
+                <div className="modal-footer">
+                    <button
+                        onClick={onClose}
+                        className="modal-button modal-button-secondary"
+                    >
+                        Закрыть
+                    </button>
+                    <button
+                        onClick={handleDownload}
+                        className="modal-button modal-button-primary download-button"
+                        disabled={!downloadUrl}
+                    >
+                        <svg className="download-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Скачать QR-код
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
 const InventoryView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -46,6 +133,7 @@ const InventoryView = () => {
                 navigate('/inventory');
             } catch (err) {
                 console.error('Error deleting item:', err);
+                alert('Не удалось удалить запись');
             }
         }
     };
@@ -55,8 +143,10 @@ const InventoryView = () => {
             try {
                 const updatedItem = await api.inventoryItems.writeOffItem(parseInt(id));
                 setItem(updatedItem);
+                alert('Инвентарь успешно списан');
             } catch (err) {
                 console.error('Error writing off item:', err);
+                alert('Не удалось списать инвентарь');
             }
         }
     };
@@ -105,6 +195,12 @@ const InventoryView = () => {
                 </div>
             </div>
 
+            <QRCodeModal
+                item={item}
+                show={showQRModal}
+                onClose={() => setShowQRModal(false)}
+            />
+
             <div className="content-grid">
                 <div className="main-details">
                     <Card className="details-card">
@@ -119,7 +215,7 @@ const InventoryView = () => {
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Категория</h4>
-                                <p className="detail-value">{item.category?.name}</p>
+                                <p className="detail-value">{item.category?.name || '-'}</p>
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Состояние</h4>
@@ -152,7 +248,7 @@ const InventoryView = () => {
                             <div className="detail-group">
                                 <h4 className="detail-label">Стоимость</h4>
                                 <p className="detail-value">
-                                    {item.purchase_price ? `$${item.purchase_price}` : '-'}
+                                    {item.purchase_price ? `${item.purchase_price.toLocaleString()} ₽` : '-'}
                                 </p>
                             </div>
                             <div className="detail-group">
@@ -162,9 +258,9 @@ const InventoryView = () => {
                                         <>
                                             {new Date(item.warranty_until).toLocaleDateString()}
                                             {new Date(item.warranty_until) > new Date() ? (
-                                                <span className="warranty-active"> (Активный)</span>
+                                                <span className="warranty-active"> (Активная)</span>
                                             ) : (
-                                                <span className="warranty-expired"> (Не активный)</span>
+                                                <span className="warranty-expired"> (Истекла)</span>
                                             )}
                                         </>
                                     ) : '-'}
@@ -173,7 +269,7 @@ const InventoryView = () => {
                             <div className="detail-group full-width">
                                 <h4 className="detail-label">Описание</h4>
                                 <p className="detail-value">
-                                    {item.description || 'Нет'}
+                                    {item.description || 'Нет описания'}
                                 </p>
                             </div>
                         </div>
@@ -189,6 +285,10 @@ const InventoryView = () => {
                                     src={item.photo}
                                     alt={item.name}
                                     className="item-photo"
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = '/images/default-inventory-item.jpg';
+                                    }}
                                 />
                             </div>
                         </Card>
@@ -216,20 +316,6 @@ const InventoryView = () => {
                     )}
                 </div>
             </div>
-
-            <Modal
-                isOpen={showQRModal}
-                onClose={() => setShowQRModal(false)}
-                title={`QR Code for ${item.name}`}
-                className="qr-modal"
-            >
-                {item && (
-                    <QRCodeGenerator
-                        value={`Inventory Item: ${item.name}\nNumber: ${item.inventory_number}\nCategory: ${item.category?.name}`}
-                        downloadName={`inventory-${item.inventory_number}`}
-                    />
-                )}
-            </Modal>
         </div>
     );
 };

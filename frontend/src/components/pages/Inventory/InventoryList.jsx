@@ -1,10 +1,97 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import api from '../../../services/';
 import Table from '../../common/Table';
 import Button from '../../common/Button';
-import Modal from '../../common/Modal';
-import QRCodeGenerator from '../../common/QRCodeGenerator';
+
+const QRCodeModal = ({ item, show, onClose }) => {
+    const modalRef = useRef(null);
+    const [downloadUrl, setDownloadUrl] = useState('');
+
+    useEffect(() => {
+        if (show && modalRef.current) {
+            const svg = modalRef.current.querySelector('svg');
+            if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    setDownloadUrl(canvas.toDataURL('image/png'));
+                };
+
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            }
+        }
+    }, [show]);
+
+    const handleDownload = () => {
+        if (!downloadUrl) return;
+        const link = document.createElement('a');
+        link.download = `qr-code-${item.inventory_number}.png`;
+        link.href = downloadUrl;
+        link.click();
+    };
+
+    if (!show || !item) return null;
+
+    return (
+        <div className="modal-overlay">
+            <div className="modal-container">
+                <div className="modal-header">
+                    <h3 className="modal-title">QR-код для {item.name}</h3>
+                    <button
+                        onClick={onClose}
+                        className="modal-close-button"
+                        aria-label="Закрыть"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                <div ref={modalRef} className="qr-code-container">
+                    <QRCodeSVG
+                        value={`${window.location.origin}/inventory/${item.id}`}
+                        size={240}
+                        level="H"
+                        includeMargin={true}
+                    />
+                </div>
+
+                <div className="modal-content">
+                    <p className="inventory-number">Инв. номер: {item.inventory_number}</p>
+                    <p className="modal-description">
+                        Отсканируйте QR-код для быстрого доступа к странице инвентаря
+                    </p>
+                </div>
+
+                <div className="modal-footer">
+                    <button
+                        onClick={onClose}
+                        className="modal-button modal-button-secondary"
+                    >
+                        Закрыть
+                    </button>
+                    <button
+                        onClick={handleDownload}
+                        className="modal-button modal-button-primary download-button"
+                        disabled={!downloadUrl}
+                    >
+                        <svg className="download-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Скачать QR-код
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const InventoryList = () => {
     const [inventoryItems, setInventoryItems] = useState([]);
@@ -81,11 +168,11 @@ const InventoryList = () => {
         }
     };
 
-    if (loading) return <div>Загрузка...</div>;
-    if (error) return <div>Ошибка: {error}</div>;
+    if (loading) return <div className="loading-spinner">Загрузка...</div>;
+    if (error) return <div className="error-message">Ошибка: {error}</div>;
 
     return (
-        <div>
+        <div className="inventory-list">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="page-title">Инвентарь</h1>
                 <div className="flex space-x-3">
@@ -93,10 +180,11 @@ const InventoryList = () => {
                         variant="secondary"
                         onClick={handleExport}
                         disabled={exportLoading}
+                        className="export-button"
                     >
                         {exportLoading ? 'Экспортируется...' : 'Отчет в Excel'}
                     </Button>
-                    <Link to="/inventory/new" className="btn primary">
+                    <Link to="/inventory/new" className="btn primary add-button">
                         Добавить запись
                     </Link>
                 </div>
@@ -117,7 +205,7 @@ const InventoryList = () => {
                         </td>
                         <td>{item.room?.name || '-'}</td>
                         <td>
-                            <div className="flex space-x-2">
+                            <div className="flex space-x-2 action-buttons">
                                 <Button variant="secondary" size="sm" onClick={() => handleShowQR(item)}>
                                     QR-код
                                 </Button>
@@ -140,19 +228,11 @@ const InventoryList = () => {
                     </tr>
                 )}
             />
-
-            <Modal
-                isOpen={showQRModal}
+            <QRCodeModal
+                item={selectedItem}
+                show={showQRModal}
                 onClose={() => setShowQRModal(false)}
-                title={`QR Code for ${selectedItem?.name}`}
-            >
-                {selectedItem && (
-                    <QRCodeGenerator
-                        value={`Inventory Item: ${selectedItem.name}\nNumber: ${selectedItem.inventory_number}`}
-                        downloadName={`inventory-${selectedItem.inventory_number}`}
-                    />
-                )}
-            </Modal>
+            />
         </div>
     );
 };
