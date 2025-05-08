@@ -16,45 +16,56 @@ import UsersList from './components/pages/Users/UsersList';
 import UserForm from './components/pages/Users/UsersForm';
 import LogsList from './components/pages/Logs/LogsList';
 import './index.css';
-
+import LoginPage from "./components/pages/LoginPage/LoginPage";
+import AuthContext from "./context/AuthContext";
 
 function App() {
     return (
         <Router>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={<Dashboard />} />
+            <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route
+                    path="/*"
+                    element={
+                        <AuthContext>
+                            <Layout>
+                                <Routes>
+                                    <Route path="/" element={<Dashboard />} />
 
-                    {/* Inventory Routes */}
-                    <Route path="/inventory" element={<InventoryList />} />
-                    <Route path="/inventory/new" element={<InventoryItemForm />} />
-                    <Route path="/inventory/:id" element={<InventoryView />} />
-                    <Route path="/inventory/:id/edit" element={<InventoryItemForm />} />
+                                    {/* Inventory Routes */}
+                                    <Route path="/inventory" element={<InventoryList />} />
+                                    <Route path="/inventory/new" element={<InventoryItemForm />} />
+                                    <Route path="/inventory/:id" element={<InventoryView />} />
+                                    <Route path="/inventory/:id/edit" element={<InventoryItemForm />} />
 
-                    {/* Categories Routes */}
-                    <Route path="/categories" element={<CategoriesList />} />
-                    <Route path="/categories/new" element={<CategoryForm />} />
-                    <Route path="/categories/:id/edit" element={<CategoryForm />} />
+                                    {/* Categories Routes */}
+                                    <Route path="/categories" element={<CategoriesList />} />
+                                    <Route path="/categories/new" element={<CategoryForm />} />
+                                    <Route path="/categories/:id/edit" element={<CategoryForm />} />
 
-                    {/* Consumables Routes */}
-                    <Route path="/consumables" element={<ConsumablesList />} />
-                    <Route path="/consumables/new" element={<ConsumableForm />} />
-                    <Route path="/consumables/:id/edit" element={<ConsumableForm />} />
+                                    {/* Consumables Routes */}
+                                    <Route path="/consumables" element={<ConsumablesList />} />
+                                    <Route path="/consumables/new" element={<ConsumableForm />} />
+                                    <Route path="/consumables/:id/edit" element={<ConsumableForm />} />
 
-                    {/* Rooms Routes */}
-                    <Route path="/rooms" element={<RoomsList />} />
-                    <Route path="/rooms/new" element={<RoomForm />} />
-                    <Route path="/rooms/:id/edit" element={<RoomForm />} />
+                                    {/* Rooms Routes */}
+                                    <Route path="/rooms" element={<RoomsList />} />
+                                    <Route path="/rooms/new" element={<RoomForm />} />
+                                    <Route path="/rooms/:id/edit" element={<RoomForm />} />
 
-                    {/* Users Routes */}
-                    <Route path="/users" element={<UsersList />} />
-                    <Route path="/users/new" element={<UserForm />} />
-                    <Route path="/users/:id/edit" element={<UserForm />} />
+                                    {/* Users Routes */}
+                                    <Route path="/users" element={<UsersList />} />
+                                    <Route path="/users/new" element={<UserForm />} />
+                                    <Route path="/users/:id/edit" element={<UserForm />} />
 
-                    {/* Logs Route */}
-                    <Route path="/logs" element={<LogsList />} />
-                </Routes>
-            </Layout>
+                                    {/* Logs Route */}
+                                    <Route path="/logs" element={<LogsList />} />
+                                </Routes>
+                            </Layout>
+                        </AuthContext>
+                    }
+                />
+            </Routes>
         </Router>
     );
 }
