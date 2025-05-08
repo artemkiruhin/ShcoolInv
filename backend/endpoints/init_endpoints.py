@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import random
 import logging
 from typing import List
+import bcrypt
 
 from backend.configurations.database import get_db
 from backend.core.entities import (
@@ -17,6 +18,14 @@ from backend.core.repositories import (
 
 logger = logging.getLogger(__name__)
 init_router = APIRouter(prefix="/init", tags=["initialization"])
+
+def hash_data(data: str) -> str:
+    """
+    Хеширует данные с помощью bcrypt
+    """
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(data.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
 
 @init_router.post("/database", summary="Initialize database with sample data")
 async def initialize_database(
@@ -115,7 +124,7 @@ def _create_sample_users(db: Session) -> List[User]:
     users_data = [
         {
             "username": "admin",
-            "password_hash": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",  # "password"
+            "password_hash": hash_data("admin_password"),
             "email": "admin@example.com",
             "full_name": "Admin User",
             "phone_number": "+1234567890",
@@ -123,7 +132,7 @@ def _create_sample_users(db: Session) -> List[User]:
         },
         {
             "username": "manager",
-            "password_hash": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+            "password_hash": hash_data("manager_password"),
             "email": "manager@example.com",
             "full_name": "Office Manager",
             "phone_number": "+1777888999",
@@ -131,7 +140,7 @@ def _create_sample_users(db: Session) -> List[User]:
         },
         {
             "username": "tech",
-            "password_hash": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+            "password_hash": hash_data("tech_password"),
             "email": "tech@example.com",
             "full_name": "Tech Support",
             "phone_number": "+1555666777",
