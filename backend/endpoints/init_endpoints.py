@@ -19,6 +19,7 @@ from backend.core.repositories import (
 logger = logging.getLogger(__name__)
 init_router = APIRouter(prefix="/init", tags=["initialization"])
 
+
 def hash_data(data: str) -> str:
     """
     Хеширует данные с помощью bcrypt
@@ -27,7 +28,8 @@ def hash_data(data: str) -> str:
     hashed = bcrypt.hashpw(data.encode('utf-8'), salt)
     return hashed.decode('utf-8')
 
-@init_router.post("/database", summary="Initialize database with sample data")
+
+@init_router.post("/database", summary="Инициализация базы данных тестовыми данными")
 async def initialize_database(
         db: Session = Depends(get_db),
         force: bool = True,
@@ -39,16 +41,16 @@ async def initialize_database(
         create_logs: bool = True
 ):
     """
-    Initialize database with sample data.
+    Инициализация базы данных тестовыми данными.
 
-    Parameters:
-    - force: Reinitialize even if data exists (default: False)
-    - create_users: Create sample users (default: True)
-    - create_rooms: Create sample rooms (default: True)
-    - create_categories: Create sample categories (default: True)
-    - create_items: Create sample inventory items (default: True)
-    - create_consumables: Create sample consumables (default: True)
-    - create_logs: Create sample logs (default: True)
+    Параметры:
+    - force: Переинициализировать, даже если данные уже существуют (по умолчанию: False)
+    - create_users: Создать тестовых пользователей (по умолчанию: True)
+    - create_rooms: Создать тестовые помещения (по умолчанию: True)
+    - create_categories: Создать тестовые категории (по умолчанию: True)
+    - create_items: Создать тестовые предметы инвентаря (по умолчанию: True)
+    - create_consumables: Создать тестовые расходники (по умолчанию: True)
+    - create_logs: Создать тестовые логи (по умолчанию: True)
     """
     try:
         if not force:
@@ -56,7 +58,7 @@ async def initialize_database(
             if user_repo.get_all(limit=1):
                 raise HTTPException(
                     status_code=400,
-                    detail="Database already contains data. Use force=True to reinitialize."
+                    detail="База данных уже содержит данные. Используйте force=True для переинициализации."
                 )
 
         result = {}
@@ -87,14 +89,14 @@ async def initialize_database(
             result["inventory_items_created"] = len(items)
         else:
             items = []
-            result["inventory_items_skipped"] = "Missing required data"
+            result["inventory_items_skipped"] = "Отсутствуют необходимые данные"
 
         if create_consumables:
             consumables = _create_sample_consumables(db)
             result["consumables_created"] = len(consumables)
         else:
             consumables = []
-            result["consumables_skipped"] = "Disabled by parameter"
+            result["consumables_skipped"] = "Отключено параметром"
 
         if create_logs and (users or create_users) and (items or not create_items) and (
                 consumables or not create_consumables):
@@ -102,48 +104,48 @@ async def initialize_database(
             result["logs_created"] = len(logs)
         else:
             logs = []
-            result["logs_skipped"] = "Missing required data"
+            result["logs_skipped"] = "Отсутствуют необходимые данные"
 
         return {
             "success": True,
-            "message": "Database initialization completed",
+            "message": "Инициализация базы данных завершена",
             "details": result
         }
 
     except Exception as e:
-        logger.error(f"Database initialization failed: {str(e)}", exc_info=True)
+        logger.error(f"Ошибка инициализации базы данных: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail=f"Database initialization failed: {str(e)}"
+            detail=f"Ошибка инициализации базы данных: {str(e)}"
         )
 
 
 def _create_sample_users(db: Session) -> List[User]:
-    """Create sample users"""
+    """Создание тестовых пользователей"""
     repo = UserRepository(db)
     users_data = [
         {
-            "username": "admin",
+            "username": "glavbuh",
             "password_hash": hash_data("admin_password"),
-            "email": "admin@example.com",
-            "full_name": "Admin User",
-            "phone_number": "+1234567890",
+            "email": "glavbuh@example.com",
+            "full_name": "Иванова Мария Петровна",
+            "phone_number": "79001234567",
             "is_admin": True
         },
         {
-            "username": "manager",
+            "username": "economist",
             "password_hash": hash_data("manager_password"),
-            "email": "manager@example.com",
-            "full_name": "Office Manager",
-            "phone_number": "+1777888999",
+            "email": "economist@example.com",
+            "full_name": "Петрова Ольга Ивановна",
+            "phone_number": "79011234567",
             "is_admin": True
         },
         {
-            "username": "tech",
+            "username": "zavhoz",
             "password_hash": hash_data("tech_password"),
-            "email": "tech@example.com",
-            "full_name": "Tech Support",
-            "phone_number": "+1555666777",
+            "email": "zavhoz@example.com",
+            "full_name": "Сидоров Алексей Владимирович",
+            "phone_number": "79021234567",
             "is_admin": False
         }
     ]
@@ -155,19 +157,19 @@ def _create_sample_users(db: Session) -> List[User]:
             created_user = repo.create(user)
             created_users.append(created_user)
         except Exception as e:
-            logger.error(f"Error creating user {user_data['username']}: {str(e)}")
+            logger.error(f"Ошибка создания пользователя {user_data['username']}: {str(e)}")
 
     return created_users
 
 
 def _create_sample_rooms(db: Session) -> List[Room]:
-    """Create sample rooms"""
+    """Создание тестовых помещений"""
     repo = RoomRepository(db)
     rooms_data = [
-        {"name": "Server Room", "description": "Main server equipment room"},
-        {"name": "Development", "description": "Software development office"},
-        {"name": "Meeting Room A", "description": "Main conference room"},
-        {"name": "Storage", "description": "Equipment storage"}
+        {"name": "Кабинет главного бухгалтера", "description": "Рабочий кабинет главного бухгалтера"},
+        {"name": "Бухгалтерия", "description": "Отдел бухгалтерии"},
+        {"name": "Склад канцелярии", "description": "Склад для хранения канцелярских товаров"},
+        {"name": "Архив", "description": "Помещение для хранения документов"}
     ]
 
     created_rooms = []
@@ -177,29 +179,34 @@ def _create_sample_rooms(db: Session) -> List[Room]:
             created_room = repo.create(room)
             created_rooms.append(created_room)
         except Exception as e:
-            logger.error(f"Error creating room {room_data['name']}: {str(e)}")
+            logger.error(f"Ошибка создания помещения {room_data['name']}: {str(e)}")
 
     return created_rooms
 
 
 def _create_sample_categories(db: Session) -> List[InventoryCategory]:
-    """Create sample inventory categories"""
+    """Создание тестовых категорий инвентаря"""
     repo = InventoryCategoryRepository(db)
     categories_data = [
         {
-            "name": "Computer Equipment",
-            "short_name": "COMP",
-            "description": "Computers and accessories"
+            "name": "Офисная мебель",
+            "short_name": "МЕБЕЛЬ",
+            "description": "Мебель для офисных помещений"
         },
         {
-            "name": "Networking",
-            "short_name": "NET",
-            "description": "Network equipment"
+            "name": "Оргтехника",
+            "short_name": "ОРГТЕХ",
+            "description": "Техника для офисной работы"
         },
         {
-            "name": "Office Equipment",
-            "short_name": "OFFICE",
-            "description": "Office devices"
+            "name": "Канцелярские товары",
+            "short_name": "КАНЦЕЛЯРИЯ",
+            "description": "Товары для канцелярских нужд"
+        },
+        {
+            "name": "Архивное оборудование",
+            "short_name": "АРХИВ",
+            "description": "Оборудование для хранения документов"
         }
     ]
 
@@ -210,7 +217,7 @@ def _create_sample_categories(db: Session) -> List[InventoryCategory]:
             created_category = repo.create(category)
             created_categories.append(created_category)
         except Exception as e:
-            logger.error(f"Error creating category {category_data['name']}: {str(e)}")
+            logger.error(f"Ошибка создания категории {category_data['name']}: {str(e)}")
 
     return created_categories
 
@@ -221,9 +228,9 @@ def _create_sample_inventory_items(
         rooms: List[Room],
         users: List[User]
 ) -> List[InventoryItem]:
-    """Create sample inventory items"""
+    """Создание тестовых предметов инвентаря"""
     if not categories or not rooms or not users:
-        logger.warning("Skipping inventory items creation - missing required data")
+        logger.warning("Пропуск создания предметов инвентаря - отсутствуют необходимые данные")
         return []
 
     repo = InventoryItemRepository(db)
@@ -234,50 +241,103 @@ def _create_sample_inventory_items(
             return None
         return random.choice(items_list)
 
-    comp_category = next((c for c in categories if c.short_name == "COMP"), None)
-    if comp_category:
-        for i in range(1, 6):
+    # Мебель
+    furniture_category = next((c for c in categories if c.short_name == "МЕБЕЛЬ"), None)
+    if furniture_category:
+        furniture_items = [
+            {"name": "Рабочий стол", "description": "Деревянный стол для работы", "price": 15000},
+            {"name": "Офисное кресло", "description": "Эргономичное кресло", "price": 8000},
+            {"name": "Шкаф для документов", "description": "Металлический шкаф", "price": 12000},
+            {"name": "Диван для посетителей", "description": "Кожаный диван", "price": 25000}
+        ]
+
+        for i, item_data in enumerate(furniture_items, 1):
             try:
                 room = get_random(rooms)
                 user = get_random(users)
 
                 item = InventoryItem.create(
-                    inventory_number=f"COMP-{1000 + i}",
-                    name=f"Dell Laptop {i}",
-                    description="Business laptop",
-                    category_id=comp_category.id,
+                    inventory_number=f"МЕБ-{1000 + i}",
+                    name=item_data["name"],
+                    description=item_data["description"],
+                    category_id=furniture_category.id,
                     condition=random.choice(list(InventoryCondition)),
                     room_id=room.id if room else None,
                     user_id=user.id if user else None,
                     purchase_date=datetime.now() - timedelta(days=random.randint(30, 365)),
-                    purchase_price=1000 + random.randint(-200, 200),
+                    purchase_price=item_data["price"] + random.randint(-2000, 2000),
                     warranty_until=datetime.now() + timedelta(days=random.randint(30, 365)))
 
                 created_item = repo.create(item)
                 items.append(created_item)
             except Exception as e:
-                logger.error(f"Error creating computer item {i}: {str(e)}")
+                logger.error(f"Ошибка создания мебели {item_data['name']}: {str(e)}")
+
+    # Оргтехника
+    tech_category = next((c for c in categories if c.short_name == "ОРГТЕХ"), None)
+    if tech_category:
+        tech_items = [
+            {"name": "Калькулятор", "description": "Бухгалтерский калькулятор", "price": 1500},
+            {"name": "Принтер", "description": "Лазерный принтер", "price": 18000},
+            {"name": "Шредер", "description": "Уничтожитель документов", "price": 9000}
+        ]
+
+        for i, item_data in enumerate(tech_items, 1):
+            try:
+                room = get_random(rooms)
+                user = get_random(users)
+
+                item = InventoryItem.create(
+                    inventory_number=f"ОРГ-{2000 + i}",
+                    name=item_data["name"],
+                    description=item_data["description"],
+                    category_id=tech_category.id,
+                    condition=random.choice(list(InventoryCondition)),
+                    room_id=room.id if room else None,
+                    user_id=user.id if user else None,
+                    purchase_date=datetime.now() - timedelta(days=random.randint(30, 365)),
+                    purchase_price=item_data["price"] + random.randint(-1000, 1000),
+                    warranty_until=datetime.now() + timedelta(days=random.randint(30, 365)))
+
+                created_item = repo.create(item)
+                items.append(created_item)
+            except Exception as e:
+                logger.error(f"Ошибка создания оргтехники {item_data['name']}: {str(e)}")
 
     return items
 
 
 def _create_sample_consumables(db: Session) -> List[Consumable]:
-    """Create sample consumables"""
+    """Создание тестовых расходных материалов"""
     repo = ConsumableRepository(db)
     consumables_data = [
         {
-            "name": "Printer Paper",
-            "description": "A4 paper",
-            "quantity": 500,
-            "min_quantity": 100,
-            "unit": "sheets"
+            "name": "Бумага для документов",
+            "description": "Бумага формата А4, 80 г/м²",
+            "quantity": 1000,
+            "min_quantity": 200,
+            "unit": "пачка"
         },
         {
-            "name": "Toner Cartridge",
-            "description": "Black toner",
-            "quantity": 5,
-            "min_quantity": 2,
-            "unit": "pcs"
+            "name": "Папки-скоросшиватели",
+            "description": "Папки для документов с зажимом",
+            "quantity": 50,
+            "min_quantity": 20,
+            "unit": "шт."
+        },
+        {
+            "name": "Ручки шариковые",
+            "description": "Синие ручки, упаковка",
+            "quantity": 100,
+            "min_quantity": 30,
+            "unit": "шт."
+        },
+        {
+            "name": "Калькуляторы",
+            "description": "Базовые бухгалтерские калькуляторы",
+            "quantity": 10,
+            "min_quantity": 5,
+            "unit": "шт."
         }
     ]
 
@@ -288,7 +348,7 @@ def _create_sample_consumables(db: Session) -> List[Consumable]:
             created_consumable = repo.create(consumable)
             created_consumables.append(created_consumable)
         except Exception as e:
-            logger.error(f"Error creating consumable {consumable_data['name']}: {str(e)}")
+            logger.error(f"Ошибка создания расходника {consumable_data['name']}: {str(e)}")
 
     return created_consumables
 
@@ -299,55 +359,88 @@ def _create_sample_logs(
         items: List[InventoryItem],
         consumables: List[Consumable]
 ) -> List[Log]:
-    """Create sample logs"""
+    """Создание тестовых логов"""
     if not users:
-        logger.warning("Skipping logs creation - no users available")
+        logger.warning("Пропуск создания логов - нет доступных пользователей")
         return []
 
     repo = LogRepository(db)
     logs = []
 
+    # Логи входа
     for _ in range(5):
         user = random.choice(users)
         try:
             log = Log.create(
-                description=f"User {user.username} logged in",
+                description=f"Пользователь {user.full_name} вошел в систему",
                 type=LogType.INFO.value,
                 user_id=user.id
             )
             created_log = repo.create(log)
             logs.append(created_log)
         except Exception as e:
-            logger.error(f"Error creating user log: {str(e)}", exc_info=True)
+            logger.error(f"Ошибка создания лога пользователя: {str(e)}", exc_info=True)
 
+    # Логи работы с инвентарем
     if items:
         for _ in range(3):
             item = random.choice(items)
             user = random.choice(users)
             try:
+                actions = [
+                    f"был перемещен в помещение {random.choice(['Бухгалтерия', 'Архив', 'Кабинет главного бухгалтера'])}",
+                    "был отмечен как требующий ремонта",
+                    "прошел плановую проверку"
+                ]
                 log = Log.create(
-                    description=f"Inventory item {item.name} was checked",
+                    description=f"Инвентарный предмет {item.name} {random.choice(actions)}",
                     type=LogType.INFO.value,
                     user_id=user.id
                 )
                 created_log = repo.create(log)
                 logs.append(created_log)
             except Exception as e:
-                logger.error(f"Error creating inventory log: {str(e)}", exc_info=True)
+                logger.error(f"Ошибка создания лога инвентаря: {str(e)}", exc_info=True)
 
+    # Логи работы с расходниками
     if consumables:
         for _ in range(2):
             consumable = random.choice(consumables)
             user = random.choice(users)
             try:
+                actions = [
+                    f"был пополнен на {random.randint(5, 20)} {consumable.unit}",
+                    "был списан по акту",
+                    f"достиг минимального уровня запасов ({consumable.min_quantity} {consumable.unit})"
+                ]
                 log = Log.create(
-                    description=f"Consumable {consumable.name} stock updated",
+                    description=f"Расходный материал {consumable.name} {random.choice(actions)}",
                     type=LogType.INFO.value,
                     user_id=user.id
                 )
                 created_log = repo.create(log)
                 logs.append(created_log)
             except Exception as e:
-                logger.error(f"Error creating consumable log: {str(e)}", exc_info=True)
+                logger.error(f"Ошибка создания лога расходников: {str(e)}", exc_info=True)
+
+    # Логи документооборота
+    for _ in range(3):
+        user = random.choice(users)
+        try:
+            actions = [
+                "сформировал отчет за месяц",
+                "подписал акт сверки",
+                "отправил документы в архив",
+                "получил входящие документы"
+            ]
+            log = Log.create(
+                description=f"Бухгалтер {user.full_name} {random.choice(actions)}",
+                type=LogType.INFO.value,
+                user_id=user.id
+            )
+            created_log = repo.create(log)
+            logs.append(created_log)
+        except Exception as e:
+            logger.error(f"Ошибка создания лога документооборота: {str(e)}", exc_info=True)
 
     return logs
