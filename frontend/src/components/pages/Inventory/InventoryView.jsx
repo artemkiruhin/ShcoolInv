@@ -215,7 +215,7 @@ const InventoryView = () => {
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Категория</h4>
-                                <p className="detail-value">{item.category?.name || '-'}</p>
+                                <p className="detail-value">{item.category_name || '-'}</p>
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Состояние</h4>
@@ -227,7 +227,7 @@ const InventoryView = () => {
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Кабинет</h4>
-                                <p className="detail-value">{item.room?.name || '-'}</p>
+                                <p className="detail-value">{item.room_name || '-'}</p>
                             </div>
                             <div className="detail-group">
                                 <h4 className="detail-label">Ответственный</h4>

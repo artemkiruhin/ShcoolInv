@@ -99,9 +99,23 @@ class InventoryItemResponse(InventoryItemBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     is_written_off: bool = False
+    category_name: str
+    room_name: Optional[str] = None
 
     class Config:
         orm_mode = True
+
+
+class InventoryItemResponseForDetails(InventoryItemBase):
+    id: int
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    is_written_off: bool = False
+    category_name: str  # Добавляем название категории
+    room_name: Optional[str] = None  # Добавляем название помещения
+
+    class Config:
+        from_attributes = True  # Для Pydantic v2 (бывшее orm_mode)
 
 class ConsumableBase(BaseModel):
     name: str

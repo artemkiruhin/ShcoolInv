@@ -197,13 +197,13 @@ const InventoryList = () => {
                     <tr key={item.id}>
                         <td>{item.inventory_number}</td>
                         <td>{item.name}</td>
-                        <td>{item.category?.name}</td>
+                        <td>{item.category_name}</td>
                         <td>
                             <span className={`badge ${item.condition.toLowerCase()}`}>
                                 {api.constants.INVENTORY_CONDITIONS[item.condition]}
                             </span>
                         </td>
-                        <td>{item.room?.name || '-'}</td>
+                        <td>{item.room_name || '-'}</td>
                         <td>
                             <div className="flex space-x-2 action-buttons">
                                 <Button variant="secondary" size="sm" onClick={() => handleShowQR(item)}>

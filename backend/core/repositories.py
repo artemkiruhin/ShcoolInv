@@ -109,6 +109,55 @@ class InventoryItemRepository:
     def get_by_number(self, inventory_number: str) -> Optional[InventoryItem]:
         return self.db.query(InventoryItem).filter(InventoryItem.inventory_number == inventory_number).first()
 
+    def get_by_id_with_details(self, item_id: int) -> Optional[dict]:
+        result = (
+            self.db.query(
+                InventoryItem,
+                InventoryCategory.name.label("category_name"),
+                Room.name.label("room_name")
+            )
+            .join(InventoryCategory, InventoryItem.category_id == InventoryCategory.id)
+            .outerjoin(Room, InventoryItem.room_id == Room.id)
+            .filter(InventoryItem.id == item_id)
+            .first()
+        )
+
+        if not result:
+            return None
+
+        item, category_name, room_name = result
+
+        # Преобразуем в словарь с нужными полями
+        return {
+            **item.__dict__,
+            "category_name": category_name,
+            "room_name": room_name
+        }
+
+    def get_all_with_details(self, skip: int = 0, limit: int = 100) -> List[dict]:
+        results = (
+            self.db.query(
+                InventoryItem,
+                InventoryCategory.name.label("category_name"),
+                Room.name.label("room_name")
+            )
+            .join(InventoryCategory, InventoryItem.category_id == InventoryCategory.id)
+            .outerjoin(Room, InventoryItem.room_id == Room.id)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+        # Преобразуем кортежи в словари с нужными полями
+        return [
+            {
+                **item.__dict__,
+                "category_name": category_name,
+                "room_name": room_name
+            }
+            for item, category_name, room_name in results
+        ]
+
     def get_all(self, skip: int = 0, limit: int = 100) -> List[InventoryItem]:
         return self.db.query(InventoryItem).offset(skip).limit(limit).all()
 

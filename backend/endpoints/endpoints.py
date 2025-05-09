@@ -22,7 +22,7 @@ from backend.core.schemas import (
     InventoryCategoryCreate, InventoryCategoryResponse,
     InventoryItemCreate, InventoryItemUpdate, InventoryItemResponse,
     ConsumableCreate, ConsumableUpdate, ConsumableResponse,
-    LogResponse, ReportType, AuthResponse, LoginRequest
+    LogResponse, ReportType, AuthResponse, LoginRequest, InventoryItemResponseForDetails
 )
 
 from openpyxl import Workbook
@@ -301,7 +301,7 @@ def create_item(item: InventoryItemCreate, db: Session = Depends(get_db)):
 @router.get("/inventory/items/", response_model=List[InventoryItemResponse])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     repo = InventoryItemRepository(db)
-    items = repo.get_all(skip=skip, limit=limit)
+    items = repo.get_all_with_details(skip=skip, limit=limit)
     return items
 
 
@@ -321,10 +321,10 @@ def read_items_by_condition(condition: str, db: Session = Depends(get_db)):
     return items
 
 
-@router.get("/inventory/items/{item_id}", response_model=InventoryItemResponse)
+@router.get("/inventory/items/{item_id}", response_model=InventoryItemResponseForDetails)
 def read_item(item_id: int, db: Session = Depends(get_db)):
     repo = InventoryItemRepository(db)
-    db_item = repo.get_by_id(item_id)
+    db_item = repo.get_by_id_with_details(item_id)  # Используем новый метод
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
