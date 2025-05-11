@@ -1,20 +1,19 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const AuthContext = ({ children }) => {
+const AdminContext = ({ children }) => {
     const userDataString = localStorage.getItem('userData');
 
-    if (!userDataString) {
-        return <Navigate to="/login" replace />;
-    }
-
     try {
-        JSON.parse(userDataString);
+        const userData = JSON.parse(userDataString || '{}');
+        if (!userData.is_admin) {
+            return <Navigate to="/" replace />;
+        }
         return children ? children : <Outlet />;
     } catch (error) {
         console.error('Error parsing user data:', error);
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 };
 
-export default AuthContext;
+export default AdminContext;

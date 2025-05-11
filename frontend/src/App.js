@@ -1,6 +1,6 @@
-import "../src/assets/styles/global.css"
+import "../src/assets/styles/global.css";
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Dashboard from './components/pages/Dashboard';
 import InventoryList from './components/pages/Inventory/InventoryList';
@@ -18,53 +18,62 @@ import LogsList from './components/pages/Logs/LogsList';
 import './index.css';
 import LoginPage from "./components/pages/LoginPage/LoginPage";
 import AuthContext from "./context/AuthContext";
+import AdminContext from "./context/AdminContext";
+
+const ProtectedLayout = () => {
+    return (
+        <AuthContext>
+            <Layout>
+                <Outlet />
+            </Layout>
+        </AuthContext>
+    );
+};
+
+const AdminRoutes = () => {
+    return (
+        <AdminContext>
+            <Outlet />
+        </AdminContext>
+    );
+};
 
 function App() {
     return (
         <Router>
             <Routes>
+                {/* Публичный роут */}
                 <Route path="/login" element={<LoginPage />} />
-                <Route
-                    path="/*"
-                    element={
-                        <AuthContext>
-                            <Layout>
-                                <Routes>
-                                    <Route path="/" element={<Dashboard />} />
 
-                                    {/* Inventory Routes */}
-                                    <Route path="/inventory" element={<InventoryList />} />
-                                    <Route path="/inventory/new" element={<InventoryItemForm />} />
-                                    <Route path="/inventory/:id" element={<InventoryView />} />
-                                    <Route path="/inventory/:id/edit" element={<InventoryItemForm />} />
+                {/* Все защищённые роуты */}
+                <Route element={<ProtectedLayout />}>
+                    {/* Общие роуты для всех авторизованных */}
+                    <Route index element={<Dashboard />} />
+                    <Route path="/inventory" element={<InventoryList />} />
+                    <Route path="/inventory/new" element={<InventoryItemForm />} />
+                    <Route path="/inventory/:id" element={<InventoryView />} />
+                    <Route path="/inventory/:id/edit" element={<InventoryItemForm />} />
 
-                                    {/* Categories Routes */}
-                                    <Route path="/categories" element={<CategoriesList />} />
-                                    <Route path="/categories/new" element={<CategoryForm />} />
-                                    <Route path="/categories/:id/edit" element={<CategoryForm />} />
+                    <Route path="/categories" element={<CategoriesList />} />
+                    <Route path="/categories/new" element={<CategoryForm />} />
+                    <Route path="/categories/:id/edit" element={<CategoryForm />} />
 
-                                    {/* Consumables Routes */}
-                                    <Route path="/consumables" element={<ConsumablesList />} />
-                                    <Route path="/consumables/new" element={<ConsumableForm />} />
-                                    <Route path="/consumables/:id/edit" element={<ConsumableForm />} />
+                    <Route path="/consumables" element={<ConsumablesList />} />
+                    <Route path="/consumables/new" element={<ConsumableForm />} />
+                    <Route path="/consumables/:id/edit" element={<ConsumableForm />} />
 
-                                    {/* Rooms Routes */}
-                                    <Route path="/rooms" element={<RoomsList />} />
-                                    <Route path="/rooms/new" element={<RoomForm />} />
-                                    <Route path="/rooms/:id/edit" element={<RoomForm />} />
+                    <Route path="/rooms" element={<RoomsList />} />
+                    <Route path="/rooms/new" element={<RoomForm />} />
+                    <Route path="/rooms/:id/edit" element={<RoomForm />} />
 
-                                    {/* Users Routes */}
-                                    <Route path="/users" element={<UsersList />} />
-                                    <Route path="/users/new" element={<UserForm />} />
-                                    <Route path="/users/:id/edit" element={<UserForm />} />
-
-                                    {/* Logs Route */}
-                                    <Route path="/logs" element={<LogsList />} />
-                                </Routes>
-                            </Layout>
-                        </AuthContext>
-                    }
-                />
+                    {/* Админские роуты */}
+                    <Route element={<AdminRoutes />}>
+                        <Route path="/users" element={<UsersList />} />
+                        <Route path="/users/new" element={<UserForm />} />
+                        <Route path="/users/:id/edit" element={<UserForm />} />
+                        <Route path="/logs" element={<LogsList />} />
+                    </Route>
+                </Route>
             </Routes>
         </Router>
     );

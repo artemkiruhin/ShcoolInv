@@ -3,15 +3,40 @@ import { NavLink } from 'react-router-dom';
 import Button from '../common/Button';
 
 const Header = () => {
-    const navItems = [
+    const getUserData = () => {
+        try {
+            const userDataString = localStorage.getItem('userData');
+            return userDataString ? JSON.parse(userDataString) : null;
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            return null;
+        }
+    };
+
+    const userData = getUserData();
+    const isAdmin = userData?.is_admin === true;
+
+    const baseNavItems = [
         { path: '/', name: 'Главная' },
         { path: '/inventory', name: 'Инвентарь' },
         { path: '/categories', name: 'Категории' },
         { path: '/consumables', name: 'Расходники' },
         { path: '/rooms', name: 'Кабинеты' },
+    ];
+
+    const adminNavItems = [
         { path: '/users', name: 'Пользователи' },
         { path: '/logs', name: 'Логи' },
     ];
+
+    const navItems = isAdmin
+        ? [...baseNavItems, ...adminNavItems]
+        : baseNavItems;
+
+    const handleLogout = () => {
+        localStorage.removeItem('userData');
+        window.location.href = '/login';
+    };
 
     return (
         <header className="app-header">
@@ -32,6 +57,7 @@ const Header = () => {
                                     className={({ isActive }) =>
                                         `nav-link ${isActive ? 'active' : ''}`
                                     }
+                                    end
                                 >
                                     {item.name}
                                     <span className="nav-underline"></span>
@@ -42,7 +68,11 @@ const Header = () => {
                 </nav>
 
                 <div className="header-actions">
-                    <Button variant="secondary" className="logout-btn">
+                    <Button
+                        variant="secondary"
+                        className="logout-btn"
+                        onClick={handleLogout}
+                    >
                         <span className="btn-icon">👋</span>
                         <span>Выйти</span>
                     </Button>
