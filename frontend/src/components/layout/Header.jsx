@@ -1,8 +1,10 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import Button from '../common/Button';
 
 const Header = () => {
+    const navigate = useNavigate();
+
     const getUserData = () => {
         try {
             const userDataString = localStorage.getItem('userData');
@@ -35,7 +37,7 @@ const Header = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
-        window.location.href = '/login';
+        navigate('/login');
     };
 
     return (
