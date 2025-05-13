@@ -1,4 +1,3 @@
-import "../src/assets/styles/global.css";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Layout from './components/layout/Layout';
@@ -15,10 +14,13 @@ import RoomForm from './components/pages/Rooms/RoomsForm';
 import UsersList from './components/pages/Users/UsersList';
 import UserForm from './components/pages/Users/UsersForm';
 import LogsList from './components/pages/Logs/LogsList';
-import './index.css';
+
 import LoginPage from "./components/pages/LoginPage/LoginPage";
 import AuthContext from "./context/AuthContext";
 import AdminContext from "./context/AdminContext";
+// import './index.css';
+// import "../src/assets/styles/global.css";
+import './App.css'
 
 const ProtectedLayout = () => {
     return (

@@ -5,14 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: add origin to CORS">
-      <change afterPath="$PROJECT_DIR$/frontend/src/context/AdminContext.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/Dashboard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/Header.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/src/hooks/useFetch.jsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/src/utils/helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/styles/global.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/common/QRCodeGenerator.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/QRCodeGenerator.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/layout/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/layout/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/global.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,21 +56,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.api.executor": "Run",
-    "Python.dev_endpoints.executor": "Run",
-    "Python.entities.executor": "Run",
-    "Python.flask_utils.executor": "Run",
-    "Python.init_endpoints.executor": "Run",
-    "Python.reader.executor": "Run",
-    "Python.schemas.executor": "Run",
-    "Python.services.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/programming/projects/Diploma/ShcoolInv/ShcoolInv/backend"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.api.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dev_endpoints.executor&quot;: &quot;Run&quot;,
+    &quot;Python.endpoints.executor&quot;: &quot;Run&quot;,
+    &quot;Python.entities.executor&quot;: &quot;Run&quot;,
+    &quot;Python.flask_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.init_endpoints.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.schemas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.services.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/programming/projects/Diploma/ShcoolInv/ShcoolInv/backend&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\programming\projects\Diploma\ShcoolInv\ShcoolInv\backend" />
