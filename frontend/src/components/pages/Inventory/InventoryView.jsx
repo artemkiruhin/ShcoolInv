@@ -5,7 +5,6 @@ import api from '../../../services/';
 import Button from '../../common/Button';
 import Card from '../../common/Card';
 
-
 const QRCodeModal = ({ item, show, onClose }) => {
     const modalRef = useRef(null);
     const [downloadUrl, setDownloadUrl] = useState('');
@@ -93,6 +92,7 @@ const QRCodeModal = ({ item, show, onClose }) => {
         </div>
     );
 };
+
 const InventoryView = () => {
     const { id } = useParams();
     const navigate = useNavigate();

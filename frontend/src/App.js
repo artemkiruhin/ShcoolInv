@@ -21,6 +21,7 @@ import AdminContext from "./context/AdminContext";
 // import './index.css';
 // import "../src/assets/styles/global.css";
 import './App.css'
+import "./assets/styles/QRCodeModal.css"
 
 const ProtectedLayout = () => {
     return (

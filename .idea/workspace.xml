@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: add origin to CORS">
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/Dashboard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/Header.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/hooks/useFetch.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/utils/helpers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/QRCodeModal.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/styles/global.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/QRCodeGenerator.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/QRCodeGenerator.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/layout/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/layout/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Inventory/InventoryView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Inventory/InventoryView.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
