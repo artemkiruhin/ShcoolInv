@@ -131,12 +131,12 @@ const InventoryList = () => {
     const handleWriteOff = async (id) => {
         if (window.confirm('Вы уверены, что хотите списать инвентарь?')) {
             try {
-                const updatedItem = await api.inventoryItems.writeOffItem(id);
-                setInventoryItems(inventoryItems.map(item =>
-                    item.id === id ? updatedItem : item
-                ));
+                await api.inventoryItems.writeOffItem(id);
+                const data = await api.inventoryItems.getAll();
+                setInventoryItems(data);
             } catch (err) {
-                console.error('Error writing off item:', err);
+                const data = await api.inventoryItems.getAll();
+                setInventoryItems(data);
             }
         }
     };
