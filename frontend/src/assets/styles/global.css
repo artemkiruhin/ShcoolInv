@@ -733,3 +733,8 @@ a:hover {
 .p-3 { padding: 1rem !important; }
 .p-4 { padding: 1.5rem !important; }
 .p-5 { padding: 2rem !important; }
+
+.main-content {
+    width: 80%;
+    margin: 0 auto;
+}
