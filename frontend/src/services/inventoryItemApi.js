@@ -27,6 +27,23 @@ const inventoryItemApi = {
         return apiClient.get(`/inventory/items/`);
     },
 
+
+    prepareInventoryItemData: (formData) => {
+        return {
+            name: formData.name,
+            category_id: formData.category_id,
+            inventory_number: formData.inventory_number || null,
+            description: formData.description || null,
+            condition: formData.condition || 'NORMAL',
+            room_id: formData.room_id || null,
+            user_id: formData.user_id || null,
+            photo: formData.photo || null,
+            purchase_date: formData.purchase_date ? new Date(formData.purchase_date).toISOString() : null,
+            warranty_until: formData.warranty_until ? new Date(formData.warranty_until).toISOString() : null,
+            purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null
+        };
+    },
+
     /**
      * Get item by ID
      * @param {number} itemId - Item ID

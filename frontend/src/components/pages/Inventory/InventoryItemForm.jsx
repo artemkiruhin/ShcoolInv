@@ -13,6 +13,7 @@ const InventoryItemForm = () => {
     const [rooms, setRooms] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [formErrors, setFormErrors] = useState({});
 
     const [formData, setFormData] = useState({
         inventory_number: '',
@@ -44,17 +45,17 @@ const InventoryItemForm = () => {
                 if (isEditMode) {
                     const item = await api.inventoryItems.getItemById(parseInt(id));
                     setFormData({
-                        inventory_number: item.inventory_number,
-                        name: item.name,
+                        inventory_number: item.inventory_number || '',
+                        name: item.name || '',
                         description: item.description || '',
-                        category_id: item.category_id,
-                        condition: item.condition,
+                        category_id: item.category_id || '',
+                        condition: item.condition || 'NORMAL',
                         room_id: item.room_id || '',
                         user_id: item.user_id || '',
-                        photo: item.photo,
-                        purchase_date: item.purchase_date || '',
+                        photo: item.photo || null,
+                        purchase_date: item.purchase_date ? item.purchase_date.split('T')[0] : '',
                         purchase_price: item.purchase_price || '',
-                        warranty_until: item.warranty_until || '',
+                        warranty_until: item.warranty_until ? item.warranty_until.split('T')[0] : '',
                     });
                 }
 
@@ -68,11 +69,19 @@ const InventoryItemForm = () => {
         fetchData();
     }, [id, isEditMode]);
 
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.name.trim()) errors.name = 'Название обязательно';
+        if (!formData.category_id) errors.category_id = 'Категория обязательна';
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: value,
+            [name]: type === 'number' ? (value === '' ? '' : Number(value)) : value,
         }));
     };
 
@@ -81,9 +90,10 @@ const InventoryItemForm = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
                 setFormData(prev => ({
                     ...prev,
-                    photo: reader.result,
+                    photo: base64String,
                 }));
             };
             reader.readAsDataURL(file);
@@ -93,15 +103,20 @@ const InventoryItemForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!validateForm()) return;
+
         try {
+            const preparedData = api.inventoryItems.prepareInventoryItemData(formData);
+
             if (isEditMode) {
-                await api.inventoryItems.updateItem(parseInt(id), formData);
+                await api.inventoryItems.updateItem(parseInt(id), preparedData);
             } else {
-                await api.inventoryItems.createItem(formData);
+                await api.inventoryItems.createItem(preparedData);
             }
             navigate('/inventory');
         } catch (error) {
             console.error('Error saving item:', error);
+            alert(`Ошибка при сохранении: ${error.response?.data?.detail || error.message}`);
         }
     };
 
@@ -124,12 +139,11 @@ const InventoryItemForm = () => {
                                 value={formData.inventory_number}
                                 onChange={handleChange}
                                 className="form-control"
-                                required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Название</label>
+                            <label className="form-label">Название <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="name"
@@ -152,7 +166,7 @@ const InventoryItemForm = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Категория</label>
+                            <label className="form-label">Категория <span className="text-red-500">*</span></label>
                             <select
                                 name="category_id"
                                 value={formData.category_id}
@@ -176,7 +190,6 @@ const InventoryItemForm = () => {
                                 value={formData.condition}
                                 onChange={handleChange}
                                 className="form-control"
-                                required
                             >
                                 {Object.entries(api.constants.INVENTORY_CONDITIONS).map(([key, value]) => (
                                     <option key={key} value={key}>{value}</option>
@@ -284,6 +297,9 @@ const InventoryItemForm = () => {
                             {isEditMode ? 'Сохранить изменения' : 'Добавить'}
                         </Button>
                     </div>
+                    <p className="text-sm text-gray-500 mt-4">
+                        Поля, отмеченные <span className="text-red-500">*</span>, обязательны для заполнения
+                    </p>
                 </form>
             </Card>
         </div>
