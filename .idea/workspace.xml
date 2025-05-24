@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/core/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/endpoints/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Inventory/InventoryItemForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Inventory/InventoryItemForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/inventoryItemApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/inventoryItemApi.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

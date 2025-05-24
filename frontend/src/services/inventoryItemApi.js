@@ -29,19 +29,23 @@ const inventoryItemApi = {
 
 
     prepareInventoryItemData: (formData) => {
-        return {
+        const data = {
             name: formData.name,
             category_id: formData.category_id,
-            inventory_number: formData.inventory_number || null,
-            description: formData.description || null,
-            condition: formData.condition || 'NORMAL',
-            room_id: formData.room_id || null,
-            user_id: formData.user_id || null,
-            photo: formData.photo || null,
-            purchase_date: formData.purchase_date ? new Date(formData.purchase_date).toISOString() : null,
-            warranty_until: formData.warranty_until ? new Date(formData.warranty_until).toISOString() : null,
-            purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null
         };
+
+        // Добавляем только те поля, которые имеют значение
+        if (formData.inventory_number) data.inventory_number = formData.inventory_number;
+        if (formData.description) data.description = formData.description;
+        if (formData.condition && formData.condition !== 'NORMAL') data.condition = formData.condition;
+        if (formData.room_id) data.room_id = formData.room_id;
+        if (formData.user_id) data.user_id = formData.user_id;
+        if (formData.photo) data.photo = formData.photo;
+        if (formData.purchase_date) data.purchase_date = new Date(formData.purchase_date).toISOString();
+        if (formData.warranty_until) data.warranty_until = new Date(formData.warranty_until).toISOString();
+        if (formData.purchase_price) data.purchase_price = parseFloat(formData.purchase_price);
+
+        return data;
     },
 
     /**

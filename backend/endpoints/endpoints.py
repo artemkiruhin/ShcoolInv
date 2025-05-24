@@ -255,31 +255,32 @@ def create_item(item: InventoryItemCreate, db: Session = Depends(get_db)):
         if db_item:
             raise HTTPException(status_code=400, detail="Item with this inventory number already exists")
 
+    # Проверка существования связанных сущностей
     category_repo = InventoryCategoryRepository(db)
-    db_category = category_repo.get_by_id(item.category_id)
-    if not db_category:
+    if not category_repo.get_by_id(item.category_id):
         raise HTTPException(status_code=404, detail="Category not found")
 
     if item.room_id:
         room_repo = RoomRepository(db)
-        db_room = room_repo.get_by_id(item.room_id)
-        if not db_room:
+        if not room_repo.get_by_id(item.room_id):
             raise HTTPException(status_code=404, detail="Room not found")
 
     if item.user_id:
         user_repo = UserRepository(db)
-        db_user = user_repo.get_by_id(item.user_id)
-        if not db_user:
+        if not user_repo.get_by_id(item.user_id):
             raise HTTPException(status_code=404, detail="User not found")
 
-    try:
-        condition = InventoryCondition(item.condition.upper())
-    except ValueError:
-        valid_conditions = [e.value for e in InventoryCondition]
-        raise HTTPException(
-            status_code=400,
-            detail=f"Invalid condition value. Must be one of: {', '.join(valid_conditions)}"
-        )
+    # Преобразование condition
+    condition = InventoryCondition.NORMAL
+    if item.condition:
+        try:
+            condition = InventoryCondition(item.condition.upper())
+        except ValueError:
+            valid_conditions = [e.value for e in InventoryCondition]
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid condition value. Must be one of: {', '.join(valid_conditions)}"
+            )
 
     new_item = InventoryItem.create(
         inventory_number=item.inventory_number,

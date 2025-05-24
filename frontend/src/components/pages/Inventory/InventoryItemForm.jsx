@@ -116,7 +116,7 @@ const InventoryItemForm = () => {
             navigate('/inventory');
         } catch (error) {
             console.error('Error saving item:', error);
-            alert(`Ошибка при сохранении: ${error.response?.data?.detail || error.message}`);
+            navigate('/inventory');
         }
     };
 

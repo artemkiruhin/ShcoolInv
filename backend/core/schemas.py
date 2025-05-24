@@ -77,8 +77,18 @@ class InventoryItemBase(BaseModel):
     purchase_price: Optional[float] = None
     warranty_until: Optional[datetime] = None
 
-class InventoryItemCreate(InventoryItemBase):
-    pass
+class InventoryItemCreate(BaseModel):
+    name: str
+    category_id: int
+    inventory_number: Optional[str] = None
+    description: Optional[str] = None
+    condition: Optional[InventoryCondition] = InventoryCondition.NORMAL
+    room_id: Optional[int] = None
+    user_id: Optional[int] = None
+    photo: Optional[bytes] = None
+    purchase_date: Optional[datetime] = None
+    purchase_price: Optional[float] = None
+    warranty_until: Optional[datetime] = None
 
 class InventoryItemUpdate(BaseModel):
     inventory_number: Optional[str] = None
