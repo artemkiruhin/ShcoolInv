@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient, {API_BASE_URL} from './apiClient';
 
 /**
  * API functions for consumable items management
@@ -57,25 +57,55 @@ const consumableApi = {
         return apiClient.delete(`/consumables/${consumableId}`);
     },
 
-    /**
-     * Increase consumable quantity
-     * @param {number} consumableId - Consumable ID
-     * @param {number} amount - Amount to increase
-     * @returns {Promise} - Success message
-     */
-    increaseConsumable: (consumableId, amount) => {
-        return apiClient.post(`/consumables/${consumableId}/increase`, { amount });
+
+    increaseConsumable: async (consumableId, amount) => {
+        try {
+            console.log(consumableId);
+            console.log(amount);
+            const response = await fetch(`${API_BASE_URL}/consumables/increase`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: consumableId,
+                    amount: amount
+                })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Failed to increase quantity');
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     },
 
-    /**
-     * Decrease consumable quantity
-     * @param {number} consumableId - Consumable ID
-     * @param {number} amount - Amount to decrease
-     * @returns {Promise} - Success message
-     */
-    decreaseConsumable: (consumableId, amount) => {
-        return apiClient.post(`/consumables/${consumableId}/decrease`, { amount });
+    decreaseConsumable: async (id, amount) => {
+        const response = await fetch(`${API_BASE_URL}/consumables/decrease`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+                amount: amount
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail);
+        }
+
+        return await response.json();
     }
+
 };
 
 export default consumableApi;

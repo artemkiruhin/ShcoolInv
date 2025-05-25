@@ -1,7 +1,7 @@
 /**
  * Base API client for making HTTP requests
  */
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:1234/api';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:1234/api';
 
 /**
  * Helper method to handle API responses and errors consistently

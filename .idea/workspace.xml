@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: add origin to CORS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/endpoints/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/services/inventoryItemApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/inventoryItemApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Consumables/ConsumablesList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Consumables/ConsumablesList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/consumableApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/consumableApi.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

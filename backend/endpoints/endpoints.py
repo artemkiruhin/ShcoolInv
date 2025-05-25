@@ -2,6 +2,7 @@ import io
 
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Response
+from pydantic import BaseModel
 from rest_framework import status
 from sqlalchemy.orm import Session
 from typing import List, Optional
@@ -437,25 +438,47 @@ def delete_consumable(consumable_id: int, db: Session = Depends(get_db)):
     repo.delete(consumable_id)
     return {"message": "Consumable deleted successfully"}
 
+class AmountRequest(BaseModel):
+    id: int
+    amount: int
 
-@router.post("/consumables/{consumable_id}/increase")
-def increase_consumable(consumable_id: int, amount: int, db: Session = Depends(get_db)):
+
+@router.post("/consumables/increase")
+def increase_consumable(
+    request: AmountRequest,
+    db: Session = Depends(get_db)
+):
     repo = ConsumableRepository(db)
-    db_consumable = repo.get_by_id(consumable_id)
+    db_consumable = repo.get_by_id(request.id)
     if db_consumable is None:
         raise HTTPException(status_code=404, detail="Consumable not found")
-    repo.increase_quantity(consumable_id, amount)
-    return {"message": f"Quantity increased by {amount}"}
+    repo.increase_quantity(request.id, request.amount)
+    return {"message": f"Quantity increased by {request.amount}"}
 
 
-@router.post("/consumables/{consumable_id}/decrease")
-def decrease_consumable(consumable_id: int, amount: int, db: Session = Depends(get_db)):
+@router.post("/consumables/decrease")
+def decrease_consumable(
+        request: AmountRequest,
+        db: Session = Depends(get_db)
+):
     repo = ConsumableRepository(db)
-    db_consumable = repo.get_by_id(consumable_id)
+    db_consumable = repo.get_by_id(request.id)
+
     if db_consumable is None:
         raise HTTPException(status_code=404, detail="Consumable not found")
-    repo.decrease_quantity(consumable_id, amount)
-    return {"message": f"Quantity decreased by {amount}"}
+
+    if db_consumable.quantity < request.amount:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot decrease by {request.amount}. Current quantity is {db_consumable.quantity}"
+        )
+
+    repo.decrease_quantity(request.id, request.amount)
+
+    return {
+        "message": f"Quantity decreased by {request.amount}",
+        "new_quantity": db_consumable.quantity - request.amount
+    }
 
 
 @router.get("/logs/", response_model=List[LogResponse])

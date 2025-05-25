@@ -41,11 +41,16 @@ const ConsumablesList = () => {
         const amount = prompt('Введите количество, на которое надо увеличить:');
         if (amount && !isNaN(amount)) {
             try {
+                console.log(parseInt(amount));
                 await api.consumables.increaseConsumable(id, parseInt(amount));
-                const updatedConsumables = await api.consumables.getConsumables();
-                setConsumables(updatedConsumables);
+                setConsumables(prev => prev.map(item =>
+                    item.id === id
+                        ? { ...item, quantity: item.quantity + parseInt(amount) }
+                        : item
+                ));
             } catch (err) {
                 console.error('Error increasing quantity:', err);
+                alert('Не удалось увеличить количество');
             }
         }
     };
@@ -55,10 +60,14 @@ const ConsumablesList = () => {
         if (amount && !isNaN(amount)) {
             try {
                 await api.consumables.decreaseConsumable(id, parseInt(amount));
-                const updatedConsumables = await api.consumables.getConsumables();
-                setConsumables(updatedConsumables);
+                setConsumables(prev => prev.map(item =>
+                    item.id === id
+                        ? { ...item, quantity: Math.max(0, item.quantity - parseInt(amount)) }
+                        : item
+                ));
             } catch (err) {
                 console.error('Error decreasing quantity:', err);
+                alert('Не удалось уменьшить количество');
             }
         }
     };
