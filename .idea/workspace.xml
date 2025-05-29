@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: add origin to CORS">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/endpoints/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/endpoints/endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/pages/Consumables/ConsumablesList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/pages/Consumables/ConsumablesList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/services/consumableApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/consumableApi.js" afterDir="false" />
-    </list>
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="fix: increase and decrease consumables" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -389,7 +384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746819401628</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="fix: increase and decrease consumables">
+      <option name="closed" value="true" />
+      <created>1748200026508</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1748200026508</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -404,7 +407,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add: consumables" />
     <MESSAGE value="add: consumables table" />
     <MESSAGE value="add: initialize db endpoint" />
     <MESSAGE value="fix: entities" />
@@ -429,6 +431,7 @@
     <MESSAGE value="upd: turn init db to russian" />
     <MESSAGE value="upd: fix category and room in inventory item" />
     <MESSAGE value="upd: add origin to CORS" />
-    <option name="LAST_COMMIT_MESSAGE" value="upd: add origin to CORS" />
+    <MESSAGE value="fix: increase and decrease consumables" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: increase and decrease consumables" />
   </component>
 </project>

@@ -501,16 +501,6 @@ def generate_excel_report(
         condition: Optional[str] = None,
         db: Session = Depends(get_db)
 ):
-    """
-    Generate Excel reports for different data types.
-
-    Parameters:
-    - report_type: Type of report to generate
-    - condition: Optional condition filter for inventory items report
-
-    Returns:
-    - Excel file as a downloadable response
-    """
     wb = Workbook()
     ws = wb.active
 
