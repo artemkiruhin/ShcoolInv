@@ -504,7 +504,6 @@ def generate_excel_report(
     wb = Workbook()
     ws = wb.active
 
-    # Apply custom styling
     title_font = Font(bold=True, size=12)
     header_font = Font(bold=True, size=11, color="FFFFFF")
     header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")

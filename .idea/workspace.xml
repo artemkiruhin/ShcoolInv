@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="fix: increase and decrease consumables" />
+    <list default="true" id="2a1e4cdc-7805-4008-9232-9cfc96dc332e" name="Changes" comment="upd: _" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -392,7 +392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748200026508</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="upd: _">
+      <option name="closed" value="true" />
+      <created>1748546456421</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1748546456421</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -419,7 +427,6 @@
     <MESSAGE value="fix: api file" />
     <MESSAGE value="upd: init endpoints remove" />
     <MESSAGE value="fix: env for alembic migrations" />
-    <MESSAGE value="upd: _" />
     <MESSAGE value="add: export type" />
     <MESSAGE value="add: export service" />
     <MESSAGE value="add: export endpoint" />
@@ -432,6 +439,7 @@
     <MESSAGE value="upd: fix category and room in inventory item" />
     <MESSAGE value="upd: add origin to CORS" />
     <MESSAGE value="fix: increase and decrease consumables" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: increase and decrease consumables" />
+    <MESSAGE value="upd: _" />
+    <option name="LAST_COMMIT_MESSAGE" value="upd: _" />
   </component>
 </project>
